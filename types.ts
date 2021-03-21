@@ -4,6 +4,7 @@ export interface ClientConfig {
     clientID: string
     clientSecret: string
     hostname: string
+    protocol?: string
 }
 
 export interface AuthenticationResponse {

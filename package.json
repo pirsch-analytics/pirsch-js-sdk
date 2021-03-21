@@ -1,6 +1,6 @@
 {
   "name": "pirsch-sdk",
-  "version": "0.1",
+  "version": "0.2.0",
   "description": "JavaScript client SDK for Pirsch.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -26,6 +26,7 @@
   },
   "homepage": "https://pirsch.io/",
   "dependencies": {
+    "@types/node": "^14.14.35",
     "axios": "^0.21.1"
   }
 }
