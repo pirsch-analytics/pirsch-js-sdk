@@ -14,6 +14,9 @@ const referrerQueryParams = [
 	"referrer",
 ];
 
+/**
+ * Client is the Pirsch API client.
+ */
 export class Client {
     private clientID: string;
     private clientSecret: string;
@@ -22,6 +25,13 @@ export class Client {
     private client: AxiosInstance;
     private accessToken: string = "";
 
+    /**
+     * The constructor creates a new client.
+     * 
+     * @param config You need to pass in the hostname, client ID, and client secret you have configured on the Pirsch dashboard.
+     * It's also recommended to set the propper protocol for your website, else it will be set to http by default.
+     * All other configuration parameters can be left to their defaults.
+     */
     constructor(config: ClientConfig) {
         if(!config.baseURL) {
             config.baseURL = defaultBaseURL;
@@ -45,6 +55,14 @@ export class Client {
         });
     }
 
+    /**
+     * Hit sends a hit to Pirsch. Make sure you call it in all request handlers you want to track.
+     * Also, make sure to filter out unwanted pathnames (like /favicon.ico in your root handler for example).
+     * 
+     * @param hit all required data for the request.
+     * @param retry retry the request in case a 401 (unauthenticated) error is returned. Don't modify this.
+     * @returns an empty promise or an APIError, in case something went wrong
+     */
     async hit(hit: Hit, retry: boolean = true): Promise<APIError | null> {
         try {
             await this.client.post(hitEndpoint, {
@@ -71,6 +89,12 @@ export class Client {
         }
     }
 
+    /**
+     * hitFromRequest returns the required data to send a hit to Pirsch for a Node request object.
+     * 
+     * @param req the Node request object from the http package.
+     * @returns a Hit object containing all necessary fields.
+     */
     hitFromRequest(req: IncomingMessage): Hit {
         const url = new URL(req.url || "", `${this.protocol}://${this.hostname}`);
         return {
