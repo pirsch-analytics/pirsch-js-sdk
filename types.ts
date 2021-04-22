@@ -29,6 +29,7 @@ export interface Hit {
     x_forwarded_for: string
     forwarded: string
     x_real_ip: string
+    dnt: string
     user_agent: string
     accept_language: string
     referrer: string

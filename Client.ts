@@ -65,6 +65,10 @@ export class Client {
      */
     async hit(hit: Hit, retry: boolean = true): Promise<APIError | null> {
         try {
+            if(hit.dnt === "1") {
+                return Promise.resolve<null>(null);
+            }
+
             await this.client.post(hitEndpoint, {
                 hostname: this.hostname,
                 ...hit,
@@ -104,6 +108,7 @@ export class Client {
             x_forwarded_for: req.headers["x-forwarded-for"] as string || "",
             forwarded: req.headers["forwarded"] || "",
             x_real_ip: req.headers["x-real-ip"] as string || "",
+            dnt: req.headers["dnt"] as string || "",
             user_agent: req.headers["user-agent"] || "",
             accept_language: req.headers["accept-language"] || "",
             referrer: this.getReferrer(req, url)
