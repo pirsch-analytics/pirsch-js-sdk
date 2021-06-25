@@ -3,6 +3,8 @@
 ## 1.1.0
 
 * added `source` and `utm_source` to referrers
+* added methods to read statistics
+* updated dependencies
 
 ## 1.0.1
 

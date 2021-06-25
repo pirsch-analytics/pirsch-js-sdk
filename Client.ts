@@ -8,6 +8,28 @@ const defaultTimeout = 5000;
 const defaultProtocol = "http";
 const authenticationEndpoint = "/api/v1/token";
 const hitEndpoint = "/api/v1/hit";
+const domainEndpoint = "/api/v1/domain";
+const sessionDurationEndpoint = "/api/v1/statistics/duration/session";
+const timeOnPageEndpoint = "/api/v1/statistics/duration/page";
+const utmSourceEndpoint = "/api/v1/statistics/utm/source";
+const utmMediumEndpoint = "/api/v1/statistics/utm/medium";
+const utmCampaignEndpoint = "/api/v1/statistics/utm/campaign";
+const utmContentEndpoint = "/api/v1/statistics/utm/content";
+const utmTermEndpoint = "/api/v1/statistics/utm/term";
+const visitorsEndpoint = "/api/v1/statistics/visitor";
+const pagesEndpoint = "/api/v1/statistics/page";
+const conversionGoalsEndpoint = "/api/v1/statistics/goals";
+const growthRateEndpoint = "/api/v1/statistics/growth";
+const activeVisitorsEndpoint = "/api/v1/statistics/active";
+const timeOfDayEndpoint = "/api/v1/statistics/hours";
+const languageEndpoint = "/api/v1/statistics/language";
+const referrerEndpoint = "/api/v1/statistics/referrer";
+const osEndpoint = "/api/v1/statistics/os";
+const browserEndpoint = "/api/v1/statistics/browser";
+const countryEndpoint = "/api/v1/statistics/country";
+const platformEndpoint = "/api/v1/statistics/platform";
+const screenEndpoint = "/api/v1/statistics/screen";
+const keywordsEndpoint = "/api/v1/statistics/keywords";
 const referrerQueryParams = [
 	"ref",
 	"referer",
@@ -20,10 +42,10 @@ const referrerQueryParams = [
  * Client is the Pirsch API client.
  */
 export class Client {
-    private clientID: string;
-    private clientSecret: string;
-    private hostname: string;
-    private protocol: string;
+    private readonly clientID: string;
+    private readonly clientSecret: string;
+    private readonly hostname: string;
+    private readonly protocol: string;
     private client: AxiosInstance;
     private accessToken: string = "";
 
@@ -113,7 +135,7 @@ export class Client {
             dnt: req.headers["dnt"] as string || "",
             user_agent: req.headers["user-agent"] || "",
             accept_language: req.headers["accept-language"] || "",
-            referrer: this.getReferrer(req, url)
+            referrer: Client.getReferrer(req, url)
         };
     }
 
@@ -131,7 +153,7 @@ export class Client {
         }
     }
 
-    private getReferrer(req: IncomingMessage, url: URL): string {
+    private static getReferrer(req: IncomingMessage, url: URL): string {
         let referrer = req.headers["referer"] || "";
 
         if(referrer === "") {
