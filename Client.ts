@@ -110,7 +110,7 @@ export class Client {
      * 
      * @param hit all required data for the request.
      * @param retry retry the request in case a 401 (unauthenticated) error is returned. Don't modify this.
-     * @returns an empty promise or an APIError, in case something went wrong
+     * @returns APIError or an empty promise, in case something went wrong
      */
     async hit(hit: Hit, retry: boolean = true): Promise<APIError | null> {
         try {
@@ -146,7 +146,7 @@ export class Client {
      * hitFromRequest returns the required data to send a hit to Pirsch for a Node request object.
      * 
      * @param req the Node request object from the http package.
-     * @returns a Hit object containing all necessary fields.
+     * @returns Hit object containing all necessary fields.
      */
     hitFromRequest(req: IncomingMessage): Hit {
         const url = new URL(req.url || "", `${this.protocol}://${this.hostname}`);
@@ -167,7 +167,8 @@ export class Client {
     /**
      * domain returns the domain for this client.
      *
-     * @returns the Domain object for this client.
+     * @param retry retry the request in case a 401 (unauthenticated) error is returned. Don't modify this.
+     * @returns Domain object for this client.
      */
     async domain(retry: boolean = true): Promise<Domain | APIError> {
         try {
@@ -201,6 +202,8 @@ export class Client {
 
     /**
      * sessionDuration returns the session duration grouped by day.
+     *
+     * @param filter used to filter the result set.
      */
     async sessionDuration(filter: Filter): Promise<TimeSpentStats[] | APIError> {
         return await this.performGet<TimeSpentStats[]>(sessionDurationEndpoint, filter);
