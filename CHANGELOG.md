@@ -5,6 +5,7 @@
 * added `source` and `utm_source` to referrers
 * added methods to read statistics
 * updated dependencies
+* fixed retry on 401
 
 ## 1.0.1
 
