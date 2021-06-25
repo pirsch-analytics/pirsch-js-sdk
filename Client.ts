@@ -12,6 +12,8 @@ const referrerQueryParams = [
 	"ref",
 	"referer",
 	"referrer",
+    "source",
+    "utm_source"
 ];
 
 /**
