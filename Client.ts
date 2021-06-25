@@ -407,7 +407,7 @@ export class Client {
             if(e.response.status === 401 && retry) {
                 try {
                     await this.refreshToken();
-                    return this.performGet(url, filter, false);
+                    return this.performGet<T>(url, filter, false);
                 } catch(e) {
                     return e;
                 }
