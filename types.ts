@@ -60,6 +60,8 @@ export interface Filter {
     to: Date
     path?: string
     pattern?: string
+    event?: string
+    event_meta_key?: string
     language?: string
     country?: string
     referrer?: string
@@ -192,6 +194,17 @@ export interface ConversionGoal extends BaseEntity {
     cr_goal?: number
     delete_reached: boolean
     email_reached: boolean
+}
+
+// EventStats is the result type for custom events.
+export interface EventStats {
+	name: string
+	visitors: number
+	views: number
+	cr: number
+	average_duration_seconds: number
+	meta_keys: string[]
+	meta_value: string
 }
 
 /**

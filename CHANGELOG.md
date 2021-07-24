@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.0
+
+* added method to send events
+* added reading event statistics
+* fixed filter parameters to read statistics
+
 ## 1.1.1
 
 * fixed build

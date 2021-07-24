@@ -20,12 +20,15 @@ import {
     ActiveVisitorsData,
     Growth,
     ConversionGoal,
+    EventStats,
     PageStats,
     VisitorStats,
     UTMTermStats,
     UTMContentStats,
     UTMCampaignStats,
-    UTMMediumStats, UTMSourceStats, TimeSpentStats
+    UTMMediumStats,
+    UTMSourceStats,
+    TimeSpentStats
 } from "./types";
 
 const defaultBaseURL = "https://api.pirsch.io";
@@ -33,6 +36,7 @@ const defaultTimeout = 5000;
 const defaultProtocol = "http";
 const authenticationEndpoint = "/api/v1/token";
 const hitEndpoint = "/api/v1/hit";
+const eventEndpoint = "/api/v1/event";
 const domainEndpoint = "/api/v1/domain";
 const sessionDurationEndpoint = "/api/v1/statistics/duration/session";
 const timeOnPageEndpoint = "/api/v1/statistics/duration/page";
@@ -44,6 +48,8 @@ const utmTermEndpoint = "/api/v1/statistics/utm/term";
 const visitorsEndpoint = "/api/v1/statistics/visitor";
 const pagesEndpoint = "/api/v1/statistics/page";
 const conversionGoalsEndpoint = "/api/v1/statistics/goals";
+const eventsEndpoint = "/api/v1/statistics/events";
+const eventMetadataEndpoint = "/api/v1/statistics/event/meta";
 const growthRateEndpoint = "/api/v1/statistics/growth";
 const activeVisitorsEndpoint = "/api/v1/statistics/active";
 const timeOfDayEndpoint = "/api/v1/statistics/hours";
@@ -120,6 +126,50 @@ export class Client {
 
             await this.client.post(hitEndpoint, {
                 hostname: this.hostname,
+                ...hit,
+            }, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${this.accessToken}`
+                }
+            });
+            return Promise.resolve<null>(null);
+        } catch(e) {
+            if(e.response.status === 401 && retry) {
+                try {
+                    await this.refreshToken();
+                    return this.hit(hit, false);
+                } catch(e) {
+                    return e;
+                }
+            }
+
+            return Promise.reject<APIError>(e.response.data);
+        }
+    }
+
+    /**
+     * event sends an event to Pirsch. Make sure you call it in all request handlers you want to track.
+     * Also, make sure to filter out unwanted pathnames (like /favicon.ico in your root handler for example).
+     *
+     * @param name the name for the event
+     * @param hit all required data for the request
+     * @param duration optional duration for the event
+     * @param meta optional object containing metadata (only scalar values, like strings, numbers, and booleans)
+     * @param retry retry the request in case a 401 (unauthenticated) error is returned. Don't modify this.
+     * @returns APIError or an empty promise, in case something went wrong
+     */
+     async event(name: string, hit: Hit, duration: number = 0, meta: Object | null = null, retry: boolean = true): Promise<APIError | null> {
+        try {
+            if(hit.dnt === "1") {
+                return Promise.resolve<null>(null);
+            }
+
+            await this.client.post(eventEndpoint, {
+                hostname: this.hostname,
+                event_name: name,
+                event_duration: duration,
+                event_meta: meta,
                 ...hit,
             }, {
                 headers: {
@@ -288,6 +338,24 @@ export class Client {
      */
     async conversionGoals(filter: Filter): Promise<ConversionGoal[] | APIError> {
         return await this.performGet<ConversionGoal[]>(conversionGoalsEndpoint, filter);
+    }
+
+    /**
+     * events returns all events.
+     *
+     * @param filter used to filter the result set.
+     */
+     async events(filter: Filter): Promise<EventStats[] | APIError> {
+        return await this.performGet<EventStats[]>(eventsEndpoint, filter);
+    }
+
+    /**
+     * eventMetadata returns the metadata for a single event.
+     *
+     * @param filter used to filter the result set.
+     */
+     async eventMetadata(filter: Filter): Promise<EventStats[] | APIError> {
+        return await this.performGet<EventStats[]>(eventMetadataEndpoint, filter);
     }
 
     /**
