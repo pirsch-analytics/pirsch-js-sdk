@@ -30,6 +30,9 @@ import {
     UTMSourceStats,
     TimeSpentStats
 } from "./types";
+import { EntryStats } from ".";
+import { ExitStats } from ".";
+import { CityStats } from ".";
 
 const defaultBaseURL = "https://api.pirsch.io";
 const defaultTimeout = 5000;
@@ -37,6 +40,7 @@ const defaultProtocol = "http";
 const authenticationEndpoint = "/api/v1/token";
 const hitEndpoint = "/api/v1/hit";
 const eventEndpoint = "/api/v1/event";
+const sessionEndpoint = "/api/v1/session";
 const domainEndpoint = "/api/v1/domain";
 const sessionDurationEndpoint = "/api/v1/statistics/duration/session";
 const timeOnPageEndpoint = "/api/v1/statistics/duration/page";
@@ -47,6 +51,8 @@ const utmContentEndpoint = "/api/v1/statistics/utm/content";
 const utmTermEndpoint = "/api/v1/statistics/utm/term";
 const visitorsEndpoint = "/api/v1/statistics/visitor";
 const pagesEndpoint = "/api/v1/statistics/page";
+const entryPagesEndpoint = "/api/v1/statistics/page/entry";
+const exitPagesEndpoint = "/api/v1/statistics/page/exit";
 const conversionGoalsEndpoint = "/api/v1/statistics/goals";
 const eventsEndpoint = "/api/v1/statistics/events";
 const eventMetadataEndpoint = "/api/v1/statistics/event/meta";
@@ -58,6 +64,7 @@ const referrerEndpoint = "/api/v1/statistics/referrer";
 const osEndpoint = "/api/v1/statistics/os";
 const browserEndpoint = "/api/v1/statistics/browser";
 const countryEndpoint = "/api/v1/statistics/country";
+const cityEndpoint = "/api/v1/statistics/city";
 const platformEndpoint = "/api/v1/statistics/platform";
 const screenEndpoint = "/api/v1/statistics/screen";
 const keywordsEndpoint = "/api/v1/statistics/keywords";
@@ -70,7 +77,7 @@ const referrerQueryParams = [
 ];
 
 /**
- * Client is the Pirsch API client.
+ * Client is used to access the Pirsch API.
  */
 export class Client {
     private readonly clientID: string;
@@ -183,6 +190,43 @@ export class Client {
                 try {
                     await this.refreshToken();
                     return this.hit(hit, false);
+                } catch(e) {
+                    return e;
+                }
+            }
+
+            return Promise.reject<APIError>(e.response.data);
+        }
+    }
+
+    /**
+     * session keeps a session alive.
+     * 
+     * @param hit all required data for the request.
+     * @param retry retry the request in case a 401 (unauthenticated) error is returned. Don't modify this.
+     * @returns APIError or an empty promise, in case something went wrong
+     */
+     async session(hit: Hit, retry: boolean = true): Promise<APIError | null> {
+        try {
+            if(hit.dnt === "1") {
+                return Promise.resolve<null>(null);
+            }
+
+            await this.client.post(sessionEndpoint, {
+                hostname: this.hostname,
+                ...hit,
+            }, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${this.accessToken}`
+                }
+            });
+            return Promise.resolve<null>(null);
+        } catch(e) {
+            if(e.response.status === 401 && retry) {
+                try {
+                    await this.refreshToken();
+                    return this.session(hit, false);
                 } catch(e) {
                     return e;
                 }
@@ -323,11 +367,29 @@ export class Client {
     }
 
     /**
+     * entryPages returns the entry page statistics grouped by page.
+     *
+     * @param filter used to filter the result set.
+     */
+    async entryPages(filter: Filter): Promise<EntryStats[] | APIError> {
+        return await this.performGet<EntryStats[]>(entryPagesEndpoint, filter);
+    }
+
+    /**
+     * exitPages returns the exit page statistics grouped by page.
+     *
+     * @param filter used to filter the result set.
+     */
+     async exitPages(filter: Filter): Promise<ExitStats[] | APIError> {
+        return await this.performGet<ExitStats[]>(exitPagesEndpoint, filter);
+    }
+
+    /**
      * pages returns the page statistics grouped by page.
      *
      * @param filter used to filter the result set.
      */
-    async pages(filter: Filter): Promise<PageStats[] | APIError> {
+     async pages(filter: Filter): Promise<PageStats[] | APIError> {
         return await this.performGet<PageStats[]>(pagesEndpoint, filter);
     }
 
@@ -428,6 +490,15 @@ export class Client {
      */
     async country(filter: Filter): Promise<CountryStats[] | APIError> {
         return await this.performGet<CountryStats[]>(countryEndpoint, filter);
+    }
+
+    /**
+     * city returns city statistics.
+     *
+     * @param filter used to filter the result set.
+     */
+     async city(filter: Filter): Promise<CityStats[] | APIError> {
+        return await this.performGet<CityStats[]>(cityEndpoint, filter);
     }
 
     /**

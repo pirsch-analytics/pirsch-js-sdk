@@ -60,11 +60,15 @@ export interface Filter {
     to: Date
     path?: string
     pattern?: string
+    entry_path?: string
+	exit_path?: string
     event?: string
     event_meta_key?: string
     language?: string
     country?: string
+    city?: string
     referrer?: string
+    referrer_name?: string
     os?: string
     browser?: string
     platform?: string
@@ -182,6 +186,31 @@ export interface PageStats {
     average_time_spent_seconds: number
 }
 
+/*
+ * EntryStats is the result type for entry page statistics.
+ */
+export interface EntryStats {
+	path: string
+	title: string
+	visitors: number
+	sessions: number
+	entries: number
+	entry_rate: number
+	average_time_spent_seconds: number
+}
+
+/*
+ * ExitStats is the result type for exit page statistics.
+ */
+export interface ExitStats {
+	exit_path: string
+	title: string
+	visitors: number
+	sessions: number
+	exits: number
+	exit_rate: number
+}
+
 /**
  * ConversionGoal is a conversion goal as configured on the dashboard.
  */
@@ -273,6 +302,13 @@ export interface CountryStats extends MetaStats {
     country_code: string
 }
 
+/*
+ * CityStats is the result type for city statistics.
+ */
+export interface CityStats extends MetaStats {
+	city: string
+}
+
 /**
  * BrowserStats is the result export interface for browser statistics.
  */
@@ -295,6 +331,7 @@ export interface ReferrerStats {
     referrer_name: string
     referrer_icon: string
     visitors: number
+    sessions: number
     relative_visitors: number
     bounces: number
     bounce_rate: number

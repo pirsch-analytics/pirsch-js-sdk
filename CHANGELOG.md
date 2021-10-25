@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.3.0
+
+* added endpoint to extend sessions
+* added entry page statistics
+* added exit page statistics
+* added number of sessions to referrer statistics
+* added city statistics
+* added entry page, exit page, city, and referrer name to filter
+
 ## 1.2.0
 
 * added method to send events
