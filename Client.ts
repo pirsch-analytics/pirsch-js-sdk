@@ -1,6 +1,6 @@
 import { IncomingMessage } from "http";
 import { URL } from "url";
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosError, AxiosInstance } from "axios";
 import {
     ClientConfig,
     AuthenticationResponse,
@@ -141,17 +141,21 @@ export class Client {
                 }
             });
             return Promise.resolve<null>(null);
-        } catch(e) {
-            if(e.response.status === 401 && retry) {
-                try {
-                    await this.refreshToken();
-                    return this.hit(hit, false);
-                } catch(e) {
-                    return e;
+        } catch(e: any) {
+            if(e.response) {
+                if(e.response.status === 401 && retry) {
+                    try {
+                        await this.refreshToken();
+                        return this.hit(hit, false);
+                    } catch(e) {
+                        return e as APIError;
+                    }
                 }
+
+                return Promise.reject<APIError>(e.response.data);
             }
 
-            return Promise.reject<APIError>(e.response.data);
+            return Promise.reject(e);
         }
     }
 
@@ -185,17 +189,21 @@ export class Client {
                 }
             });
             return Promise.resolve<null>(null);
-        } catch(e) {
-            if(e.response.status === 401 && retry) {
-                try {
-                    await this.refreshToken();
-                    return this.hit(hit, false);
-                } catch(e) {
-                    return e;
+        } catch(e: any) {
+            if(e.response) {
+                if(e.response.status === 401 && retry) {
+                    try {
+                        await this.refreshToken();
+                        return this.hit(hit, false);
+                    } catch(e) {
+                        return e as APIError;
+                    }
                 }
+
+                return Promise.reject<APIError>(e.response.data);
             }
 
-            return Promise.reject<APIError>(e.response.data);
+            return Promise.reject(e);
         }
     }
 
@@ -222,17 +230,21 @@ export class Client {
                 }
             });
             return Promise.resolve<null>(null);
-        } catch(e) {
-            if(e.response.status === 401 && retry) {
-                try {
-                    await this.refreshToken();
-                    return this.session(hit, false);
-                } catch(e) {
-                    return e;
+        } catch(e: any) {
+            if(e.response) {
+                if(e.response.status === 401 && retry) {
+                    try {
+                        await this.refreshToken();
+                        return this.session(hit, false);
+                    } catch(e) {
+                        return e as APIError;
+                    }
                 }
+
+                return Promise.reject<APIError>(e.response.data);
             }
 
-            return Promise.reject<APIError>(e.response.data);
+            return Promise.reject(e);
         }
     }
 
@@ -280,17 +292,21 @@ export class Client {
             }
 
             return Promise.resolve<Domain>(resp.data);
-        } catch(e) {
-            if(e.response.status === 401 && retry) {
-                try {
-                    await this.refreshToken();
-                    return this.domain(false);
-                } catch(e) {
-                    return e;
+        } catch(e: any) {
+            if(e.response) {
+                if(e.response.status === 401 && retry) {
+                    try {
+                        await this.refreshToken();
+                        return this.domain(false);
+                    } catch(e) {
+                        return e as APIError;
+                    }
                 }
+
+                return Promise.reject<APIError>(e.response.data);
             }
 
-            return Promise.reject<APIError>(e.response.data);
+            return Promise.reject(e);
         }
     }
 
@@ -542,17 +558,21 @@ export class Client {
                 params: filter
             });
             return Promise.resolve<T>(resp.data);
-        } catch(e) {
-            if(e.response.status === 401 && retry) {
-                try {
-                    await this.refreshToken();
-                    return this.performGet<T>(url, filter, false);
-                } catch(e) {
-                    return e;
+        } catch(e: any) {
+            if(e.response) {
+                if(e.response.status === 401 && retry) {
+                    try {
+                        await this.refreshToken();
+                        return this.performGet<T>(url, filter, false);
+                    } catch(e) {
+                        return e as APIError;
+                    }
                 }
+
+                return Promise.reject<APIError>(e.response.data);
             }
 
-            return Promise.reject<APIError>(e.response.data);
+            return Promise.reject(e);
         }
     }
 
@@ -564,9 +584,14 @@ export class Client {
             });
             this.accessToken = resp.data.access_token;
             return Promise.resolve<null>(null);
-        } catch(e) {
+        } catch(e: any) {
             this.accessToken = "";
-            return Promise.reject<APIError>(e.response.data);
+
+            if(e.response) {
+                return Promise.reject<APIError>(e.response.data);
+            }
+
+            return Promise.reject(e);
         }
     }
 
