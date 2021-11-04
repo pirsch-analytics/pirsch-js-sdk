@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.2
+
+* fixed copy-paste error
+
 ## 1.3.1
 
 * fixed error handling

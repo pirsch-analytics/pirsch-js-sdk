@@ -194,7 +194,7 @@ export class Client {
                 if(e.response.status === 401 && retry) {
                     try {
                         await this.refreshToken();
-                        return this.hit(hit, false);
+                        return this.event(name, hit, duration, meta, false);
                     } catch(e) {
                         return e as APIError;
                     }
