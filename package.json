@@ -1,6 +1,6 @@
 {
   "name": "pirsch-sdk",
-  "version": "1.3.1",
+  "version": "1.3.3",
   "description": "JavaScript client SDK for Pirsch.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
