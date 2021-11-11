@@ -160,6 +160,17 @@ export interface UTMTermStats extends MetaStats {
 }
 
 /**
+ * TotalVisitorStats is the result export interface for total visitor statistics.
+ */
+ export interface TotalVisitorStats {
+    visitors: number
+    views: number
+    sessions: number
+    bounces: number
+    bounce_rate: number
+}
+
+/**
  * VisitorStats is the result export interface for visitor statistics.
  */
 export interface VisitorStats {

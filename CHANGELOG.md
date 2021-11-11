@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.2
+
+* added endpoint for total visitor statistics
+
 ## 1.3.1
 
 * fixed error handling

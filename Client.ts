@@ -28,7 +28,8 @@ import {
     UTMCampaignStats,
     UTMMediumStats,
     UTMSourceStats,
-    TimeSpentStats
+    TimeSpentStats,
+    TotalVisitorStats
 } from "./types";
 import { EntryStats } from ".";
 import { ExitStats } from ".";
@@ -49,6 +50,7 @@ const utmMediumEndpoint = "/api/v1/statistics/utm/medium";
 const utmCampaignEndpoint = "/api/v1/statistics/utm/campaign";
 const utmContentEndpoint = "/api/v1/statistics/utm/content";
 const utmTermEndpoint = "/api/v1/statistics/utm/term";
+const totalVisitorsEndpoint = "/api/v1/statistics/total";
 const visitorsEndpoint = "/api/v1/statistics/visitor";
 const pagesEndpoint = "/api/v1/statistics/page";
 const entryPagesEndpoint = "/api/v1/statistics/page/entry";
@@ -371,6 +373,15 @@ export class Client {
      */
     async utmTerm(filter: Filter): Promise<UTMTermStats[] | APIError> {
         return await this.performGet<UTMTermStats[]>(utmTermEndpoint, filter);
+    }
+
+    /**
+     * totalVisitors returns the total visitor statistics.
+     *
+     * @param filter used to filter the result set.
+     */
+     async totalVisitors(filter: Filter): Promise<TotalVisitorStats | APIError> {
+        return await this.performGet<TotalVisitorStats>(totalVisitorsEndpoint, filter);
     }
 
     /**
