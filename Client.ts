@@ -150,7 +150,7 @@ export class Client {
                         await this.refreshToken();
                         return this.hit(hit, false);
                     } catch(e) {
-                        return e as APIError;
+                        return Promise.reject(e);
                     }
                 }
 
@@ -198,7 +198,7 @@ export class Client {
                         await this.refreshToken();
                         return this.event(name, hit, duration, meta, false);
                     } catch(e) {
-                        return e as APIError;
+                        return Promise.reject(e);
                     }
                 }
 
@@ -239,7 +239,7 @@ export class Client {
                         await this.refreshToken();
                         return this.session(hit, false);
                     } catch(e) {
-                        return e as APIError;
+                        return Promise.reject(e);
                     }
                 }
 
@@ -301,7 +301,7 @@ export class Client {
                         await this.refreshToken();
                         return this.domain(false);
                     } catch(e) {
-                        return e as APIError;
+                        return Promise.reject(e);
                     }
                 }
 
@@ -576,7 +576,7 @@ export class Client {
                         await this.refreshToken();
                         return this.performGet<T>(url, filter, false);
                     } catch(e) {
-                        return e as APIError;
+                        return Promise.reject(e);
                     }
                 }
 

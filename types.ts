@@ -297,6 +297,10 @@ export interface ActiveVisitorsData {
 export interface VisitorHourStats {
     hour: number
     visitors: number
+    views: number
+    sessions: number
+    bounces: number
+    bounce_rate: number
 }
 
 /**

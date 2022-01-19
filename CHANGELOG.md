@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.4
+
+* added new hourly visitor statistics
+* fixed promise not being rejected in case the token cannot be refreshed
+
 ## 1.3.3
 
 * added endpoint for total visitor statistics
