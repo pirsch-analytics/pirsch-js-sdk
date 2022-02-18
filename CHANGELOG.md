@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.5
+
+* fixed domain method returning an object instead of an array
+
 ## 1.3.4
 
 * added new hourly visitor statistics

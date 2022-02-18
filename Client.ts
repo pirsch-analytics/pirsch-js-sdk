@@ -273,12 +273,12 @@ export class Client {
     }
 
     /**
-     * domain returns the domain for this client.
+     * domain returns the domain for this client in an array (first and only entry).
      *
      * @param retry retry the request in case a 401 (unauthenticated) error is returned. Don't modify this.
      * @returns Domain object for this client.
      */
-    async domain(retry: boolean = true): Promise<Domain | APIError> {
+    async domain(retry: boolean = true): Promise<Domain[] | APIError> {
         try {
             const resp = await this.client.get(domainEndpoint, {
                 headers: {
@@ -287,13 +287,13 @@ export class Client {
                 }
             });
 
-            if(resp.data.length !== 1) {
+            if(resp.data.length === 0) {
                 return Promise.reject<APIError>({
                     error: ["domain not found"]
                 });
             }
 
-            return Promise.resolve<Domain>(resp.data);
+            return Promise.resolve<Domain[]>(resp.data);
         } catch(e: any) {
             if(e.response) {
                 if(e.response.status === 401 && retry) {
