@@ -5,6 +5,7 @@
 * added hourly visitor statistics, listing events, os and browser versions
 * added filter options
 * updated return types with new and modified fields
+* updated dependencies
 
 ## 1.3.5
 
