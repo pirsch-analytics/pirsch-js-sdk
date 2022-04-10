@@ -50,6 +50,8 @@ export interface Validation {
     [key: string]: string
 }
 
+export type Scale = "day" | "week" | "month" | "year";
+
 /**
  * Filter is used to filter statistics.
  * DomainID, From, and To are required dates (the time is ignored).
@@ -58,6 +60,8 @@ export interface Filter {
     id: string
     from: Date
     to: Date
+    start: number
+    scale: Scale
     path?: string
     pattern?: string
     entry_path?: string
@@ -73,6 +77,8 @@ export interface Filter {
     browser?: string
     platform?: string
     screen_class?: string
+    screen_width?: number
+    screen_height?: number
     utm_source?: string
     utm_medium?: string
     utm_campaign?: string
@@ -111,8 +117,12 @@ export interface Domain extends BaseEntity {
  * TimeSpentStats is the time spent on the website or specific pages.
  */
 export interface TimeSpentStats {
-    day: Date
+    day?: Date
+    week?: Date
+    month?: Date
+    year?: Date
     path: string
+    title: string
     average_time_spent_seconds: number
 }
 
@@ -174,7 +184,10 @@ export interface UTMTermStats extends MetaStats {
  * VisitorStats is the result export interface for visitor statistics.
  */
 export interface VisitorStats {
-    day: Date
+    day?: Date
+    week?: Date
+    month?: Date
+    year?: Date
     visitors: number
     views: number
     sessions: number
@@ -247,6 +260,14 @@ export interface EventStats {
 	meta_value: string
 }
 
+// EventListStats is the result type for a custom event list.
+export interface EventListStats {
+	name: string
+	meta: {[key: string]: string}
+	visitors: number
+	count: number
+}
+
 /**
  * PageConversionsStats is the result export interface for page conversions.
  */
@@ -280,6 +301,7 @@ export interface Growth {
  */
 export interface ActiveVisitorStats {
     path: string
+    title: string
     visitors: number
 }
 
@@ -331,11 +353,23 @@ export interface BrowserStats extends MetaStats {
     browser: string
 }
 
+// BrowserVersionStats is the result type for browser version statistics.
+export interface BrowserVersionStats extends MetaStats {
+	browser: string
+	browser_version: string
+}
+
 /**
  * OSStats is the result export interface for operating system statistics.
  */
 export interface OSStats extends MetaStats {
     os: string
+}
+
+// OSVersionStats is the result type for operating system version statistics.
+export interface OSVersionStats extends MetaStats {
+	os: string
+	os_version: string
 }
 
 /**

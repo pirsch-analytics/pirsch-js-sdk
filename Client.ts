@@ -29,7 +29,10 @@ import {
     UTMMediumStats,
     UTMSourceStats,
     TimeSpentStats,
-    TotalVisitorStats
+    TotalVisitorStats,
+    EventListStats,
+    OSVersionStats,
+    BrowserVersionStats
 } from "./types";
 import { EntryStats } from ".";
 import { ExitStats } from ".";
@@ -58,13 +61,16 @@ const exitPagesEndpoint = "/api/v1/statistics/page/exit";
 const conversionGoalsEndpoint = "/api/v1/statistics/goals";
 const eventsEndpoint = "/api/v1/statistics/events";
 const eventMetadataEndpoint = "/api/v1/statistics/event/meta";
+const listEventsEndpoint = "/api/v1/statistics/event/list";
 const growthRateEndpoint = "/api/v1/statistics/growth";
 const activeVisitorsEndpoint = "/api/v1/statistics/active";
 const timeOfDayEndpoint = "/api/v1/statistics/hours";
 const languageEndpoint = "/api/v1/statistics/language";
 const referrerEndpoint = "/api/v1/statistics/referrer";
 const osEndpoint = "/api/v1/statistics/os";
+const osVersionEndpoint = "/api/v1/statistics/os/version";
 const browserEndpoint = "/api/v1/statistics/browser";
+const browserVersionEndpoint = "/api/v1/statistics/browser/version";
 const countryEndpoint = "/api/v1/statistics/country";
 const cityEndpoint = "/api/v1/statistics/city";
 const platformEndpoint = "/api/v1/statistics/platform";
@@ -172,7 +178,7 @@ export class Client {
      * @param retry retry the request in case a 401 (unauthenticated) error is returned. Don't modify this.
      * @returns APIError or an empty promise, in case something went wrong
      */
-     async event(name: string, hit: Hit, duration: number = 0, meta: Object | null = null, retry: boolean = true): Promise<APIError | null> {
+    async event(name: string, hit: Hit, duration: number = 0, meta: Object | null = null, retry: boolean = true): Promise<APIError | null> {
         try {
             if(hit.dnt === "1") {
                 return Promise.resolve<null>(null);
@@ -216,7 +222,7 @@ export class Client {
      * @param retry retry the request in case a 401 (unauthenticated) error is returned. Don't modify this.
      * @returns APIError or an empty promise, in case something went wrong
      */
-     async session(hit: Hit, retry: boolean = true): Promise<APIError | null> {
+    async session(hit: Hit, retry: boolean = true): Promise<APIError | null> {
         try {
             if(hit.dnt === "1") {
                 return Promise.resolve<null>(null);
@@ -380,7 +386,7 @@ export class Client {
      *
      * @param filter used to filter the result set.
      */
-     async totalVisitors(filter: Filter): Promise<TotalVisitorStats | APIError> {
+    async totalVisitors(filter: Filter): Promise<TotalVisitorStats | APIError> {
         return await this.performGet<TotalVisitorStats>(totalVisitorsEndpoint, filter);
     }
 
@@ -407,7 +413,7 @@ export class Client {
      *
      * @param filter used to filter the result set.
      */
-     async exitPages(filter: Filter): Promise<ExitStats[] | APIError> {
+    async exitPages(filter: Filter): Promise<ExitStats[] | APIError> {
         return await this.performGet<ExitStats[]>(exitPagesEndpoint, filter);
     }
 
@@ -416,7 +422,7 @@ export class Client {
      *
      * @param filter used to filter the result set.
      */
-     async pages(filter: Filter): Promise<PageStats[] | APIError> {
+    async pages(filter: Filter): Promise<PageStats[] | APIError> {
         return await this.performGet<PageStats[]>(pagesEndpoint, filter);
     }
 
@@ -434,7 +440,7 @@ export class Client {
      *
      * @param filter used to filter the result set.
      */
-     async events(filter: Filter): Promise<EventStats[] | APIError> {
+    async events(filter: Filter): Promise<EventStats[] | APIError> {
         return await this.performGet<EventStats[]>(eventsEndpoint, filter);
     }
 
@@ -443,8 +449,17 @@ export class Client {
      *
      * @param filter used to filter the result set.
      */
-     async eventMetadata(filter: Filter): Promise<EventStats[] | APIError> {
+    async eventMetadata(filter: Filter): Promise<EventStats[] | APIError> {
         return await this.performGet<EventStats[]>(eventMetadataEndpoint, filter);
+    }
+
+    /**
+     * listEvents returns a list of all events including metadata.
+     *
+     * @param filter used to filter the result set.
+     */
+    async listEvents(filter: Filter): Promise<EventListStats[] | APIError> {
+        return await this.performGet<EventListStats[]>(listEventsEndpoint, filter);
     }
 
     /**
@@ -502,12 +517,30 @@ export class Client {
     }
 
     /**
+     * osVersions returns operating system version statistics.
+     *
+     * @param filter used to filter the result set.
+     */
+    async osVersions(filter: Filter): Promise<OSVersionStats[] | APIError> {
+        return await this.performGet<OSVersionStats[]>(osVersionEndpoint, filter);
+    }
+
+    /**
      * browser returns browser statistics.
      *
      * @param filter used to filter the result set.
      */
     async browser(filter: Filter): Promise<BrowserStats[] | APIError> {
         return await this.performGet<BrowserStats[]>(browserEndpoint, filter);
+    }
+
+    /**
+     * browserVersions returns browser version statistics.
+     *
+     * @param filter used to filter the result set.
+     */
+    async browserVersions(filter: Filter): Promise<BrowserVersionStats[] | APIError> {
+        return await this.performGet<BrowserVersionStats[]>(browserVersionEndpoint, filter);
     }
 
     /**
@@ -524,7 +557,7 @@ export class Client {
      *
      * @param filter used to filter the result set.
      */
-     async city(filter: Filter): Promise<CityStats[] | APIError> {
+    async city(filter: Filter): Promise<CityStats[] | APIError> {
         return await this.performGet<CityStats[]>(cityEndpoint, filter);
     }
 
