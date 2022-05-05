@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.1
+
+* added single access token that don't require to query an access token using oAuth
+
 ## 1.4.0
 
 * added hourly visitor statistics, listing events, os and browser versions

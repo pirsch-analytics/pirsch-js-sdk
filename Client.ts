@@ -115,6 +115,10 @@ export class Client {
             config.protocol = defaultProtocol;
         }
 
+        if(!config.clientID) {
+            this.accessToken = config.clientSecret;
+        }
+
         this.clientID = config.clientID;
         this.clientSecret = config.clientSecret;
         this.hostname = config.hostname;
@@ -151,7 +155,7 @@ export class Client {
             return Promise.resolve<null>(null);
         } catch(e: any) {
             if(e.response) {
-                if(e.response.status === 401 && retry) {
+                if(this.clientID && e.response.status === 401 && retry) {
                     try {
                         await this.refreshToken();
                         return this.hit(hit, false);
@@ -199,7 +203,7 @@ export class Client {
             return Promise.resolve<null>(null);
         } catch(e: any) {
             if(e.response) {
-                if(e.response.status === 401 && retry) {
+                if(this.clientID && e.response.status === 401 && retry) {
                     try {
                         await this.refreshToken();
                         return this.event(name, hit, duration, meta, false);
@@ -240,7 +244,7 @@ export class Client {
             return Promise.resolve<null>(null);
         } catch(e: any) {
             if(e.response) {
-                if(e.response.status === 401 && retry) {
+                if(this.clientID && e.response.status === 401 && retry) {
                     try {
                         await this.refreshToken();
                         return this.session(hit, false);
@@ -302,7 +306,7 @@ export class Client {
             return Promise.resolve<Domain[]>(resp.data);
         } catch(e: any) {
             if(e.response) {
-                if(e.response.status === 401 && retry) {
+                if(this.clientID && e.response.status === 401 && retry) {
                     try {
                         await this.refreshToken();
                         return this.domain(false);
@@ -604,7 +608,7 @@ export class Client {
             return Promise.resolve<T>(resp.data);
         } catch(e: any) {
             if(e.response) {
-                if(e.response.status === 401 && retry) {
+                if(this.clientID && e.response.status === 401 && retry) {
                     try {
                         await this.refreshToken();
                         return this.performGet<T>(url, filter, false);
