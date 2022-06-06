@@ -57,7 +57,7 @@ export function init(config: Config) {
 }
 
 /**
- * TODO
+ * hit sends a page view to Pirsch.
  */
 export function hit() {
     if(ignoreRequest()) {
@@ -74,11 +74,16 @@ export function hit() {
 }
 
 /**
- * TODO
+ * event sends an event to Pirsch.
+ * 
+ * @param name the event name
+ * @param meta optional meta data (key-value pairs)
+ * @param duration optional duration on page
+ * @returns a Promise resolving or rejecting for the first event to be sent (when using multiple domains)
  */
-export function event(name: string, meta?: EventMeta, duration?: number) {
+export function event(name: string, meta?: EventMeta, duration?: number): Promise<any> {
     if(ignoreRequest()) {
-        return;
+        return Promise.reject("request ignored");
     }
 
     if(!meta) {
@@ -89,17 +94,19 @@ export function event(name: string, meta?: EventMeta, duration?: number) {
         duration = 0;
     }
 
-    sendEvent("", name, meta, duration);
+    return new Promise((resolve, reject) => {
+        sendEvent("", name, meta as EventMeta, duration as number, resolve, reject);
 
-    if(pirschConfig.domains) {
-        for(let i = 0; i < pirschConfig.domains.length; i++) {
-            sendEvent(pirschConfig.domains[i], name, meta, duration);
+        if(pirschConfig.domains) {
+            for(let i = 0; i < pirschConfig.domains.length; i++) {
+                sendEvent(pirschConfig.domains[i], name, meta as EventMeta, duration as number, resolve, reject);
+            }
         }
-    }
+    });
 }
 
 /**
- * TODO
+ * session keeps a visitor session alive.
  */
  export function session() {
     if(ignoreRequest()) {
@@ -158,7 +165,7 @@ function sendHit(hostname?: string) {
     req.send();
 }
 
-function sendEvent(hostname: string, name: string, meta: EventMeta, duration: number) {
+function sendEvent(hostname: string, name: string, meta: EventMeta, duration: number, resolve: (value: any) => void, reject: (value: any) => void) {
     if(!name) {
         console.error("The event name must not be empty.");
         return;
@@ -179,14 +186,14 @@ function sendEvent(hostname: string, name: string, meta: EventMeta, duration: nu
     const req = new XMLHttpRequest();
     req.open("POST", pirschConfig.eventEndpoint || eventEndpoint);
     req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    /*req.onload = () => {
+    req.onload = () => {
         if(req.status >= 200 && req.status < 300) {
             resolve(req.response);
         } else {
             reject(req.statusText);
         }
     };
-    req.onerror = () => reject(req.statusText);*/
+    req.onerror = () => reject(req.statusText);
     req.send(JSON.stringify({
         identification_code: pirschConfig.identificationCode,
         url: hostname.substring(0, 1800),
