@@ -1,3 +1,4 @@
+import { config } from "process";
 import { defaultBaseURL, defaultTimeout } from "./Client";
 
 const hitEndpoint = "https://api.pirsch.io/hit";
@@ -11,11 +12,16 @@ let pirschConfig: Config;
  */
 export interface Config {
     identificationCode: string
-    domain?: string
+    domains?: string[]
+    excludePaths?: string[]
     dev?: boolean
     hitEndpoint?: string
     eventEndpoint?: string
     sessionEndpoint?: string
+}
+
+export interface EventMeta {
+    [key: string]: string | number
 }
 
 /**
@@ -47,33 +53,49 @@ export function init(config: Config) {
         config.sessionEndpoint = sessionEndpoint;
     }
 
-    // TODO set exclude paths
-    // TODO additional domains
-
     pirschConfig = config;
 }
 
 /**
  * TODO
  */
-export async function hit() {
+export function hit() {
     if(ignoreRequest()) {
         return;
     }
 
-    // TODO iterate domains
-    sendHit("");
+    sendHit();
+
+    if(pirschConfig.domains) {
+        for(let i = 0; i < pirschConfig.domains.length; i++) {
+            sendHit(pirschConfig.domains[i]);
+        }
+    }
 }
 
 /**
  * TODO
  */
-export function event() {
+export function event(name: string, meta?: EventMeta, duration?: number) {
     if(ignoreRequest()) {
         return;
     }
 
-    // TODO
+    if(!meta) {
+        meta = {};
+    }
+
+    if(!duration) {
+        duration = 0;
+    }
+
+    sendEvent("", name, meta, duration);
+
+    if(pirschConfig.domains) {
+        for(let i = 0; i < pirschConfig.domains.length; i++) {
+            sendEvent(pirschConfig.domains[i], name, meta, duration);
+        }
+    }
 }
 
 /**
@@ -97,6 +119,18 @@ function ignoreRequest() {
         return true;
     }
 
+    try {
+        if(pirschConfig.excludePaths) {
+            for(let i = 0; i < pirschConfig.excludePaths.length; i++) {
+                if (new RegExp(pirschConfig.excludePaths[i]).test(location.pathname)) {
+                    return true;
+                }
+            }
+        }
+    } catch(e) {
+        console.error(e);
+    }
+
     return false;
 }
 
@@ -104,7 +138,7 @@ function dntOrDisabled() {
     return navigator.doNotTrack === "1" || localStorage.getItem("disable_pirsch");
 }
 
-function sendHit(hostname: string) {
+function sendHit(hostname?: string) {
     if(!hostname) {
         hostname = location.href;
     } else {
@@ -122,4 +156,50 @@ function sendHit(hostname: string) {
     const req = new XMLHttpRequest();
     req.open("GET", url);
     req.send();
+}
+
+function sendEvent(hostname: string, name: string, meta: EventMeta, duration: number) {
+    if(!name) {
+        console.error("The event name must not be empty.");
+        return;
+    }
+
+    if(!hostname) {
+        hostname = location.href;
+    } else {
+        hostname = location.href.replace(location.hostname, hostname);
+    }
+
+    for(let key in meta) {
+        if(meta.hasOwnProperty(key)) {
+            meta[key] = String(meta[key]);
+        }
+    }
+
+    const req = new XMLHttpRequest();
+    req.open("POST", pirschConfig.eventEndpoint || eventEndpoint);
+    req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    /*req.onload = () => {
+        if(req.status >= 200 && req.status < 300) {
+            resolve(req.response);
+        } else {
+            reject(req.statusText);
+        }
+    };
+    req.onerror = () => reject(req.statusText);*/
+    req.send(JSON.stringify({
+        identification_code: pirschConfig.identificationCode,
+        url: hostname.substring(0, 1800),
+        title: document.title,
+        referrer: document.referrer,
+        screen_width: screen.width,
+        screen_height: screen.height,
+        event_name: name,
+        event_duration: duration,
+        event_meta: meta
+    }));
+}
+
+function sendSession() {
+    // TODO
 }
