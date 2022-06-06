@@ -5,7 +5,13 @@
 
 This is the official JavaScript client SDK for Pirsch. For details, please check out our [documentation](https://docs.pirsch.io/).
 
-## Usage
+The SDK can be used in the browser or server-side using NodeJS. Please see the demos below.
+
+## Using the SDK in the Browser
+
+*WIP*
+
+## Using the SDK with Node
 
 Here is a quick demo on how to use this library in NodeJS:
 

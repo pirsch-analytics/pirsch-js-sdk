@@ -38,9 +38,9 @@ import { EntryStats } from ".";
 import { ExitStats } from ".";
 import { CityStats } from ".";
 
-const defaultBaseURL = "https://api.pirsch.io";
-const defaultTimeout = 5000;
-const defaultProtocol = "http";
+export const defaultBaseURL = "https://api.pirsch.io";
+export const defaultTimeout = 5000;
+const defaultProtocol = "https";
 const authenticationEndpoint = "/api/v1/token";
 const hitEndpoint = "/api/v1/hit";
 const eventEndpoint = "/api/v1/event";

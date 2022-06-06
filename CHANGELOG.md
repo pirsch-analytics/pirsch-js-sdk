@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.0
+
+* added `hit`, `event`, and `session` functions to use the SDK in the browser without the need to create a client
+* fixed default protocol from http to https
+* updated dependencies
+
 ## 1.4.1
 
 * added single access token that don't require to query an access token using oAuth
