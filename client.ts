@@ -142,12 +142,7 @@ export class Client {
      * @param meta optional object containing metadata (only scalar values, like strings, numbers, and booleans)
      * @returns APIError or an empty promise, in case something went wrong
      */
-    async event(
-        name: string,
-        hit: Hit,
-        duration = 0,
-        meta?: Record<string, Scalar>,
-    ): Promise<Optional<APIError>> {
+    async event(name: string, hit: Hit, duration = 0, meta?: Record<string, Scalar>): Promise<Optional<APIError>> {
         if (hit.dnt === "1") {
             return;
         }
@@ -505,11 +500,7 @@ export class Client {
         return await this.performFilteredGet<Keyword[]>(keywordsEndpoint, filter);
     }
 
-    private async performPost<T extends object>(
-        url: string,
-        data: T,
-        retry = true
-    ): Promise<Optional<APIError>> {
+    private async performPost<T extends object>(url: string, data: T, retry = true): Promise<Optional<APIError>> {
         try {
             await this.client.post(
                 url,
