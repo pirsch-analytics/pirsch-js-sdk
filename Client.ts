@@ -77,7 +77,7 @@ const cityEndpoint = "/api/v1/statistics/city";
 const platformEndpoint = "/api/v1/statistics/platform";
 const screenEndpoint = "/api/v1/statistics/screen";
 const keywordsEndpoint = "/api/v1/statistics/keywords";
-const referrerQueryParams = ["ref", "referer", "referrer", "source", "utm_source"];
+const referrerQueryParameters = ["ref", "referer", "referrer", "source", "utm_source"];
 
 /**
  * Client is used to access the Pirsch API.
@@ -271,19 +271,19 @@ export class Client {
      * @param req the Node request object from the http package.
      * @returns Hit object containing all necessary fields.
      */
-    hitFromRequest(req: IncomingMessage): Hit {
-        const url = new URL(req.url ?? "", `${this.protocol}://${this.hostname}`);
+    hitFromRequest(request: IncomingMessage): Hit {
+        const url = new URL(request.url ?? "", `${this.protocol}://${this.hostname}`);
         return {
             url: url.toString(),
-            ip: req.socket.remoteAddress ?? "",
-            cf_connecting_ip: this.getHeader(req.headers, "cf-connecting-ip"),
-            x_forwarded_for: this.getHeader(req.headers, "x-forwarded-for"),
-            forwarded: this.getHeader(req.headers, "forwarded"),
-            x_real_ip: this.getHeader(req.headers, "x-real-ip"),
-            dnt: this.getHeader(req.headers, "dnt"),
-            user_agent: this.getHeader(req.headers, "user-agent"),
-            accept_language: this.getHeader(req.headers, "accept-language"),
-            referrer: Client.getReferrer(req, url),
+            ip: request.socket.remoteAddress ?? "",
+            cf_connecting_ip: this.getHeader(request.headers, "cf-connecting-ip"),
+            x_forwarded_for: this.getHeader(request.headers, "x-forwarded-for"),
+            forwarded: this.getHeader(request.headers, "forwarded"),
+            x_real_ip: this.getHeader(request.headers, "x-real-ip"),
+            dnt: this.getHeader(request.headers, "dnt"),
+            user_agent: this.getHeader(request.headers, "user-agent"),
+            accept_language: this.getHeader(request.headers, "accept-language"),
+            referrer: Client.getReferrer(request, url),
         };
     }
 
@@ -648,15 +648,15 @@ export class Client {
         }
     }
 
-    private static getReferrer(req: IncomingMessage, url: URL): string {
-        const referrer = req.headers.referer ?? "";
+    private static getReferrer(request: IncomingMessage, url: URL): string {
+        const referrer = request.headers.referer ?? "";
 
         if (referrer === "") {
-            for (const ref of referrerQueryParams) {
-                const param = url.searchParams.get(ref);
+            for (const parameterName of referrerQueryParameters) {
+                const parameter = url.searchParams.get(parameterName);
 
-                if (param && param !== "") {
-                    return param;
+                if (parameter && parameter !== "") {
+                    return parameter;
                 }
             }
         }
