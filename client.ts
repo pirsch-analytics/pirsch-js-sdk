@@ -33,12 +33,12 @@ import {
     EventListStats,
     OSVersionStats,
     BrowserVersionStats,
+    EntryStats,
+    ExitStats,
+    CityStats,
     Scalar,
     Optional,
 } from "./types";
-import { EntryStats } from ".";
-import { ExitStats } from ".";
-import { CityStats } from ".";
 
 const defaultBaseURL = "https://api.pirsch.io";
 const defaultTimeout = 5000;
