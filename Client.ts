@@ -1,6 +1,6 @@
 import { IncomingMessage } from "http";
 import { URL } from "url";
-import axios, { AxiosError, AxiosInstance } from "axios";
+import axios, { AxiosInstance } from "axios";
 import {
     ClientConfig,
     AuthenticationResponse,
