@@ -265,13 +265,13 @@ export class Client {
         return {
             url: url.toString(),
             ip: request.socket.remoteAddress ?? "",
-            cf_connecting_ip: this.getHeader(request.headers, "cf-connecting-ip"),
-            x_forwarded_for: this.getHeader(request.headers, "x-forwarded-for"),
-            forwarded: this.getHeader(request.headers, "forwarded"),
-            x_real_ip: this.getHeader(request.headers, "x-real-ip"),
-            dnt: this.getHeader(request.headers, "dnt"),
-            user_agent: this.getHeader(request.headers, "user-agent"),
-            accept_language: this.getHeader(request.headers, "accept-language"),
+            cf_connecting_ip: this.getHeaderWithDefault(request.headers, "cf-connecting-ip"),
+            x_forwarded_for: this.getHeaderWithDefault(request.headers, "x-forwarded-for"),
+            forwarded: this.getHeaderWithDefault(request.headers, "forwarded"),
+            x_real_ip: this.getHeaderWithDefault(request.headers, "x-real-ip"),
+            dnt: this.getHeaderWithDefault(request.headers, "dnt"),
+            user_agent: this.getHeaderWithDefault(request.headers, "user-agent"),
+            accept_language: this.getHeaderWithDefault(request.headers, "accept-language"),
             referrer: this.getReferrer(request, url),
         };
     }
@@ -651,7 +651,7 @@ export class Client {
         return referrer;
     }
 
-    private getHeader(headers: IncomingHttpHeaders, name: string): string {
+    private getHeaderWithDefault(headers: IncomingHttpHeaders, name: string): string {
         const header = headers[name];
 
         if (!header) {
