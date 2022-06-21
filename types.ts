@@ -2,9 +2,9 @@
  * ClientConfig contains the configuration parameters for the Client.
  */
 export interface ClientConfig {
-    baseURL?: string
+    baseUrl?: string
     timeout?: number
-    clientID: string
+    clientId: string
     clientSecret: string
     hostname: string
     protocol?: string

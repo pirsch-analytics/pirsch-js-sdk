@@ -40,7 +40,7 @@ import {
     Optional,
 } from "./types";
 
-const defaultBaseURL = "https://api.pirsch.io";
+const defaultBaseUrl = "https://api.pirsch.io";
 const defaultTimeout = 5000;
 const defaultProtocol = "http";
 const authenticationEndpoint = "/api/v1/token";
@@ -84,7 +84,7 @@ const referrerQueryParameters = ["ref", "referer", "referrer", "source", "utm_so
  * Client is used to access the Pirsch API.
  */
 export class Client {
-    private readonly clientID: string;
+    private readonly clientId: string;
     private readonly clientSecret: string;
     private readonly hostname: string;
     private readonly protocol: string;
@@ -99,22 +99,22 @@ export class Client {
      * All other configuration parameters can be left to their defaults.
      */
     constructor({
-        baseURL = defaultBaseURL,
+        baseUrl = defaultBaseUrl,
         timeout = defaultTimeout,
         protocol = defaultProtocol,
         hostname,
-        clientID,
+        clientId,
         clientSecret,
     }: ClientConfig) {
-        if (!clientID) {
+        if (!clientId) {
             this.accessToken = clientSecret;
         }
 
-        this.clientID = clientID;
+        this.clientId = clientId;
         this.clientSecret = clientSecret;
         this.hostname = hostname;
         this.protocol = protocol;
-        this.client = axios.create({ baseURL, timeout });
+        this.client = axios.create({ baseURL: baseUrl, timeout });
     }
 
     /**
@@ -499,7 +499,7 @@ export class Client {
             return;
         } catch (error: unknown) {
             if (this.isApiError(error)) {
-                if (this.clientID && error.response.status === 401 && retry) {
+                if (this.clientId && error.response.status === 401 && retry) {
                     await this.refreshToken();
                     return this.performPost(url, data, false);
                 }
@@ -527,7 +527,7 @@ export class Client {
             return data;
         } catch (error: unknown) {
             if (this.isApiError(error)) {
-                if (this.clientID && error.response.status === 401 && retry) {
+                if (this.clientId && error.response.status === 401 && retry) {
                     await this.refreshToken();
                     return this.performGet<T>(url, parameters, false);
                 }
@@ -546,7 +546,7 @@ export class Client {
     private async refreshToken(): Promise<Optional<APIError>> {
         try {
             const { data } = await this.client.post<AuthenticationResponse>(authenticationEndpoint, {
-                client_id: this.clientID,
+                client_id: this.clientId,
                 client_secret: this.clientSecret,
             });
             this.accessToken = data.access_token;

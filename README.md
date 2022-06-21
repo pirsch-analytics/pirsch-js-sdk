@@ -20,7 +20,7 @@ var { Client } = require("pirsch-sdk");
 var client = new Client({
     hostname: "example.com",
     protocol: "https", // used to parse the request URL, default is http
-    clientID: "<client_id>",
+    clientId: "<client_id>",
     clientSecret: "<client_secret>"
 });
 
