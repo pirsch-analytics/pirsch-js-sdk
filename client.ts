@@ -284,14 +284,14 @@ export class Client {
      */
     async domain(retry = true): Promise<Domain[] | APIError> {
         try {
-            const resp = await this.client.get<Domain[]>(domainEndpoint, {
+            const { data } = await this.client.get<Domain[]>(domainEndpoint, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${this.accessToken}`,
                 },
             });
 
-            if (resp.data.length === 0) {
+            if (data.length === 0) {
                 throw new Error(
                     JSON.stringify(
                         {
@@ -303,7 +303,7 @@ export class Client {
                 );
             }
 
-            return resp.data;
+            return data;
         } catch (error: unknown) {
             if (error instanceof AxiosError && error.response) {
                 if (this.clientID && error.response.status === 401 && retry) {
@@ -594,14 +594,14 @@ export class Client {
                 await this.refreshToken();
             }
 
-            const resp = await this.client.get<T>(url, {
+            const { data } = await this.client.get<T>(url, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${this.accessToken}`,
                 },
                 params: filter,
             });
-            return resp.data;
+            return data;
         } catch (error: unknown) {
             if (error instanceof AxiosError && error.response) {
                 if (this.clientID && error.response.status === 401 && retry) {
@@ -618,11 +618,11 @@ export class Client {
 
     private async refreshToken(): Promise<Optional<APIError>> {
         try {
-            const resp = await this.client.post<AuthenticationResponse>(authenticationEndpoint, {
+            const { data } = await this.client.post<AuthenticationResponse>(authenticationEndpoint, {
                 client_id: this.clientID,
                 client_secret: this.clientSecret,
             });
-            this.accessToken = resp.data.access_token;
+            this.accessToken = data.access_token;
             return undefined;
         } catch (error: unknown) {
             this.accessToken = "";
