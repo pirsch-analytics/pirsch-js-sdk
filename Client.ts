@@ -96,31 +96,23 @@ export class Client {
      * It's also recommended to set the proper protocol for your website, else it will be set to http by default.
      * All other configuration parameters can be left to their defaults.
      */
-    constructor(config: ClientConfig) {
-        if (!config.baseURL) {
-            config.baseURL = defaultBaseURL;
+    constructor({
+        baseURL = defaultBaseURL,
+        timeout = defaultTimeout,
+        protocol = defaultProtocol,
+        hostname,
+        clientID,
+        clientSecret,
+    }: ClientConfig) {
+        if (!clientID) {
+            this.accessToken = clientSecret;
         }
 
-        if (!config.timeout) {
-            config.timeout = defaultTimeout;
-        }
-
-        if (!config.protocol) {
-            config.protocol = defaultProtocol;
-        }
-
-        if (!config.clientID) {
-            this.accessToken = config.clientSecret;
-        }
-
-        this.clientID = config.clientID;
-        this.clientSecret = config.clientSecret;
-        this.hostname = config.hostname;
-        this.protocol = config.protocol;
-        this.client = axios.create({
-            baseURL: config.baseURL,
-            timeout: config.timeout,
-        });
+        this.clientID = clientID;
+        this.clientSecret = clientSecret;
+        this.hostname = hostname;
+        this.protocol = protocol;
+        this.client = axios.create({ baseURL, timeout });
     }
 
     /**
