@@ -272,10 +272,10 @@ export class Client {
      * @returns Hit object containing all necessary fields.
      */
     hitFromRequest(req: IncomingMessage): Hit {
-        const url = new URL(req.url || "", `${this.protocol}://${this.hostname}`);
+        const url = new URL(req.url ?? "", `${this.protocol}://${this.hostname}`);
         return {
             url: url.toString(),
-            ip: req.socket.remoteAddress || "",
+            ip: req.socket.remoteAddress ?? "",
             cf_connecting_ip: (req.headers["cf-connecting-ip"] as string) || "",
             x_forwarded_for: (req.headers["x-forwarded-for"] as string) || "",
             forwarded: req.headers.forwarded || "",
@@ -649,7 +649,7 @@ export class Client {
     }
 
     private static getReferrer(req: IncomingMessage, url: URL): string {
-        const referrer = req.headers.referer || "";
+        const referrer = req.headers.referer ?? "";
 
         if (referrer === "") {
             for (const ref of referrerQueryParams) {
