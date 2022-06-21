@@ -295,7 +295,7 @@ export class Client {
      */
     async domain(retry = true): Promise<Domain[] | APIError> {
         try {
-            const resp = await this.client.get(domainEndpoint, {
+            const resp = await this.client.get<Domain[]>(domainEndpoint, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${this.accessToken}`,
@@ -603,7 +603,7 @@ export class Client {
                 await this.refreshToken();
             }
 
-            const resp = await this.client.get(url, {
+            const resp = await this.client.get<T>(url, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${this.accessToken}`,
