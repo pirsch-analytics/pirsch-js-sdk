@@ -415,3 +415,8 @@ export interface Keyword {
     ctr: number
     position: number
 }
+
+/**
+ * Scalar type
+ */
+export type Scalar = string | number | boolean;

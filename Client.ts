@@ -33,6 +33,7 @@ import {
     EventListStats,
     OSVersionStats,
     BrowserVersionStats,
+    Scalar,
 } from "./types";
 import { EntryStats } from ".";
 import { ExitStats } from ".";
@@ -176,7 +177,7 @@ export class Client {
         name: string,
         hit: Hit,
         duration: number = 0,
-        meta: Object | null = null,
+        meta: Record<string, Scalar> | null = null,
         retry: boolean = true
     ): Promise<APIError | null> {
         try {
