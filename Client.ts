@@ -150,8 +150,8 @@ export class Client {
                     try {
                         await this.refreshToken();
                         return this.hit(hit, false);
-                    } catch (e) {
-                        return Promise.reject(e);
+                    } catch (exception) {
+                        return Promise.reject(exception);
                     }
                 }
 
@@ -208,8 +208,8 @@ export class Client {
                     try {
                         await this.refreshToken();
                         return this.event(name, hit, duration, meta, false);
-                    } catch (e) {
-                        return Promise.reject(e);
+                    } catch (exception) {
+                        return Promise.reject(exception);
                     }
                 }
 
@@ -253,8 +253,8 @@ export class Client {
                     try {
                         await this.refreshToken();
                         return this.session(hit, false);
-                    } catch (e) {
-                        return Promise.reject(e);
+                    } catch (exception) {
+                        return Promise.reject(exception);
                     }
                 }
 
@@ -315,8 +315,8 @@ export class Client {
                     try {
                         await this.refreshToken();
                         return this.domain(false);
-                    } catch (e) {
-                        return Promise.reject(e);
+                    } catch (exception) {
+                        return Promise.reject(exception);
                     }
                 }
 
@@ -617,8 +617,8 @@ export class Client {
                     try {
                         await this.refreshToken();
                         return this.performGet<T>(url, filter, false);
-                    } catch (e) {
-                        return Promise.reject(e);
+                    } catch (exception) {
+                        return Promise.reject(exception);
                     }
                 }
 
