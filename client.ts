@@ -241,7 +241,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async sessionDuration(filter: Filter): Promise<TimeSpentStats[] | APIError> {
-        return await this.performGet<TimeSpentStats[]>(sessionDurationEndpoint, filter);
+        return await this.performFilteredGet<TimeSpentStats[]>(sessionDurationEndpoint, filter);
     }
 
     /**
@@ -250,7 +250,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async timeOnPage(filter: Filter): Promise<TimeSpentStats[] | APIError> {
-        return await this.performGet<TimeSpentStats[]>(timeOnPageEndpoint, filter);
+        return await this.performFilteredGet<TimeSpentStats[]>(timeOnPageEndpoint, filter);
     }
 
     /**
@@ -259,7 +259,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async utmSource(filter: Filter): Promise<UTMSourceStats[] | APIError> {
-        return await this.performGet<UTMSourceStats[]>(utmSourceEndpoint, filter);
+        return await this.performFilteredGet<UTMSourceStats[]>(utmSourceEndpoint, filter);
     }
 
     /**
@@ -268,7 +268,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async utmMedium(filter: Filter): Promise<UTMMediumStats[] | APIError> {
-        return await this.performGet<UTMMediumStats[]>(utmMediumEndpoint, filter);
+        return await this.performFilteredGet<UTMMediumStats[]>(utmMediumEndpoint, filter);
     }
 
     /**
@@ -277,7 +277,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async utmCampaign(filter: Filter): Promise<UTMCampaignStats[] | APIError> {
-        return await this.performGet<UTMCampaignStats[]>(utmCampaignEndpoint, filter);
+        return await this.performFilteredGet<UTMCampaignStats[]>(utmCampaignEndpoint, filter);
     }
 
     /**
@@ -286,7 +286,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async utmContent(filter: Filter): Promise<UTMContentStats[] | APIError> {
-        return await this.performGet<UTMContentStats[]>(utmContentEndpoint, filter);
+        return await this.performFilteredGet<UTMContentStats[]>(utmContentEndpoint, filter);
     }
 
     /**
@@ -295,7 +295,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async utmTerm(filter: Filter): Promise<UTMTermStats[] | APIError> {
-        return await this.performGet<UTMTermStats[]>(utmTermEndpoint, filter);
+        return await this.performFilteredGet<UTMTermStats[]>(utmTermEndpoint, filter);
     }
 
     /**
@@ -304,7 +304,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async totalVisitors(filter: Filter): Promise<TotalVisitorStats | APIError> {
-        return await this.performGet<TotalVisitorStats>(totalVisitorsEndpoint, filter);
+        return await this.performFilteredGet<TotalVisitorStats>(totalVisitorsEndpoint, filter);
     }
 
     /**
@@ -313,7 +313,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async visitors(filter: Filter): Promise<VisitorStats[] | APIError> {
-        return await this.performGet<VisitorStats[]>(visitorsEndpoint, filter);
+        return await this.performFilteredGet<VisitorStats[]>(visitorsEndpoint, filter);
     }
 
     /**
@@ -322,7 +322,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async entryPages(filter: Filter): Promise<EntryStats[] | APIError> {
-        return await this.performGet<EntryStats[]>(entryPagesEndpoint, filter);
+        return await this.performFilteredGet<EntryStats[]>(entryPagesEndpoint, filter);
     }
 
     /**
@@ -331,7 +331,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async exitPages(filter: Filter): Promise<ExitStats[] | APIError> {
-        return await this.performGet<ExitStats[]>(exitPagesEndpoint, filter);
+        return await this.performFilteredGet<ExitStats[]>(exitPagesEndpoint, filter);
     }
 
     /**
@@ -340,7 +340,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async pages(filter: Filter): Promise<PageStats[] | APIError> {
-        return await this.performGet<PageStats[]>(pagesEndpoint, filter);
+        return await this.performFilteredGet<PageStats[]>(pagesEndpoint, filter);
     }
 
     /**
@@ -349,7 +349,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async conversionGoals(filter: Filter): Promise<ConversionGoal[] | APIError> {
-        return await this.performGet<ConversionGoal[]>(conversionGoalsEndpoint, filter);
+        return await this.performFilteredGet<ConversionGoal[]>(conversionGoalsEndpoint, filter);
     }
 
     /**
@@ -358,7 +358,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async events(filter: Filter): Promise<EventStats[] | APIError> {
-        return await this.performGet<EventStats[]>(eventsEndpoint, filter);
+        return await this.performFilteredGet<EventStats[]>(eventsEndpoint, filter);
     }
 
     /**
@@ -367,7 +367,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async eventMetadata(filter: Filter): Promise<EventStats[] | APIError> {
-        return await this.performGet<EventStats[]>(eventMetadataEndpoint, filter);
+        return await this.performFilteredGet<EventStats[]>(eventMetadataEndpoint, filter);
     }
 
     /**
@@ -376,7 +376,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async listEvents(filter: Filter): Promise<EventListStats[] | APIError> {
-        return await this.performGet<EventListStats[]>(listEventsEndpoint, filter);
+        return await this.performFilteredGet<EventListStats[]>(listEventsEndpoint, filter);
     }
 
     /**
@@ -385,7 +385,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async growth(filter: Filter): Promise<Growth | APIError> {
-        return await this.performGet<Growth>(growthRateEndpoint, filter);
+        return await this.performFilteredGet<Growth>(growthRateEndpoint, filter);
     }
 
     /**
@@ -394,7 +394,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async activeVisitors(filter: Filter): Promise<ActiveVisitorsData | APIError> {
-        return await this.performGet<ActiveVisitorsData>(activeVisitorsEndpoint, filter);
+        return await this.performFilteredGet<ActiveVisitorsData>(activeVisitorsEndpoint, filter);
     }
 
     /**
@@ -403,7 +403,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async timeOfDay(filter: Filter): Promise<VisitorHourStats[] | APIError> {
-        return await this.performGet<VisitorHourStats[]>(timeOfDayEndpoint, filter);
+        return await this.performFilteredGet<VisitorHourStats[]>(timeOfDayEndpoint, filter);
     }
 
     /**
@@ -412,7 +412,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async languages(filter: Filter): Promise<LanguageStats[] | APIError> {
-        return await this.performGet<LanguageStats[]>(languageEndpoint, filter);
+        return await this.performFilteredGet<LanguageStats[]>(languageEndpoint, filter);
     }
 
     /**
@@ -421,7 +421,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async referrer(filter: Filter): Promise<ReferrerStats[] | APIError> {
-        return await this.performGet<ReferrerStats[]>(referrerEndpoint, filter);
+        return await this.performFilteredGet<ReferrerStats[]>(referrerEndpoint, filter);
     }
 
     /**
@@ -430,7 +430,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async os(filter: Filter): Promise<OSStats[] | APIError> {
-        return await this.performGet<OSStats[]>(osEndpoint, filter);
+        return await this.performFilteredGet<OSStats[]>(osEndpoint, filter);
     }
 
     /**
@@ -439,7 +439,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async osVersions(filter: Filter): Promise<OSVersionStats[] | APIError> {
-        return await this.performGet<OSVersionStats[]>(osVersionEndpoint, filter);
+        return await this.performFilteredGet<OSVersionStats[]>(osVersionEndpoint, filter);
     }
 
     /**
@@ -448,7 +448,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async browser(filter: Filter): Promise<BrowserStats[] | APIError> {
-        return await this.performGet<BrowserStats[]>(browserEndpoint, filter);
+        return await this.performFilteredGet<BrowserStats[]>(browserEndpoint, filter);
     }
 
     /**
@@ -457,7 +457,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async browserVersions(filter: Filter): Promise<BrowserVersionStats[] | APIError> {
-        return await this.performGet<BrowserVersionStats[]>(browserVersionEndpoint, filter);
+        return await this.performFilteredGet<BrowserVersionStats[]>(browserVersionEndpoint, filter);
     }
 
     /**
@@ -466,7 +466,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async country(filter: Filter): Promise<CountryStats[] | APIError> {
-        return await this.performGet<CountryStats[]>(countryEndpoint, filter);
+        return await this.performFilteredGet<CountryStats[]>(countryEndpoint, filter);
     }
 
     /**
@@ -475,7 +475,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async city(filter: Filter): Promise<CityStats[] | APIError> {
-        return await this.performGet<CityStats[]>(cityEndpoint, filter);
+        return await this.performFilteredGet<CityStats[]>(cityEndpoint, filter);
     }
 
     /**
@@ -484,7 +484,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async platform(filter: Filter): Promise<PlatformStats[] | APIError> {
-        return await this.performGet<PlatformStats[]>(platformEndpoint, filter);
+        return await this.performFilteredGet<PlatformStats[]>(platformEndpoint, filter);
     }
 
     /**
@@ -493,7 +493,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async screen(filter: Filter): Promise<ScreenClassStats[] | APIError> {
-        return await this.performGet<ScreenClassStats[]>(screenEndpoint, filter);
+        return await this.performFilteredGet<ScreenClassStats[]>(screenEndpoint, filter);
     }
 
     /**
@@ -502,7 +502,7 @@ export class Client {
      * @param filter used to filter the result set.
      */
     async keywords(filter: Filter): Promise<Keyword[] | APIError> {
-        return await this.performGet<Keyword[]>(keywordsEndpoint, filter);
+        return await this.performFilteredGet<Keyword[]>(keywordsEndpoint, filter);
     }
 
     private async performPost<T extends object>(
@@ -539,7 +539,7 @@ export class Client {
         }
     }
 
-    private async performGet<T>(url: string, filter: Filter, retry = true): Promise<T | APIError> {
+    private async performGet<T>(url: string, parameters: object = {}, retry = true): Promise<T | APIError> {
         try {
             if (!this.accessToken && retry) {
                 await this.refreshToken();
@@ -550,14 +550,14 @@ export class Client {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${this.accessToken}`,
                 },
-                params: filter,
+                params: parameters,
             });
             return data;
         } catch (error: unknown) {
             if (this.isApiError(error)) {
                 if (this.clientID && error.response.status === 401 && retry) {
                     await this.refreshToken();
-                    return this.performGet<T>(url, filter, false);
+                    return this.performGet<T>(url, parameters, false);
                 }
 
                 return error.response.data;
@@ -565,6 +565,10 @@ export class Client {
 
             throw error;
         }
+    }
+
+    private async performFilteredGet<T>(url: string, filter: Filter): Promise<T | APIError> {
+        return this.performGet<T>(url, filter)
     }
 
     private async refreshToken(): Promise<Optional<APIError>> {
