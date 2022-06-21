@@ -156,7 +156,7 @@ export class Client {
                     }
                 }
 
-                return Promise.reject<APIError>(error.response.data);
+                throw new Error(JSON.stringify(error.response.data, undefined, 4));
             }
 
             throw error;
@@ -214,7 +214,7 @@ export class Client {
                     }
                 }
 
-                return Promise.reject<APIError>(error.response.data);
+                throw new Error(JSON.stringify(error.response.data, undefined, 4));
             }
 
             throw error;
@@ -259,7 +259,7 @@ export class Client {
                     }
                 }
 
-                return Promise.reject<APIError>(error.response.data);
+                throw new Error(JSON.stringify(error.response.data, undefined, 4));
             }
 
             throw error;
@@ -304,9 +304,15 @@ export class Client {
             });
 
             if (resp.data.length === 0) {
-                return Promise.reject<APIError>({
-                    error: ["domain not found"],
-                });
+                throw new Error(
+                    JSON.stringify(
+                        {
+                            error: ["domain not found"],
+                        },
+                        undefined,
+                        4
+                    )
+                );
             }
 
             return resp.data;
@@ -321,7 +327,7 @@ export class Client {
                     }
                 }
 
-                return Promise.reject<APIError>(error.response.data);
+                throw new Error(JSON.stringify(error.response.data, undefined, 4));
             }
 
             throw error;
@@ -623,7 +629,7 @@ export class Client {
                     }
                 }
 
-                return Promise.reject<APIError>(error.response.data);
+                throw new Error(JSON.stringify(error.response.data, undefined, 4));
             }
 
             throw error;
@@ -642,7 +648,7 @@ export class Client {
             this.accessToken = "";
 
             if (error instanceof AxiosError && error.response) {
-                return Promise.reject<APIError>(error.response.data);
+                throw new Error(JSON.stringify(error.response.data, undefined, 4));
             }
 
             throw error;
