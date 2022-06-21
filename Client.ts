@@ -159,7 +159,7 @@ export class Client {
                 return Promise.reject<APIError>(error.response.data);
             }
 
-            return Promise.reject(error);
+            throw error;
         }
     }
 
@@ -217,7 +217,7 @@ export class Client {
                 return Promise.reject<APIError>(error.response.data);
             }
 
-            return Promise.reject(error);
+            throw error;
         }
     }
 
@@ -262,7 +262,7 @@ export class Client {
                 return Promise.reject<APIError>(error.response.data);
             }
 
-            return Promise.reject(error);
+            throw error;
         }
     }
 
@@ -324,7 +324,7 @@ export class Client {
                 return Promise.reject<APIError>(error.response.data);
             }
 
-            return Promise.reject(error);
+            throw error;
         }
     }
 
@@ -626,7 +626,7 @@ export class Client {
                 return Promise.reject<APIError>(error.response.data);
             }
 
-            return Promise.reject(error);
+            throw error;
         }
     }
 
@@ -645,7 +645,7 @@ export class Client {
                 return Promise.reject<APIError>(error.response.data);
             }
 
-            return Promise.reject(error);
+            throw error;
         }
     }
 
