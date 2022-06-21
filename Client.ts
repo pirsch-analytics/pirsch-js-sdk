@@ -148,12 +148,8 @@ export class Client {
         } catch (error: unknown) {
             if (error instanceof AxiosError && error.response) {
                 if (this.clientID && error.response.status === 401 && retry) {
-                    try {
-                        await this.refreshToken();
-                        return this.hit(hit, false);
-                    } catch (exception) {
-                        return Promise.reject(exception);
-                    }
+                    await this.refreshToken();
+                    return this.hit(hit, false);
                 }
 
                 throw new Error(JSON.stringify(error.response.data, undefined, 4));
@@ -179,7 +175,7 @@ export class Client {
         hit: Hit,
         duration = 0,
         meta?: Record<string, Scalar>,
-        retry = true,
+        retry = true
     ): Promise<Optional<APIError>> {
         try {
             if (hit.dnt === "1") {
@@ -206,12 +202,8 @@ export class Client {
         } catch (error: unknown) {
             if (error instanceof AxiosError && error.response) {
                 if (this.clientID && error.response.status === 401 && retry) {
-                    try {
-                        await this.refreshToken();
-                        return this.event(name, hit, duration, meta, false);
-                    } catch (exception) {
-                        return Promise.reject(exception);
-                    }
+                    await this.refreshToken();
+                    return this.event(name, hit, duration, meta, false);
                 }
 
                 throw new Error(JSON.stringify(error.response.data, undefined, 4));
@@ -251,12 +243,8 @@ export class Client {
         } catch (error: unknown) {
             if (error instanceof AxiosError && error.response) {
                 if (this.clientID && error.response.status === 401 && retry) {
-                    try {
-                        await this.refreshToken();
-                        return this.session(hit, false);
-                    } catch (exception) {
-                        return Promise.reject(exception);
-                    }
+                    await this.refreshToken();
+                    return this.session(hit, false);
                 }
 
                 throw new Error(JSON.stringify(error.response.data, undefined, 4));
@@ -319,12 +307,8 @@ export class Client {
         } catch (error: unknown) {
             if (error instanceof AxiosError && error.response) {
                 if (this.clientID && error.response.status === 401 && retry) {
-                    try {
-                        await this.refreshToken();
-                        return this.domain(false);
-                    } catch (exception) {
-                        return Promise.reject(exception);
-                    }
+                    await this.refreshToken();
+                    return this.domain(false);
                 }
 
                 throw new Error(JSON.stringify(error.response.data, undefined, 4));
@@ -621,12 +605,8 @@ export class Client {
         } catch (error: unknown) {
             if (error instanceof AxiosError && error.response) {
                 if (this.clientID && error.response.status === 401 && retry) {
-                    try {
-                        await this.refreshToken();
-                        return this.performGet<T>(url, filter, false);
-                    } catch (exception) {
-                        return Promise.reject(exception);
-                    }
+                    await this.refreshToken();
+                    return this.performGet<T>(url, filter, false);
                 }
 
                 throw new Error(JSON.stringify(error.response.data, undefined, 4));
