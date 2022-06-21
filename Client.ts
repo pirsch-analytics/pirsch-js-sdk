@@ -278,7 +278,7 @@ export class Client {
             ip: req.socket.remoteAddress || "",
             cf_connecting_ip: (req.headers["cf-connecting-ip"] as string) || "",
             x_forwarded_for: (req.headers["x-forwarded-for"] as string) || "",
-            forwarded: req.headers["forwarded"] || "",
+            forwarded: req.headers.forwarded || "",
             x_real_ip: (req.headers["x-real-ip"] as string) || "",
             dnt: (req.headers["dnt"] as string) || "",
             user_agent: req.headers["user-agent"] || "",
@@ -649,7 +649,7 @@ export class Client {
     }
 
     private static getReferrer(req: IncomingMessage, url: URL): string {
-        const referrer = req.headers["referer"] || "";
+        const referrer = req.headers.referer || "";
 
         if (referrer === "") {
             for (const ref of referrerQueryParams) {
