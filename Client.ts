@@ -88,7 +88,7 @@ export class Client {
     private readonly hostname: string;
     private readonly protocol: string;
     private client: AxiosInstance;
-    private accessToken: string = "";
+    private accessToken = "";
 
     /**
      * The constructor creates a new client.
@@ -124,7 +124,7 @@ export class Client {
      * @param retry retry the request in case a 401 (unauthenticated) error is returned. Don't modify this.
      * @returns APIError or an empty promise, in case something went wrong
      */
-    async hit(hit: Hit, retry: boolean = true): Promise<APIError | null> {
+    async hit(hit: Hit, retry = true): Promise<APIError | null> {
         try {
             if (hit.dnt === "1") {
                 return Promise.resolve<null>(null);
@@ -176,9 +176,9 @@ export class Client {
     async event(
         name: string,
         hit: Hit,
-        duration: number = 0,
+        duration = 0,
         meta: Record<string, Scalar> | null = null,
-        retry: boolean = true
+        retry = true
     ): Promise<APIError | null> {
         try {
             if (hit.dnt === "1") {
@@ -227,7 +227,7 @@ export class Client {
      * @param retry retry the request in case a 401 (unauthenticated) error is returned. Don't modify this.
      * @returns APIError or an empty promise, in case something went wrong
      */
-    async session(hit: Hit, retry: boolean = true): Promise<APIError | null> {
+    async session(hit: Hit, retry = true): Promise<APIError | null> {
         try {
             if (hit.dnt === "1") {
                 return Promise.resolve<null>(null);
@@ -293,7 +293,7 @@ export class Client {
      * @param retry retry the request in case a 401 (unauthenticated) error is returned. Don't modify this.
      * @returns Domain object for this client.
      */
-    async domain(retry: boolean = true): Promise<Domain[] | APIError> {
+    async domain(retry = true): Promise<Domain[] | APIError> {
         try {
             const resp = await this.client.get(domainEndpoint, {
                 headers: {
@@ -597,7 +597,7 @@ export class Client {
         return await this.performGet<Keyword[]>(keywordsEndpoint, filter);
     }
 
-    private async performGet<T>(url: string, filter: Filter, retry: boolean = true): Promise<T | APIError> {
+    private async performGet<T>(url: string, filter: Filter, retry = true): Promise<T | APIError> {
         try {
             if (!this.accessToken && retry) {
                 await this.refreshToken();
