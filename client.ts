@@ -651,17 +651,17 @@ export class Client {
         return referrer;
     }
 
-    private getHeaderWithDefault(headers: IncomingHttpHeaders, name: string): string {
+    private getHeader(headers: IncomingHttpHeaders, name: string): Optional<string> {
         const header = headers[name];
 
-        if (!header) {
-            return "";
-        }
-
         if (Array.isArray(header)) {
-            return header.at(0) ?? "";
+            return header.at(0);
         }
 
         return header;
+    }
+
+    private getHeaderWithDefault(headers: IncomingHttpHeaders, name: string): string {
+        return this.getHeader(headers, name) ?? "";
     }
 }
