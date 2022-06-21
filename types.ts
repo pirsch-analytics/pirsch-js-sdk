@@ -39,6 +39,7 @@ export interface Hit {
  * APIError represents an error returned from the API.
  */
 export interface APIError {
+    code: number;
     validation: Validation
     error: string[]
 }
@@ -423,3 +424,11 @@ export type Scalar = string | number | boolean;
  * Optional type
  */
 export type Optional<T> = T | undefined;
+
+/**
+ * HttpOptions type
+ */
+export interface HttpOptions {
+    headers?: Record<string, string>;
+    parameters?: object;
+}

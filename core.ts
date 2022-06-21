@@ -1,6 +1,5 @@
 import { IncomingHttpHeaders, IncomingMessage } from "node:http";
 import { URL } from "node:url";
-import axios, { AxiosError, AxiosInstance } from "axios";
 import {
     ClientConfig,
     AuthenticationResponse,
@@ -38,58 +37,59 @@ import {
     CityStats,
     Scalar,
     Optional,
+    HttpOptions,
 } from "./types";
 
-const defaultBaseUrl = "https://api.pirsch.io";
-const defaultTimeout = 5000;
-const defaultProtocol = "http";
-const authenticationEndpoint = "/api/v1/token";
-const hitEndpoint = "/api/v1/hit";
-const eventEndpoint = "/api/v1/event";
-const sessionEndpoint = "/api/v1/session";
-const domainEndpoint = "/api/v1/domain";
-const sessionDurationEndpoint = "/api/v1/statistics/duration/session";
-const timeOnPageEndpoint = "/api/v1/statistics/duration/page";
-const utmSourceEndpoint = "/api/v1/statistics/utm/source";
-const utmMediumEndpoint = "/api/v1/statistics/utm/medium";
-const utmCampaignEndpoint = "/api/v1/statistics/utm/campaign";
-const utmContentEndpoint = "/api/v1/statistics/utm/content";
-const utmTermEndpoint = "/api/v1/statistics/utm/term";
-const totalVisitorsEndpoint = "/api/v1/statistics/total";
-const visitorsEndpoint = "/api/v1/statistics/visitor";
-const pagesEndpoint = "/api/v1/statistics/page";
-const entryPagesEndpoint = "/api/v1/statistics/page/entry";
-const exitPagesEndpoint = "/api/v1/statistics/page/exit";
-const conversionGoalsEndpoint = "/api/v1/statistics/goals";
-const eventsEndpoint = "/api/v1/statistics/events";
-const eventMetadataEndpoint = "/api/v1/statistics/event/meta";
-const listEventsEndpoint = "/api/v1/statistics/event/list";
-const growthRateEndpoint = "/api/v1/statistics/growth";
-const activeVisitorsEndpoint = "/api/v1/statistics/active";
-const timeOfDayEndpoint = "/api/v1/statistics/hours";
-const languageEndpoint = "/api/v1/statistics/language";
-const referrerEndpoint = "/api/v1/statistics/referrer";
-const osEndpoint = "/api/v1/statistics/os";
-const osVersionEndpoint = "/api/v1/statistics/os/version";
-const browserEndpoint = "/api/v1/statistics/browser";
-const browserVersionEndpoint = "/api/v1/statistics/browser/version";
-const countryEndpoint = "/api/v1/statistics/country";
-const cityEndpoint = "/api/v1/statistics/city";
-const platformEndpoint = "/api/v1/statistics/platform";
-const screenEndpoint = "/api/v1/statistics/screen";
-const keywordsEndpoint = "/api/v1/statistics/keywords";
-const referrerQueryParameters = ["ref", "referer", "referrer", "source", "utm_source"];
+import {
+    defaultBaseUrl,
+    defaultTimeout,
+    defaultProtocol,
+    authenticationEndpoint,
+    hitEndpoint,
+    eventEndpoint,
+    sessionEndpoint,
+    domainEndpoint,
+    sessionDurationEndpoint,
+    timeOnPageEndpoint,
+    utmSourceEndpoint,
+    utmMediumEndpoint,
+    utmCampaignEndpoint,
+    utmContentEndpoint,
+    utmTermEndpoint,
+    totalVisitorsEndpoint,
+    visitorsEndpoint,
+    pagesEndpoint,
+    entryPagesEndpoint,
+    exitPagesEndpoint,
+    conversionGoalsEndpoint,
+    eventsEndpoint,
+    eventMetadataEndpoint,
+    listEventsEndpoint,
+    growthRateEndpoint,
+    activeVisitorsEndpoint,
+    timeOfDayEndpoint,
+    languageEndpoint,
+    referrerEndpoint,
+    osEndpoint,
+    osVersionEndpoint,
+    browserEndpoint,
+    browserVersionEndpoint,
+    countryEndpoint,
+    cityEndpoint,
+    platformEndpoint,
+    screenEndpoint,
+    keywordsEndpoint,
+    referrerQueryParameters,
+} from "./constants";
 
-/**
- * Client is used to access the Pirsch API.
- */
-export class Client {
-    private readonly clientId: string;
-    private readonly clientSecret: string;
-    private readonly hostname: string;
-    private readonly protocol: string;
-    private client: AxiosInstance;
-    private accessToken = "";
+export abstract class Core {
+    protected readonly clientId: string;
+    protected readonly clientSecret: string;
+    protected readonly hostname: string;
+    protected readonly protocol: string;
+    protected readonly baseUrl: string;
+    protected readonly timeout: number;
+    protected accessToken = "";
 
     /**
      * The constructor creates a new client.
@@ -110,11 +110,12 @@ export class Client {
             this.accessToken = clientSecret;
         }
 
+        this.baseUrl = baseUrl;
+        this.timeout = timeout;
         this.clientId = clientId;
         this.clientSecret = clientSecret;
         this.hostname = hostname;
         this.protocol = protocol;
-        this.client = axios.create({ baseURL: baseUrl, timeout });
     }
 
     /**
@@ -201,6 +202,7 @@ export class Client {
 
         if (Array.isArray(result) && result.length === 0) {
             const error: APIError = {
+                code: 500,
                 validation: {},
                 error: ["domain not found"],
             };
@@ -483,7 +485,7 @@ export class Client {
 
     private async performPost<T extends object>(url: string, data: T, retry = true): Promise<Optional<APIError>> {
         try {
-            await this.client.post(
+            await this.post(
                 url,
                 {
                     hostname: this.hostname,
@@ -498,13 +500,11 @@ export class Client {
             );
             return;
         } catch (error: unknown) {
-            if (this.isApiError(error)) {
-                if (this.clientId && error.response.status === 401 && retry) {
-                    await this.refreshToken();
-                    return this.performPost(url, data, false);
-                }
+            const exception = this.toApiError(error);
 
-                return error.response.data;
+            if (exception && this.clientId && exception.code === 401 && retry) {
+                await this.refreshToken();
+                return this.performPost(url, data, false);
             }
 
             throw error;
@@ -517,22 +517,20 @@ export class Client {
                 await this.refreshToken();
             }
 
-            const { data } = await this.client.get<T>(url, {
+            const data = await this.get<T>(url, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${this.accessToken}`,
                 },
-                params: parameters,
+                parameters,
             });
             return data;
         } catch (error: unknown) {
-            if (this.isApiError(error)) {
-                if (this.clientId && error.response.status === 401 && retry) {
-                    await this.refreshToken();
-                    return this.performGet<T>(url, parameters, false);
-                }
+            const exception = this.toApiError(error);
 
-                return error.response.data;
+            if (exception && this.clientId && exception.code === 401 && retry) {
+                await this.refreshToken();
+                return this.performGet<T>(url, parameters, false);
             }
 
             throw error;
@@ -545,17 +543,19 @@ export class Client {
 
     private async refreshToken(): Promise<Optional<APIError>> {
         try {
-            const { data } = await this.client.post<AuthenticationResponse>(authenticationEndpoint, {
+            const result = await this.post<AuthenticationResponse>(authenticationEndpoint, {
                 client_id: this.clientId,
                 client_secret: this.clientSecret,
             });
-            this.accessToken = data.access_token;
+            this.accessToken = result.access_token;
             return;
         } catch (error: unknown) {
             this.accessToken = "";
 
-            if (this.isApiError(error)) {
-                return error.response.data;
+            const exception = this.toApiError(error);
+
+            if (exception) {
+                return exception;
             }
 
             throw error;
@@ -593,7 +593,11 @@ export class Client {
         return this.getHeader(headers, name) ?? "";
     }
 
-    private isApiError(error: unknown): error is Required<AxiosError<APIError>> {
-        return error instanceof AxiosError && error.response !== undefined && error.request !== null;
-    }
+    protected abstract post<Response, Data extends object = object>(
+        url: string,
+        data: Data,
+        options?: HttpOptions
+    ): Promise<Response>;
+    protected abstract get<Response>(url: string, options?: HttpOptions): Promise<Response>;
+    protected abstract toApiError(error: unknown): Optional<APIError>;
 }
