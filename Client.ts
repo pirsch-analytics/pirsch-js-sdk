@@ -93,7 +93,7 @@ export class Client {
      * The constructor creates a new client.
      *
      * @param config You need to pass in the hostname, client ID, and client secret you have configured on the Pirsch dashboard.
-     * It's also recommended to set the propper protocol for your website, else it will be set to http by default.
+     * It's also recommended to set the proper protocol for your website, else it will be set to http by default.
      * All other configuration parameters can be left to their defaults.
      */
     constructor(config: ClientConfig) {
@@ -371,7 +371,7 @@ export class Client {
     }
 
     /**
-     * utmCampaign returnst he utm campaigns.
+     * utmCampaign returns the utm campaigns.
      *
      * @param filter used to filter the result set.
      */
