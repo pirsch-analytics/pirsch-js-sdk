@@ -28,7 +28,8 @@
   "homepage": "https://pirsch.io/",
   "dependencies": {
     "@types/node": "^17.0.40",
-    "axios": "^0.27.2"
+    "axios": "^0.27.2",
+    "ky": "^0.30.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.29.0",
