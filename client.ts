@@ -152,7 +152,7 @@ export class Client {
                     return this.hit(hit, false);
                 }
 
-                throw new Error(JSON.stringify(error.response.data, undefined, 4));
+                return error.response.data;
             }
 
             throw error;
@@ -206,7 +206,7 @@ export class Client {
                     return this.event(name, hit, duration, meta, false);
                 }
 
-                throw new Error(JSON.stringify(error.response.data, undefined, 4));
+                return error.response.data;
             }
 
             throw error;
@@ -247,7 +247,7 @@ export class Client {
                     return this.session(hit, false);
                 }
 
-                throw new Error(JSON.stringify(error.response.data, undefined, 4));
+                return error.response.data;
             }
 
             throw error;
@@ -292,15 +292,12 @@ export class Client {
             });
 
             if (data.length === 0) {
-                throw new Error(
-                    JSON.stringify(
-                        {
-                            error: ["domain not found"],
-                        },
-                        undefined,
-                        4
-                    )
-                );
+                const error: APIError = {
+                    validation: {},
+                    error: ["domain not found"],
+                };
+
+                return error;
             }
 
             return data;
@@ -311,7 +308,7 @@ export class Client {
                     return this.domain(false);
                 }
 
-                throw new Error(JSON.stringify(error.response.data, undefined, 4));
+                return error.response.data;
             }
 
             throw error;
@@ -609,7 +606,7 @@ export class Client {
                     return this.performGet<T>(url, filter, false);
                 }
 
-                throw new Error(JSON.stringify(error.response.data, undefined, 4));
+                return error.response.data;
             }
 
             throw error;
@@ -628,7 +625,7 @@ export class Client {
             this.accessToken = "";
 
             if (this.isApiError(error)) {
-                throw new Error(JSON.stringify(error.response.data, undefined, 4));
+                return error.response.data;
             }
 
             throw error;
