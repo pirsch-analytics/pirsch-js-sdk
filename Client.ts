@@ -144,9 +144,9 @@ export class Client {
                 }
             );
             return Promise.resolve<null>(null);
-        } catch (e: unknown) {
-            if (e instanceof AxiosError && e.response) {
-                if (this.clientID && e.response.status === 401 && retry) {
+        } catch (error: unknown) {
+            if (error instanceof AxiosError && error.response) {
+                if (this.clientID && error.response.status === 401 && retry) {
                     try {
                         await this.refreshToken();
                         return this.hit(hit, false);
@@ -155,10 +155,10 @@ export class Client {
                     }
                 }
 
-                return Promise.reject<APIError>(e.response.data);
+                return Promise.reject<APIError>(error.response.data);
             }
 
-            return Promise.reject(e);
+            return Promise.reject(error);
         }
     }
 
@@ -202,9 +202,9 @@ export class Client {
                 }
             );
             return Promise.resolve<null>(null);
-        } catch (e: unknown) {
-            if (e instanceof AxiosError && e.response) {
-                if (this.clientID && e.response.status === 401 && retry) {
+        } catch (error: unknown) {
+            if (error instanceof AxiosError && error.response) {
+                if (this.clientID && error.response.status === 401 && retry) {
                     try {
                         await this.refreshToken();
                         return this.event(name, hit, duration, meta, false);
@@ -213,10 +213,10 @@ export class Client {
                     }
                 }
 
-                return Promise.reject<APIError>(e.response.data);
+                return Promise.reject<APIError>(error.response.data);
             }
 
-            return Promise.reject(e);
+            return Promise.reject(error);
         }
     }
 
@@ -247,9 +247,9 @@ export class Client {
                 }
             );
             return Promise.resolve<null>(null);
-        } catch (e: unknown) {
-            if (e instanceof AxiosError && e.response) {
-                if (this.clientID && e.response.status === 401 && retry) {
+        } catch (error: unknown) {
+            if (error instanceof AxiosError && error.response) {
+                if (this.clientID && error.response.status === 401 && retry) {
                     try {
                         await this.refreshToken();
                         return this.session(hit, false);
@@ -258,10 +258,10 @@ export class Client {
                     }
                 }
 
-                return Promise.reject<APIError>(e.response.data);
+                return Promise.reject<APIError>(error.response.data);
             }
 
-            return Promise.reject(e);
+            return Promise.reject(error);
         }
     }
 
@@ -309,9 +309,9 @@ export class Client {
             }
 
             return Promise.resolve<Domain[]>(resp.data);
-        } catch (e: unknown) {
-            if (e instanceof AxiosError && e.response) {
-                if (this.clientID && e.response.status === 401 && retry) {
+        } catch (error: unknown) {
+            if (error instanceof AxiosError && error.response) {
+                if (this.clientID && error.response.status === 401 && retry) {
                     try {
                         await this.refreshToken();
                         return this.domain(false);
@@ -320,10 +320,10 @@ export class Client {
                     }
                 }
 
-                return Promise.reject<APIError>(e.response.data);
+                return Promise.reject<APIError>(error.response.data);
             }
 
-            return Promise.reject(e);
+            return Promise.reject(error);
         }
     }
 
@@ -611,9 +611,9 @@ export class Client {
                 params: filter,
             });
             return Promise.resolve<T>(resp.data);
-        } catch (e: unknown) {
-            if (e instanceof AxiosError && e.response) {
-                if (this.clientID && e.response.status === 401 && retry) {
+        } catch (error: unknown) {
+            if (error instanceof AxiosError && error.response) {
+                if (this.clientID && error.response.status === 401 && retry) {
                     try {
                         await this.refreshToken();
                         return this.performGet<T>(url, filter, false);
@@ -622,10 +622,10 @@ export class Client {
                     }
                 }
 
-                return Promise.reject<APIError>(e.response.data);
+                return Promise.reject<APIError>(error.response.data);
             }
 
-            return Promise.reject(e);
+            return Promise.reject(error);
         }
     }
 
@@ -637,14 +637,14 @@ export class Client {
             });
             this.accessToken = resp.data.access_token;
             return Promise.resolve<null>(null);
-        } catch (e: unknown) {
+        } catch (error: unknown) {
             this.accessToken = "";
 
-            if (e instanceof AxiosError && e.response) {
-                return Promise.reject<APIError>(e.response.data);
+            if (error instanceof AxiosError && error.response) {
+                return Promise.reject<APIError>(error.response.data);
             }
 
-            return Promise.reject(e);
+            return Promise.reject(error);
         }
     }
 
