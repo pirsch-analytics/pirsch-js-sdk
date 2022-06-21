@@ -1,6 +1,6 @@
 import { IncomingMessage } from "http";
 import { URL } from "url";
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosError, AxiosInstance } from "axios";
 import {
     ClientConfig,
     AuthenticationResponse,
@@ -144,8 +144,8 @@ export class Client {
                 }
             );
             return Promise.resolve<null>(null);
-        } catch (e: any) {
-            if (e.response) {
+        } catch (e: unknown) {
+            if (e instanceof AxiosError && e.response) {
                 if (this.clientID && e.response.status === 401 && retry) {
                     try {
                         await this.refreshToken();
@@ -202,8 +202,8 @@ export class Client {
                 }
             );
             return Promise.resolve<null>(null);
-        } catch (e: any) {
-            if (e.response) {
+        } catch (e: unknown) {
+            if (e instanceof AxiosError && e.response) {
                 if (this.clientID && e.response.status === 401 && retry) {
                     try {
                         await this.refreshToken();
@@ -247,8 +247,8 @@ export class Client {
                 }
             );
             return Promise.resolve<null>(null);
-        } catch (e: any) {
-            if (e.response) {
+        } catch (e: unknown) {
+            if (e instanceof AxiosError && e.response) {
                 if (this.clientID && e.response.status === 401 && retry) {
                     try {
                         await this.refreshToken();
@@ -309,8 +309,8 @@ export class Client {
             }
 
             return Promise.resolve<Domain[]>(resp.data);
-        } catch (e: any) {
-            if (e.response) {
+        } catch (e: unknown) {
+            if (e instanceof AxiosError && e.response) {
                 if (this.clientID && e.response.status === 401 && retry) {
                     try {
                         await this.refreshToken();
@@ -611,8 +611,8 @@ export class Client {
                 params: filter,
             });
             return Promise.resolve<T>(resp.data);
-        } catch (e: any) {
-            if (e.response) {
+        } catch (e: unknown) {
+            if (e instanceof AxiosError && e.response) {
                 if (this.clientID && e.response.status === 401 && retry) {
                     try {
                         await this.refreshToken();
@@ -637,10 +637,10 @@ export class Client {
             });
             this.accessToken = resp.data.access_token;
             return Promise.resolve<null>(null);
-        } catch (e: any) {
+        } catch (e: unknown) {
             this.accessToken = "";
 
-            if (e.response) {
+            if (e instanceof AxiosError && e.response) {
                 return Promise.reject<APIError>(e.response.data);
             }
 
