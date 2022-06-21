@@ -649,10 +649,10 @@ export class Client {
     }
 
     private static getReferrer(req: IncomingMessage, url: URL): string {
-        let referrer = req.headers["referer"] || "";
+        const referrer = req.headers["referer"] || "";
 
         if (referrer === "") {
-            for (let ref of referrerQueryParams) {
+            for (const ref of referrerQueryParams) {
                 const param = url.searchParams.get(ref);
 
                 if (param && param !== "") {
