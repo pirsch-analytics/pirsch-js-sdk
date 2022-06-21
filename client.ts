@@ -194,40 +194,21 @@ export class Client {
     /**
      * domain returns the domain for this client in an array (first and only entry).
      *
-     * @param retry retry the request in case a 401 (unauthenticated) error is returned. Don't modify this.
      * @returns Domain object for this client.
      */
-    async domain(retry = true): Promise<Domain[] | APIError> {
-        try {
-            const { data } = await this.client.get<Domain[]>(domainEndpoint, {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${this.accessToken}`,
-                },
-            });
+    async domain(): Promise<Domain[] | APIError> {
+        const result = await this.performGet<Domain[]>(domainEndpoint);
 
-            if (data.length === 0) {
-                const error: APIError = {
-                    validation: {},
-                    error: ["domain not found"],
-                };
+        if (Array.isArray(result) && result.length === 0) {
+            const error: APIError = {
+                validation: {},
+                error: ["domain not found"],
+            };
 
-                return error;
-            }
-
-            return data;
-        } catch (error: unknown) {
-            if (this.isApiError(error)) {
-                if (this.clientID && error.response.status === 401 && retry) {
-                    await this.refreshToken();
-                    return this.domain(false);
-                }
-
-                return error.response.data;
-            }
-
-            throw error;
+            return error;
         }
+
+        return result;
     }
 
     /**
@@ -559,7 +540,7 @@ export class Client {
     }
 
     private async performFilteredGet<T>(url: string, filter: Filter): Promise<T | APIError> {
-        return this.performGet<T>(url, filter)
+        return this.performGet<T>(url, filter);
     }
 
     private async refreshToken(): Promise<Optional<APIError>> {
