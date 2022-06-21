@@ -128,7 +128,7 @@ export class Client {
     async hit(hit: Hit, retry = true): Promise<Optional<APIError>> {
         try {
             if (hit.dnt === "1") {
-                return Promise.resolve(undefined);
+                return undefined;
             }
 
             await this.client.post(
@@ -144,7 +144,7 @@ export class Client {
                     },
                 }
             );
-            return Promise.resolve(undefined);
+            return undefined;
         } catch (error: unknown) {
             if (error instanceof AxiosError && error.response) {
                 if (this.clientID && error.response.status === 401 && retry) {
@@ -183,7 +183,7 @@ export class Client {
     ): Promise<Optional<APIError>> {
         try {
             if (hit.dnt === "1") {
-                return Promise.resolve(undefined);
+                return undefined;
             }
 
             await this.client.post(
@@ -202,7 +202,7 @@ export class Client {
                     },
                 }
             );
-            return Promise.resolve(undefined);
+            return undefined;
         } catch (error: unknown) {
             if (error instanceof AxiosError && error.response) {
                 if (this.clientID && error.response.status === 401 && retry) {
@@ -231,7 +231,7 @@ export class Client {
     async session(hit: Hit, retry = true): Promise<Optional<APIError>> {
         try {
             if (hit.dnt === "1") {
-                return Promise.resolve(undefined);
+                return undefined;
             }
 
             await this.client.post(
@@ -247,7 +247,7 @@ export class Client {
                     },
                 }
             );
-            return Promise.resolve(undefined);
+            return undefined;
         } catch (error: unknown) {
             if (error instanceof AxiosError && error.response) {
                 if (this.clientID && error.response.status === 401 && retry) {
@@ -309,7 +309,7 @@ export class Client {
                 });
             }
 
-            return Promise.resolve<Domain[]>(resp.data);
+            return resp.data;
         } catch (error: unknown) {
             if (error instanceof AxiosError && error.response) {
                 if (this.clientID && error.response.status === 401 && retry) {
@@ -611,7 +611,7 @@ export class Client {
                 },
                 params: filter,
             });
-            return Promise.resolve<T>(resp.data);
+            return resp.data;
         } catch (error: unknown) {
             if (error instanceof AxiosError && error.response) {
                 if (this.clientID && error.response.status === 401 && retry) {
@@ -637,7 +637,7 @@ export class Client {
                 client_secret: this.clientSecret,
             });
             this.accessToken = resp.data.access_token;
-            return Promise.resolve(undefined);
+            return undefined;
         } catch (error: unknown) {
             this.accessToken = "";
 
