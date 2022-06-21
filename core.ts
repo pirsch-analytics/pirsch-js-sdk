@@ -168,21 +168,23 @@ export abstract class Core {
     }
 
     /**
-     * domain returns the domain for this client in an array (first and only entry).
+     * domain returns the domain for this client.
      *
      * @returns Domain object for this client.
      */
-    async domain(): Promise<Domain[] | APIError> {
+    async domain(): Promise<Domain | APIError> {
         const result = await this.performGet<Domain[]>(domainEndpoint);
 
-        if (Array.isArray(result) && result.length === 0) {
-            const error: APIError = {
-                code: 500,
-                validation: {},
-                error: ["domain not found"],
-            };
+        const error: APIError = {
+            code: 404,
+            validation: {},
+            error: ["domain not found"],
+        };
 
+        if (Array.isArray(result) && result.length === 0) {
             return error;
+        } else if (Array.isArray(result)) {
+            return result.at(0) ?? error;
         }
 
         return result;
