@@ -32,7 +32,7 @@ import {
     TotalVisitorStats,
     EventListStats,
     OSVersionStats,
-    BrowserVersionStats
+    BrowserVersionStats,
 } from "./types";
 import { EntryStats } from ".";
 import { ExitStats } from ".";
@@ -76,13 +76,7 @@ const cityEndpoint = "/api/v1/statistics/city";
 const platformEndpoint = "/api/v1/statistics/platform";
 const screenEndpoint = "/api/v1/statistics/screen";
 const keywordsEndpoint = "/api/v1/statistics/keywords";
-const referrerQueryParams = [
-	"ref",
-	"referer",
-	"referrer",
-    "source",
-    "utm_source"
-];
+const referrerQueryParams = ["ref", "referer", "referrer", "source", "utm_source"];
 
 /**
  * Client is used to access the Pirsch API.
@@ -97,25 +91,25 @@ export class Client {
 
     /**
      * The constructor creates a new client.
-     * 
+     *
      * @param config You need to pass in the hostname, client ID, and client secret you have configured on the Pirsch dashboard.
      * It's also recommended to set the propper protocol for your website, else it will be set to http by default.
      * All other configuration parameters can be left to their defaults.
      */
     constructor(config: ClientConfig) {
-        if(!config.baseURL) {
+        if (!config.baseURL) {
             config.baseURL = defaultBaseURL;
         }
 
-        if(!config.timeout) {
+        if (!config.timeout) {
             config.timeout = defaultTimeout;
         }
 
-        if(!config.protocol) {
+        if (!config.protocol) {
             config.protocol = defaultProtocol;
         }
 
-        if(!config.clientID) {
+        if (!config.clientID) {
             this.accessToken = config.clientSecret;
         }
 
@@ -132,34 +126,38 @@ export class Client {
     /**
      * hit sends a hit to Pirsch. Make sure you call it in all request handlers you want to track.
      * Also, make sure to filter out unwanted pathnames (like /favicon.ico in your root handler for example).
-     * 
+     *
      * @param hit all required data for the request.
      * @param retry retry the request in case a 401 (unauthenticated) error is returned. Don't modify this.
      * @returns APIError or an empty promise, in case something went wrong
      */
     async hit(hit: Hit, retry: boolean = true): Promise<APIError | null> {
         try {
-            if(hit.dnt === "1") {
+            if (hit.dnt === "1") {
                 return Promise.resolve<null>(null);
             }
 
-            await this.client.post(hitEndpoint, {
-                hostname: this.hostname,
-                ...hit,
-            }, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${this.accessToken}`
+            await this.client.post(
+                hitEndpoint,
+                {
+                    hostname: this.hostname,
+                    ...hit,
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${this.accessToken}`,
+                    },
                 }
-            });
+            );
             return Promise.resolve<null>(null);
-        } catch(e: any) {
-            if(e.response) {
-                if(this.clientID && e.response.status === 401 && retry) {
+        } catch (e: any) {
+            if (e.response) {
+                if (this.clientID && e.response.status === 401 && retry) {
                     try {
                         await this.refreshToken();
                         return this.hit(hit, false);
-                    } catch(e) {
+                    } catch (e) {
                         return Promise.reject(e);
                     }
                 }
@@ -182,32 +180,42 @@ export class Client {
      * @param retry retry the request in case a 401 (unauthenticated) error is returned. Don't modify this.
      * @returns APIError or an empty promise, in case something went wrong
      */
-    async event(name: string, hit: Hit, duration: number = 0, meta: Object | null = null, retry: boolean = true): Promise<APIError | null> {
+    async event(
+        name: string,
+        hit: Hit,
+        duration: number = 0,
+        meta: Object | null = null,
+        retry: boolean = true
+    ): Promise<APIError | null> {
         try {
-            if(hit.dnt === "1") {
+            if (hit.dnt === "1") {
                 return Promise.resolve<null>(null);
             }
 
-            await this.client.post(eventEndpoint, {
-                hostname: this.hostname,
-                event_name: name,
-                event_duration: duration,
-                event_meta: meta,
-                ...hit,
-            }, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${this.accessToken}`
+            await this.client.post(
+                eventEndpoint,
+                {
+                    hostname: this.hostname,
+                    event_name: name,
+                    event_duration: duration,
+                    event_meta: meta,
+                    ...hit,
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${this.accessToken}`,
+                    },
                 }
-            });
+            );
             return Promise.resolve<null>(null);
-        } catch(e: any) {
-            if(e.response) {
-                if(this.clientID && e.response.status === 401 && retry) {
+        } catch (e: any) {
+            if (e.response) {
+                if (this.clientID && e.response.status === 401 && retry) {
                     try {
                         await this.refreshToken();
                         return this.event(name, hit, duration, meta, false);
-                    } catch(e) {
+                    } catch (e) {
                         return Promise.reject(e);
                     }
                 }
@@ -221,34 +229,38 @@ export class Client {
 
     /**
      * session keeps a session alive.
-     * 
+     *
      * @param hit all required data for the request.
      * @param retry retry the request in case a 401 (unauthenticated) error is returned. Don't modify this.
      * @returns APIError or an empty promise, in case something went wrong
      */
     async session(hit: Hit, retry: boolean = true): Promise<APIError | null> {
         try {
-            if(hit.dnt === "1") {
+            if (hit.dnt === "1") {
                 return Promise.resolve<null>(null);
             }
 
-            await this.client.post(sessionEndpoint, {
-                hostname: this.hostname,
-                ...hit,
-            }, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${this.accessToken}`
+            await this.client.post(
+                sessionEndpoint,
+                {
+                    hostname: this.hostname,
+                    ...hit,
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${this.accessToken}`,
+                    },
                 }
-            });
+            );
             return Promise.resolve<null>(null);
-        } catch(e: any) {
-            if(e.response) {
-                if(this.clientID && e.response.status === 401 && retry) {
+        } catch (e: any) {
+            if (e.response) {
+                if (this.clientID && e.response.status === 401 && retry) {
                     try {
                         await this.refreshToken();
                         return this.session(hit, false);
-                    } catch(e) {
+                    } catch (e) {
                         return Promise.reject(e);
                     }
                 }
@@ -262,7 +274,7 @@ export class Client {
 
     /**
      * hitFromRequest returns the required data to send a hit to Pirsch for a Node request object.
-     * 
+     *
      * @param req the Node request object from the http package.
      * @returns Hit object containing all necessary fields.
      */
@@ -271,14 +283,14 @@ export class Client {
         return {
             url: url.toString(),
             ip: req.socket.remoteAddress || "",
-            cf_connecting_ip: req.headers["cf-connecting-ip"] as string || "",
-            x_forwarded_for: req.headers["x-forwarded-for"] as string || "",
+            cf_connecting_ip: (req.headers["cf-connecting-ip"] as string) || "",
+            x_forwarded_for: (req.headers["x-forwarded-for"] as string) || "",
             forwarded: req.headers["forwarded"] || "",
-            x_real_ip: req.headers["x-real-ip"] as string || "",
-            dnt: req.headers["dnt"] as string || "",
+            x_real_ip: (req.headers["x-real-ip"] as string) || "",
+            dnt: (req.headers["dnt"] as string) || "",
             user_agent: req.headers["user-agent"] || "",
             accept_language: req.headers["accept-language"] || "",
-            referrer: Client.getReferrer(req, url)
+            referrer: Client.getReferrer(req, url),
         };
     }
 
@@ -293,24 +305,24 @@ export class Client {
             const resp = await this.client.get(domainEndpoint, {
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${this.accessToken}`
-                }
+                    Authorization: `Bearer ${this.accessToken}`,
+                },
             });
 
-            if(resp.data.length === 0) {
+            if (resp.data.length === 0) {
                 return Promise.reject<APIError>({
-                    error: ["domain not found"]
+                    error: ["domain not found"],
                 });
             }
 
             return Promise.resolve<Domain[]>(resp.data);
-        } catch(e: any) {
-            if(e.response) {
-                if(this.clientID && e.response.status === 401 && retry) {
+        } catch (e: any) {
+            if (e.response) {
+                if (this.clientID && e.response.status === 401 && retry) {
                     try {
                         await this.refreshToken();
                         return this.domain(false);
-                    } catch(e) {
+                    } catch (e) {
                         return Promise.reject(e);
                     }
                 }
@@ -594,25 +606,25 @@ export class Client {
 
     private async performGet<T>(url: string, filter: Filter, retry: boolean = true): Promise<T | APIError> {
         try {
-            if(!this.accessToken && retry) {
+            if (!this.accessToken && retry) {
                 await this.refreshToken();
             }
 
             const resp = await this.client.get(url, {
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${this.accessToken}`
+                    Authorization: `Bearer ${this.accessToken}`,
                 },
-                params: filter
+                params: filter,
             });
             return Promise.resolve<T>(resp.data);
-        } catch(e: any) {
-            if(e.response) {
-                if(this.clientID && e.response.status === 401 && retry) {
+        } catch (e: any) {
+            if (e.response) {
+                if (this.clientID && e.response.status === 401 && retry) {
                     try {
                         await this.refreshToken();
                         return this.performGet<T>(url, filter, false);
-                    } catch(e) {
+                    } catch (e) {
                         return Promise.reject(e);
                     }
                 }
@@ -632,10 +644,10 @@ export class Client {
             });
             this.accessToken = resp.data.access_token;
             return Promise.resolve<null>(null);
-        } catch(e: any) {
+        } catch (e: any) {
             this.accessToken = "";
 
-            if(e.response) {
+            if (e.response) {
                 return Promise.reject<APIError>(e.response.data);
             }
 
@@ -646,11 +658,11 @@ export class Client {
     private static getReferrer(req: IncomingMessage, url: URL): string {
         let referrer = req.headers["referer"] || "";
 
-        if(referrer === "") {
-            for(let ref of referrerQueryParams) {
+        if (referrer === "") {
+            for (let ref of referrerQueryParams) {
                 const param = url.searchParams.get(ref);
 
-                if(param && param !== "") {
+                if (param && param !== "") {
                     return param;
                 }
             }
