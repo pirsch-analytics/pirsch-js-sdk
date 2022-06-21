@@ -477,7 +477,7 @@ export abstract class Core {
             );
             return;
         } catch (error: unknown) {
-            const exception = this.toApiError(error);
+            const exception = await this.toApiError(error);
 
             if (exception && this.clientId && exception.code === 401 && retry) {
                 await this.refreshToken();
@@ -503,7 +503,7 @@ export abstract class Core {
             });
             return data;
         } catch (error: unknown) {
-            const exception = this.toApiError(error);
+            const exception = await this.toApiError(error);
 
             if (exception && this.clientId && exception.code === 401 && retry) {
                 await this.refreshToken();
@@ -529,7 +529,7 @@ export abstract class Core {
         } catch (error: unknown) {
             this.accessToken = "";
 
-            const exception = this.toApiError(error);
+            const exception = await this.toApiError(error);
 
             if (exception) {
                 return exception;
@@ -545,5 +545,5 @@ export abstract class Core {
         options?: HttpOptions
     ): Promise<Response>;
     protected abstract get<Response>(url: string, options?: HttpOptions): Promise<Response>;
-    protected abstract toApiError(error: unknown): Optional<APIError>;
+    protected abstract toApiError(error: unknown): Promise<Optional<APIError>>;
 }

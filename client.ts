@@ -101,7 +101,7 @@ export class Client extends Core {
         return result.data;
     }
 
-    protected toApiError(error: unknown): Optional<APIError> {
+    protected async toApiError(error: unknown): Promise<Optional<APIError>> {
         if (error instanceof AxiosError && error.response !== undefined && error.request !== null) {
             const exception = error as AxiosError<APIError>;
             return {
