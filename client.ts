@@ -122,41 +122,14 @@ export class Client {
      * Also, make sure to filter out unwanted pathnames (like /favicon.ico in your root handler for example).
      *
      * @param hit all required data for the request.
-     * @param retry retry the request in case a 401 (unauthenticated) error is returned. Don't modify this.
      * @returns APIError or an empty promise, in case something went wrong
      */
-    async hit(hit: Hit, retry = true): Promise<Optional<APIError>> {
-        try {
-            if (hit.dnt === "1") {
-                return;
-            }
-
-            await this.client.post(
-                hitEndpoint,
-                {
-                    hostname: this.hostname,
-                    ...hit,
-                },
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${this.accessToken}`,
-                    },
-                }
-            );
+    async hit(hit: Hit): Promise<Optional<APIError>> {
+        if (hit.dnt === "1") {
             return;
-        } catch (error: unknown) {
-            if (this.isApiError(error)) {
-                if (this.clientID && error.response.status === 401 && retry) {
-                    await this.refreshToken();
-                    return this.hit(hit, false);
-                }
-
-                return error.response.data;
-            }
-
-            throw error;
         }
+
+        return await this.performPost(hitEndpoint, hit);
     }
 
     /**
@@ -167,7 +140,6 @@ export class Client {
      * @param hit all required data for the request
      * @param duration optional duration for the event
      * @param meta optional object containing metadata (only scalar values, like strings, numbers, and booleans)
-     * @param retry retry the request in case a 401 (unauthenticated) error is returned. Don't modify this.
      * @returns APIError or an empty promise, in case something went wrong
      */
     async event(
@@ -175,83 +147,31 @@ export class Client {
         hit: Hit,
         duration = 0,
         meta?: Record<string, Scalar>,
-        retry = true
     ): Promise<Optional<APIError>> {
-        try {
-            if (hit.dnt === "1") {
-                return;
-            }
-
-            await this.client.post(
-                eventEndpoint,
-                {
-                    hostname: this.hostname,
-                    event_name: name,
-                    event_duration: duration,
-                    event_meta: meta,
-                    ...hit,
-                },
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${this.accessToken}`,
-                    },
-                }
-            );
+        if (hit.dnt === "1") {
             return;
-        } catch (error: unknown) {
-            if (this.isApiError(error)) {
-                if (this.clientID && error.response.status === 401 && retry) {
-                    await this.refreshToken();
-                    return this.event(name, hit, duration, meta, false);
-                }
-
-                return error.response.data;
-            }
-
-            throw error;
         }
+
+        return await this.performPost(eventEndpoint, {
+            event_name: name,
+            event_duration: duration,
+            event_meta: meta,
+            ...hit,
+        });
     }
 
     /**
      * session keeps a session alive.
      *
      * @param hit all required data for the request.
-     * @param retry retry the request in case a 401 (unauthenticated) error is returned. Don't modify this.
      * @returns APIError or an empty promise, in case something went wrong
      */
-    async session(hit: Hit, retry = true): Promise<Optional<APIError>> {
-        try {
-            if (hit.dnt === "1") {
-                return;
-            }
-
-            await this.client.post(
-                sessionEndpoint,
-                {
-                    hostname: this.hostname,
-                    ...hit,
-                },
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${this.accessToken}`,
-                    },
-                }
-            );
+    async session(hit: Hit): Promise<Optional<APIError>> {
+        if (hit.dnt === "1") {
             return;
-        } catch (error: unknown) {
-            if (this.isApiError(error)) {
-                if (this.clientID && error.response.status === 401 && retry) {
-                    await this.refreshToken();
-                    return this.session(hit, false);
-                }
-
-                return error.response.data;
-            }
-
-            throw error;
         }
+
+        return await this.performPost(sessionEndpoint, hit);
     }
 
     /**
@@ -583,6 +503,40 @@ export class Client {
      */
     async keywords(filter: Filter): Promise<Keyword[] | APIError> {
         return await this.performGet<Keyword[]>(keywordsEndpoint, filter);
+    }
+
+    private async performPost<T extends object>(
+        url: string,
+        data: T,
+        retry = true
+    ): Promise<Optional<APIError>> {
+        try {
+            await this.client.post(
+                url,
+                {
+                    hostname: this.hostname,
+                    ...data,
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${this.accessToken}`,
+                    },
+                }
+            );
+            return;
+        } catch (error: unknown) {
+            if (this.isApiError(error)) {
+                if (this.clientID && error.response.status === 401 && retry) {
+                    await this.refreshToken();
+                    return this.performPost(url, data, false);
+                }
+
+                return error.response.data;
+            }
+
+            throw error;
+        }
     }
 
     private async performGet<T>(url: string, filter: Filter, retry = true): Promise<T | APIError> {
