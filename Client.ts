@@ -1,5 +1,5 @@
-import { IncomingHttpHeaders, IncomingMessage } from "http";
-import { URL } from "url";
+import { IncomingHttpHeaders, IncomingMessage } from "node:http";
+import { URL } from "node:url";
 import axios, { AxiosError, AxiosInstance } from "axios";
 import {
     ClientConfig,
