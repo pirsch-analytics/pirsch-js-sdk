@@ -272,7 +272,7 @@ export class Client {
             dnt: this.getHeader(request.headers, "dnt"),
             user_agent: this.getHeader(request.headers, "user-agent"),
             accept_language: this.getHeader(request.headers, "accept-language"),
-            referrer: Client.getReferrer(request, url),
+            referrer: this.getReferrer(request, url),
         };
     }
 
@@ -635,7 +635,7 @@ export class Client {
         }
     }
 
-    private static getReferrer(request: IncomingMessage, url: URL): string {
+    private getReferrer(request: IncomingMessage, url: URL): string {
         const referrer = request.headers.referer ?? "";
 
         if (referrer === "") {
