@@ -146,7 +146,7 @@ export class Client {
             );
             return;
         } catch (error: unknown) {
-            if (error instanceof AxiosError && error.response) {
+            if (this.isApiError(error)) {
                 if (this.clientID && error.response.status === 401 && retry) {
                     await this.refreshToken();
                     return this.hit(hit, false);
@@ -200,7 +200,7 @@ export class Client {
             );
             return;
         } catch (error: unknown) {
-            if (error instanceof AxiosError && error.response) {
+            if (this.isApiError(error)) {
                 if (this.clientID && error.response.status === 401 && retry) {
                     await this.refreshToken();
                     return this.event(name, hit, duration, meta, false);
@@ -241,7 +241,7 @@ export class Client {
             );
             return;
         } catch (error: unknown) {
-            if (error instanceof AxiosError && error.response) {
+            if (this.isApiError(error)) {
                 if (this.clientID && error.response.status === 401 && retry) {
                     await this.refreshToken();
                     return this.session(hit, false);
@@ -305,7 +305,7 @@ export class Client {
 
             return data;
         } catch (error: unknown) {
-            if (error instanceof AxiosError && error.response) {
+            if (this.isApiError(error)) {
                 if (this.clientID && error.response.status === 401 && retry) {
                     await this.refreshToken();
                     return this.domain(false);
@@ -603,7 +603,7 @@ export class Client {
             });
             return data;
         } catch (error: unknown) {
-            if (error instanceof AxiosError && error.response) {
+            if (this.isApiError(error)) {
                 if (this.clientID && error.response.status === 401 && retry) {
                     await this.refreshToken();
                     return this.performGet<T>(url, filter, false);
@@ -627,7 +627,7 @@ export class Client {
         } catch (error: unknown) {
             this.accessToken = "";
 
-            if (error instanceof AxiosError && error.response) {
+            if (this.isApiError(error)) {
                 throw new Error(JSON.stringify(error.response.data, undefined, 4));
             }
 
@@ -664,5 +664,9 @@ export class Client {
 
     private getHeaderWithDefault(headers: IncomingHttpHeaders, name: string): string {
         return this.getHeader(headers, name) ?? "";
+    }
+
+    private isApiError(error: unknown): error is Required<AxiosError<APIError>> {
+        return error instanceof AxiosError && error.response !== undefined && error.request !== null;
     }
 }
