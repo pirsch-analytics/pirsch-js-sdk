@@ -636,7 +636,8 @@ export class Client {
     }
 
     private getReferrer(request: IncomingMessage, url: URL): string {
-        const referrer = request.headers.referer ?? "";
+        const referrer =
+            this.getHeader(request.headers, "referer") ?? this.getHeader(request.headers, "referrer") ?? "";
 
         if (referrer === "") {
             for (const parameterName of referrerQueryParameters) {
