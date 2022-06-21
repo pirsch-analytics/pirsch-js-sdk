@@ -257,7 +257,7 @@ export class Client {
     /**
      * hitFromRequest returns the required data to send a hit to Pirsch for a Node request object.
      *
-     * @param req the Node request object from the http package.
+     * @param request the Node request object from the http package.
      * @returns Hit object containing all necessary fields.
      */
     hitFromRequest(request: IncomingMessage): Hit {
