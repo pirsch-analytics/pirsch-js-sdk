@@ -128,7 +128,7 @@ export class Client {
     async hit(hit: Hit, retry = true): Promise<Optional<APIError>> {
         try {
             if (hit.dnt === "1") {
-                return undefined;
+                return;
             }
 
             await this.client.post(
@@ -144,7 +144,7 @@ export class Client {
                     },
                 }
             );
-            return undefined;
+            return;
         } catch (error: unknown) {
             if (error instanceof AxiosError && error.response) {
                 if (this.clientID && error.response.status === 401 && retry) {
@@ -179,7 +179,7 @@ export class Client {
     ): Promise<Optional<APIError>> {
         try {
             if (hit.dnt === "1") {
-                return undefined;
+                return;
             }
 
             await this.client.post(
@@ -198,7 +198,7 @@ export class Client {
                     },
                 }
             );
-            return undefined;
+            return;
         } catch (error: unknown) {
             if (error instanceof AxiosError && error.response) {
                 if (this.clientID && error.response.status === 401 && retry) {
@@ -223,7 +223,7 @@ export class Client {
     async session(hit: Hit, retry = true): Promise<Optional<APIError>> {
         try {
             if (hit.dnt === "1") {
-                return undefined;
+                return;
             }
 
             await this.client.post(
@@ -239,7 +239,7 @@ export class Client {
                     },
                 }
             );
-            return undefined;
+            return;
         } catch (error: unknown) {
             if (error instanceof AxiosError && error.response) {
                 if (this.clientID && error.response.status === 401 && retry) {
@@ -623,7 +623,7 @@ export class Client {
                 client_secret: this.clientSecret,
             });
             this.accessToken = data.access_token;
-            return undefined;
+            return;
         } catch (error: unknown) {
             this.accessToken = "";
 
