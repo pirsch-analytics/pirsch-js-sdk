@@ -46,9 +46,7 @@ export interface APIError {
 /**
  * Validation is a validation error string for a specific field.
  */
-export interface Validation {
-    [key: string]: string
-}
+export type Validation = Record<string, string>;
 
 export type Scale = "day" | "week" | "month" | "year";
 
@@ -263,7 +261,7 @@ export interface EventStats {
 // EventListStats is the result type for a custom event list.
 export interface EventListStats {
 	name: string
-	meta: {[key: string]: string}
+	meta: Record<string, string>
 	visitors: number
 	count: number
 }
