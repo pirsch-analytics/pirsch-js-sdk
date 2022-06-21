@@ -1,4 +1,4 @@
-import { IncomingMessage } from "http";
+import { IncomingHttpHeaders, IncomingMessage } from "http";
 import { URL } from "url";
 import axios, { AxiosError, AxiosInstance } from "axios";
 import {
@@ -276,13 +276,13 @@ export class Client {
         return {
             url: url.toString(),
             ip: req.socket.remoteAddress ?? "",
-            cf_connecting_ip: (req.headers["cf-connecting-ip"] as string) || "",
-            x_forwarded_for: (req.headers["x-forwarded-for"] as string) || "",
-            forwarded: req.headers.forwarded || "",
-            x_real_ip: (req.headers["x-real-ip"] as string) || "",
-            dnt: (req.headers["dnt"] as string) || "",
-            user_agent: req.headers["user-agent"] || "",
-            accept_language: req.headers["accept-language"] || "",
+            cf_connecting_ip: this.getHeader(req.headers, "cf-connecting-ip"),
+            x_forwarded_for: this.getHeader(req.headers, "x-forwarded-for"),
+            forwarded: this.getHeader(req.headers, "forwarded"),
+            x_real_ip: this.getHeader(req.headers, "x-real-ip"),
+            dnt: this.getHeader(req.headers, "dnt"),
+            user_agent: this.getHeader(req.headers, "user-agent"),
+            accept_language: this.getHeader(req.headers, "accept-language"),
             referrer: Client.getReferrer(req, url),
         };
     }
@@ -662,5 +662,19 @@ export class Client {
         }
 
         return referrer;
+    }
+
+    private getHeader(headers: IncomingHttpHeaders, name: string): string {
+        const header = headers[name];
+
+        if (!header) {
+            return "";
+        }
+
+        if (Array.isArray(header)) {
+            return header.at(0) ?? "";
+        }
+
+        return header;
     }
 }
