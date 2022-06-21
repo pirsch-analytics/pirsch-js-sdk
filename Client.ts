@@ -34,6 +34,7 @@ import {
     OSVersionStats,
     BrowserVersionStats,
     Scalar,
+    Optional,
 } from "./types";
 import { EntryStats } from ".";
 import { ExitStats } from ".";
@@ -124,10 +125,10 @@ export class Client {
      * @param retry retry the request in case a 401 (unauthenticated) error is returned. Don't modify this.
      * @returns APIError or an empty promise, in case something went wrong
      */
-    async hit(hit: Hit, retry = true): Promise<APIError | null> {
+    async hit(hit: Hit, retry = true): Promise<Optional<APIError>> {
         try {
             if (hit.dnt === "1") {
-                return Promise.resolve<null>(null);
+                return Promise.resolve(undefined);
             }
 
             await this.client.post(
@@ -143,7 +144,7 @@ export class Client {
                     },
                 }
             );
-            return Promise.resolve<null>(null);
+            return Promise.resolve(undefined);
         } catch (error: unknown) {
             if (error instanceof AxiosError && error.response) {
                 if (this.clientID && error.response.status === 401 && retry) {
@@ -177,12 +178,12 @@ export class Client {
         name: string,
         hit: Hit,
         duration = 0,
-        meta: Record<string, Scalar> | null = null,
-        retry = true
-    ): Promise<APIError | null> {
+        meta?: Record<string, Scalar>,
+        retry = true,
+    ): Promise<Optional<APIError>> {
         try {
             if (hit.dnt === "1") {
-                return Promise.resolve<null>(null);
+                return Promise.resolve(undefined);
             }
 
             await this.client.post(
@@ -201,7 +202,7 @@ export class Client {
                     },
                 }
             );
-            return Promise.resolve<null>(null);
+            return Promise.resolve(undefined);
         } catch (error: unknown) {
             if (error instanceof AxiosError && error.response) {
                 if (this.clientID && error.response.status === 401 && retry) {
@@ -227,10 +228,10 @@ export class Client {
      * @param retry retry the request in case a 401 (unauthenticated) error is returned. Don't modify this.
      * @returns APIError or an empty promise, in case something went wrong
      */
-    async session(hit: Hit, retry = true): Promise<APIError | null> {
+    async session(hit: Hit, retry = true): Promise<Optional<APIError>> {
         try {
             if (hit.dnt === "1") {
-                return Promise.resolve<null>(null);
+                return Promise.resolve(undefined);
             }
 
             await this.client.post(
@@ -246,7 +247,7 @@ export class Client {
                     },
                 }
             );
-            return Promise.resolve<null>(null);
+            return Promise.resolve(undefined);
         } catch (error: unknown) {
             if (error instanceof AxiosError && error.response) {
                 if (this.clientID && error.response.status === 401 && retry) {
@@ -629,14 +630,14 @@ export class Client {
         }
     }
 
-    private async refreshToken(): Promise<APIError | null> {
+    private async refreshToken(): Promise<Optional<APIError>> {
         try {
             const resp = await this.client.post<AuthenticationResponse>(authenticationEndpoint, {
                 client_id: this.clientID,
                 client_secret: this.clientSecret,
             });
             this.accessToken = resp.data.access_token;
-            return Promise.resolve<null>(null);
+            return Promise.resolve(undefined);
         } catch (error: unknown) {
             this.accessToken = "";
 

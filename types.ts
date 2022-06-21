@@ -418,3 +418,8 @@ export interface Keyword {
  * Scalar type
  */
 export type Scalar = string | number | boolean;
+
+/**
+ * Optional type
+ */
+export type Optional<T> = T | undefined;
