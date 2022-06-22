@@ -21,6 +21,16 @@ export class PirschDomainNotFoundApiError extends PirschApiError {
     }
 }
 
+export class PirschInvalidAccessModeApiError extends PirschApiError {
+    public constructor(methodName: string) {
+        const error = [
+            `you are trying to run the data-accessing method '${methodName}', which is not possible with access tokens. please use a oauth id and secret!`,
+        ];
+        super(401, { error });
+        this.name = "PirschInvalidAccessModeApiError";
+    }
+}
+
 export class PirschUnknownApiError extends PirschApiError {
     public constructor(message?: string) {
         const error = message ? [message] : [];

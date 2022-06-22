@@ -39,7 +39,7 @@ import {
 } from "./types";
 
 import { PIRSCH_DEFAULT_BASE_URL, PIRSCH_DEFAULT_TIMEOUT, PirschEndpoint } from "./constants";
-import { PirschApiError, PirschDomainNotFoundApiError } from "./shared";
+import { PirschApiError, PirschDomainNotFoundApiError, PirschInvalidAccessModeApiError } from "./shared";
 
 export abstract class PirschCoreClient {
     protected readonly version = "v1";
@@ -149,6 +149,8 @@ export abstract class PirschCoreClient {
      * @returns Domain object for this client.
      */
     async domain(): Promise<PirschDomain | PirschApiError> {
+        this.accessModeCheck('domain');
+
         const result = await this.performGet<PirschDomain[]>(PirschEndpoint.DOMAIN);
 
         const error = new PirschDomainNotFoundApiError();
@@ -168,6 +170,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async sessionDuration(filter: PirschFilter): Promise<PirschTimeSpentStats[] | PirschApiError> {
+        this.accessModeCheck("sessionDuration");
+
         return await this.performFilteredGet<PirschTimeSpentStats[]>(PirschEndpoint.SESSION_DURATION, filter);
     }
 
@@ -177,6 +181,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async timeOnPage(filter: PirschFilter): Promise<PirschTimeSpentStats[] | PirschApiError> {
+        this.accessModeCheck("timeOnPage");
+
         return await this.performFilteredGet<PirschTimeSpentStats[]>(PirschEndpoint.TIME_ON_PAGE, filter);
     }
 
@@ -186,6 +192,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async utmSource(filter: PirschFilter): Promise<PirschUTMSourceStats[] | PirschApiError> {
+        this.accessModeCheck("utmSource");
+
         return await this.performFilteredGet<PirschUTMSourceStats[]>(PirschEndpoint.UTM_SOURCE, filter);
     }
 
@@ -195,6 +203,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async utmMedium(filter: PirschFilter): Promise<PirschUTMMediumStats[] | PirschApiError> {
+        this.accessModeCheck("utmMedium");
+
         return await this.performFilteredGet<PirschUTMMediumStats[]>(PirschEndpoint.UTM_MEDIUM, filter);
     }
 
@@ -204,6 +214,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async utmCampaign(filter: PirschFilter): Promise<PirschUTMCampaignStats[] | PirschApiError> {
+        this.accessModeCheck("utmCampaign");
+
         return await this.performFilteredGet<PirschUTMCampaignStats[]>(PirschEndpoint.UTM_CAMPAIGN, filter);
     }
 
@@ -213,6 +225,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async utmContent(filter: PirschFilter): Promise<PirschUTMContentStats[] | PirschApiError> {
+        this.accessModeCheck("utmContent");
+
         return await this.performFilteredGet<PirschUTMContentStats[]>(PirschEndpoint.UTM_CONTENT, filter);
     }
 
@@ -222,6 +236,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async utmTerm(filter: PirschFilter): Promise<PirschUTMTermStats[] | PirschApiError> {
+        this.accessModeCheck("utmTerm");
+
         return await this.performFilteredGet<PirschUTMTermStats[]>(PirschEndpoint.UTM_TERM, filter);
     }
 
@@ -231,6 +247,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async totalVisitors(filter: PirschFilter): Promise<PirschTotalVisitorStats | PirschApiError> {
+        this.accessModeCheck("totalVisitors");
+
         return await this.performFilteredGet<PirschTotalVisitorStats>(PirschEndpoint.TOTAL_VISITORS, filter);
     }
 
@@ -240,6 +258,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async visitors(filter: PirschFilter): Promise<PirschVisitorStats[] | PirschApiError> {
+        this.accessModeCheck("visitors");
+
         return await this.performFilteredGet<PirschVisitorStats[]>(PirschEndpoint.VISITORS, filter);
     }
 
@@ -249,6 +269,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async entryPages(filter: PirschFilter): Promise<PirschEntryStats[] | PirschApiError> {
+        this.accessModeCheck("entryPages");
+
         return await this.performFilteredGet<PirschEntryStats[]>(PirschEndpoint.ENTRY_PAGES, filter);
     }
 
@@ -258,6 +280,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async exitPages(filter: PirschFilter): Promise<PirschExitStats[] | PirschApiError> {
+        this.accessModeCheck("exitPages");
+
         return await this.performFilteredGet<PirschExitStats[]>(PirschEndpoint.EXIT_PAGES, filter);
     }
 
@@ -267,6 +291,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async pages(filter: PirschFilter): Promise<PirschPageStats[] | PirschApiError> {
+        this.accessModeCheck("pages");
+
         return await this.performFilteredGet<PirschPageStats[]>(PirschEndpoint.PAGES, filter);
     }
 
@@ -276,6 +302,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async conversionGoals(filter: PirschFilter): Promise<PirschConversionGoal[] | PirschApiError> {
+        this.accessModeCheck("conversionGoals");
+
         return await this.performFilteredGet<PirschConversionGoal[]>(PirschEndpoint.CONVERSION_GOALS, filter);
     }
 
@@ -285,6 +313,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async events(filter: PirschFilter): Promise<PirschEventStats[] | PirschApiError> {
+        this.accessModeCheck("events");
+
         return await this.performFilteredGet<PirschEventStats[]>(PirschEndpoint.EVENTS, filter);
     }
 
@@ -294,6 +324,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async eventMetadata(filter: PirschFilter): Promise<PirschEventStats[] | PirschApiError> {
+        this.accessModeCheck("eventMetadata");
+
         return await this.performFilteredGet<PirschEventStats[]>(PirschEndpoint.EVENT_METADATA, filter);
     }
 
@@ -303,6 +335,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async listEvents(filter: PirschFilter): Promise<PirschEventListStats[] | PirschApiError> {
+        this.accessModeCheck("listEvents");
+
         return await this.performFilteredGet<PirschEventListStats[]>(PirschEndpoint.LIST_EVENTS, filter);
     }
 
@@ -312,6 +346,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async growth(filter: PirschFilter): Promise<PirschGrowth | PirschApiError> {
+        this.accessModeCheck("growth");
+
         return await this.performFilteredGet<PirschGrowth>(PirschEndpoint.GROWTH_RATE, filter);
     }
 
@@ -321,6 +357,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async activeVisitors(filter: PirschFilter): Promise<PirschActiveVisitorsData | PirschApiError> {
+        this.accessModeCheck("activeVisitors");
+
         return await this.performFilteredGet<PirschActiveVisitorsData>(PirschEndpoint.ACTIVE_VISITORS, filter);
     }
 
@@ -330,6 +368,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async timeOfDay(filter: PirschFilter): Promise<PirschVisitorHourStats[] | PirschApiError> {
+        this.accessModeCheck("timeOfDay");
+
         return await this.performFilteredGet<PirschVisitorHourStats[]>(PirschEndpoint.TIME_OF_DAY, filter);
     }
 
@@ -339,6 +379,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async languages(filter: PirschFilter): Promise<PirschLanguageStats[] | PirschApiError> {
+        this.accessModeCheck("languages");
+
         return await this.performFilteredGet<PirschLanguageStats[]>(PirschEndpoint.LANGUAGE, filter);
     }
 
@@ -348,6 +390,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async referrer(filter: PirschFilter): Promise<PirschReferrerStats[] | PirschApiError> {
+        this.accessModeCheck("referrer");
+
         return await this.performFilteredGet<PirschReferrerStats[]>(PirschEndpoint.REFERRER, filter);
     }
 
@@ -357,6 +401,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async os(filter: PirschFilter): Promise<PirschOSStats[] | PirschApiError> {
+        this.accessModeCheck("os");
+
         return await this.performFilteredGet<PirschOSStats[]>(PirschEndpoint.OS, filter);
     }
 
@@ -366,6 +412,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async osVersions(filter: PirschFilter): Promise<PirschOSVersionStats[] | PirschApiError> {
+        this.accessModeCheck("osVersions");
+
         return await this.performFilteredGet<PirschOSVersionStats[]>(PirschEndpoint.OS_VERSION, filter);
     }
 
@@ -375,6 +423,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async browser(filter: PirschFilter): Promise<PirschBrowserStats[] | PirschApiError> {
+        this.accessModeCheck("browser");
+
         return await this.performFilteredGet<PirschBrowserStats[]>(PirschEndpoint.BROWSER, filter);
     }
 
@@ -384,6 +434,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async browserVersions(filter: PirschFilter): Promise<PirschBrowserVersionStats[] | PirschApiError> {
+        this.accessModeCheck("browserVersions");
+
         return await this.performFilteredGet<PirschBrowserVersionStats[]>(PirschEndpoint.BROWSER_VERSION, filter);
     }
 
@@ -393,6 +445,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async country(filter: PirschFilter): Promise<PirschCountryStats[] | PirschApiError> {
+        this.accessModeCheck("country");
+
         return await this.performFilteredGet<PirschCountryStats[]>(PirschEndpoint.COUNTRY, filter);
     }
 
@@ -402,6 +456,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async city(filter: PirschFilter): Promise<PirschCityStats[] | PirschApiError> {
+        this.accessModeCheck("city");
+
         return await this.performFilteredGet<PirschCityStats[]>(PirschEndpoint.CITY, filter);
     }
 
@@ -411,6 +467,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async platform(filter: PirschFilter): Promise<PirschPlatformStats[] | PirschApiError> {
+        this.accessModeCheck("platform");
+
         return await this.performFilteredGet<PirschPlatformStats[]>(PirschEndpoint.PLATFORM, filter);
     }
 
@@ -420,6 +478,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async screen(filter: PirschFilter): Promise<PirschScreenClassStats[] | PirschApiError> {
+        this.accessModeCheck("screen");
+
         return await this.performFilteredGet<PirschScreenClassStats[]>(PirschEndpoint.SCREEN, filter);
     }
 
@@ -429,6 +489,8 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async keywords(filter: PirschFilter): Promise<PirschKeyword[] | PirschApiError> {
+        this.accessModeCheck("keywords");
+
         return await this.performFilteredGet<PirschKeyword[]>(PirschEndpoint.KEYWORDS, filter);
     }
 
@@ -518,6 +580,12 @@ export abstract class PirschCoreClient {
 
     private generateUrl(path: PirschEndpoint): string {
         return "/" + [this.endpoint, this.version, path].join("/");
+    }
+
+    private accessModeCheck(methodName: string) {
+        if (this.accessMode === 'access-token') {
+            throw new PirschInvalidAccessModeApiError(methodName);
+        }
     }
 
     protected abstract post<Response, Data extends object = object>(
