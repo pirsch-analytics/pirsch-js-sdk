@@ -2,7 +2,7 @@ import ky, { HTTPError, Options } from "ky";
 import { ClientConfig, APIError, Optional, HttpOptions } from "./types";
 
 import { Core } from "./core";
-import { defaultBaseUrl, defaultTimeout, defaultProtocol } from "./constants";
+import { PIRSCH_DEFAULT_BASE_URL, PIRSCH_DEFAULT_TIMEOUT, PIRSCH_DEFAULT_PROTOCOL } from "./constants";
 
 /**
  * Client is used to access the Pirsch API.
@@ -18,9 +18,9 @@ export class Client extends Core {
      * All other configuration parameters can be left to their defaults.
      */
     constructor({
-        baseUrl = defaultBaseUrl,
-        timeout = defaultTimeout,
-        protocol = defaultProtocol,
+        baseUrl = PIRSCH_DEFAULT_BASE_URL,
+        timeout = PIRSCH_DEFAULT_TIMEOUT,
+        protocol = PIRSCH_DEFAULT_PROTOCOL,
         hostname,
         clientId,
         clientSecret,

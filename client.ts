@@ -5,7 +5,7 @@ import axios, { AxiosError, AxiosInstance } from "axios";
 import { ClientConfig, APIError, Optional, HttpOptions, Hit } from "./types";
 
 import { Core } from "./core";
-import { defaultBaseUrl, defaultTimeout, defaultProtocol, referrerQueryParameters } from "./constants";
+import { PIRSCH_DEFAULT_BASE_URL, PIRSCH_DEFAULT_TIMEOUT, PIRSCH_DEFAULT_PROTOCOL, PIRSCH_REFERRER_QUERY_PARAMETERS} from "./constants";
 
 /**
  * Client is used to access the Pirsch API.
@@ -21,9 +21,9 @@ export class Client extends Core {
      * All other configuration parameters can be left to their defaults.
      */
     constructor({
-        baseUrl = defaultBaseUrl,
-        timeout = defaultTimeout,
-        protocol = defaultProtocol,
+        baseUrl = PIRSCH_DEFAULT_BASE_URL,
+        timeout = PIRSCH_DEFAULT_TIMEOUT,
+        protocol = PIRSCH_DEFAULT_PROTOCOL,
         hostname,
         clientId,
         clientSecret,
@@ -59,7 +59,7 @@ export class Client extends Core {
             this.getHeader(request.headers, "referer") ?? this.getHeader(request.headers, "referrer") ?? "";
 
         if (referrer === "") {
-            for (const parameterName of referrerQueryParameters) {
+            for (const parameterName of PIRSCH_REFERRER_QUERY_PARAMETERS) {
                 const parameter = url.searchParams.get(parameterName);
 
                 if (parameter && parameter !== "") {

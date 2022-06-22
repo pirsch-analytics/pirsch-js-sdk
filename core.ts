@@ -39,44 +39,44 @@ import {
 } from "./types";
 
 import {
-    defaultBaseUrl,
-    defaultTimeout,
-    defaultProtocol,
-    authenticationEndpoint,
-    hitEndpoint,
-    eventEndpoint,
-    sessionEndpoint,
-    domainEndpoint,
-    sessionDurationEndpoint,
-    timeOnPageEndpoint,
-    utmSourceEndpoint,
-    utmMediumEndpoint,
-    utmCampaignEndpoint,
-    utmContentEndpoint,
-    utmTermEndpoint,
-    totalVisitorsEndpoint,
-    visitorsEndpoint,
-    pagesEndpoint,
-    entryPagesEndpoint,
-    exitPagesEndpoint,
-    conversionGoalsEndpoint,
-    eventsEndpoint,
-    eventMetadataEndpoint,
-    listEventsEndpoint,
-    growthRateEndpoint,
-    activeVisitorsEndpoint,
-    timeOfDayEndpoint,
-    languageEndpoint,
-    referrerEndpoint,
-    osEndpoint,
-    osVersionEndpoint,
-    browserEndpoint,
-    browserVersionEndpoint,
-    countryEndpoint,
-    cityEndpoint,
-    platformEndpoint,
-    screenEndpoint,
-    keywordsEndpoint,
+    PIRSCH_DEFAULT_BASE_URL,
+    PIRSCH_DEFAULT_TIMEOUT,
+    PIRSCH_DEFAULT_PROTOCOL,
+    PIRSCH_AUTHENTICATION_ENDPOINT,
+    PIRSCH_HIT_ENDPOINT,
+    PIRSCH_EVENT_ENDPOINT,
+    PIRSCH_SESSION_ENDPOINT,
+    PIRSCH_DOMAIN_ENDPOINT,
+    PIRSCH_SESSION_DURATION_ENDPOINT,
+    PIRSCH_TIME_ON_PAGE_ENDPOINT,
+    PIRSCH_UTM_SOURCE_ENDPOINT,
+    PIRSCH_UTM_MEDIUM_ENDPOINT,
+    PIRSCH_UTM_CAMPAIGN_ENDPOINT,
+    PIRSCH_UTM_CONTENT_ENDPOINT,
+    PIRSCH_UTM_TERM_ENDPOINT,
+    PIRSCH_TOTAL_VISITORS_ENDPOINT,
+    PIRSCH_VISITORS_ENDPOINT,
+    PIRSCH_PAGES_ENDPOINT,
+    PIRSCH_ENTRY_PAGES_ENDPOINT,
+    PIRSCH_EXIT_PAGES_ENDPOINT,
+    PIRSCH_CONVERSION_GOALS_ENDPOINT,
+    PIRSCH_EVENTS_ENDPOINT,
+    PIRSCH_EVENT_METADATA_ENDPOINT,
+    PIRSCH_LIST_EVENTS_ENDPOINT,
+    PIRSCH_GROWTH_RATE_ENDPOINT,
+    PIRSCH_ACTIVE_VISITORS_ENDPOINT,
+    PIRSCH_TIME_OF_DAY_ENDPOINT,
+    PIRSCH_LANGUAGE_ENDPOINT,
+    PIRSCH_REFERRER_ENDPOINT,
+    PIRSCH_OS_ENDPOINT,
+    PIRSCH_OS_VERSION_ENDPOINT,
+    PIRSCH_BROWSER_ENDPOINT,
+    PIRSCH_BROWSER_VERSION_ENDPOINT,
+    PIRSCH_COUNTRY_ENDPOINT,
+    PIRSCH_CITY_ENDPOINT,
+    PIRSCH_PLATFORM_ENDPOINT,
+    PIRSCH_SCREEN_ENDPOINT,
+    PIRSCH_KEYWORDS_ENDPOINT,
 } from "./constants";
 
 export abstract class Core {
@@ -96,9 +96,9 @@ export abstract class Core {
      * All other configuration parameters can be left to their defaults.
      */
     constructor({
-        baseUrl = defaultBaseUrl,
-        timeout = defaultTimeout,
-        protocol = defaultProtocol,
+        baseUrl = PIRSCH_DEFAULT_BASE_URL,
+        timeout = PIRSCH_DEFAULT_TIMEOUT,
+        protocol = PIRSCH_DEFAULT_PROTOCOL,
         hostname,
         clientId,
         clientSecret,
@@ -127,7 +127,7 @@ export abstract class Core {
             return;
         }
 
-        return await this.performPost(hitEndpoint, hit);
+        return await this.performPost(PIRSCH_HIT_ENDPOINT, hit);
     }
 
     /**
@@ -145,7 +145,7 @@ export abstract class Core {
             return;
         }
 
-        return await this.performPost(eventEndpoint, {
+        return await this.performPost(PIRSCH_EVENT_ENDPOINT, {
             event_name: name,
             event_duration: duration,
             event_meta: meta,
@@ -164,7 +164,7 @@ export abstract class Core {
             return;
         }
 
-        return await this.performPost(sessionEndpoint, hit);
+        return await this.performPost(PIRSCH_SESSION_ENDPOINT, hit);
     }
 
     /**
@@ -173,7 +173,7 @@ export abstract class Core {
      * @returns Domain object for this client.
      */
     async domain(): Promise<Domain | APIError> {
-        const result = await this.performGet<Domain[]>(domainEndpoint);
+        const result = await this.performGet<Domain[]>(PIRSCH_DOMAIN_ENDPOINT);
 
         const error: APIError = {
             code: 404,
@@ -196,7 +196,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async sessionDuration(filter: Filter): Promise<TimeSpentStats[] | APIError> {
-        return await this.performFilteredGet<TimeSpentStats[]>(sessionDurationEndpoint, filter);
+        return await this.performFilteredGet<TimeSpentStats[]>(PIRSCH_SESSION_DURATION_ENDPOINT, filter);
     }
 
     /**
@@ -205,7 +205,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async timeOnPage(filter: Filter): Promise<TimeSpentStats[] | APIError> {
-        return await this.performFilteredGet<TimeSpentStats[]>(timeOnPageEndpoint, filter);
+        return await this.performFilteredGet<TimeSpentStats[]>(PIRSCH_TIME_ON_PAGE_ENDPOINT, filter);
     }
 
     /**
@@ -214,7 +214,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async utmSource(filter: Filter): Promise<UTMSourceStats[] | APIError> {
-        return await this.performFilteredGet<UTMSourceStats[]>(utmSourceEndpoint, filter);
+        return await this.performFilteredGet<UTMSourceStats[]>(PIRSCH_UTM_SOURCE_ENDPOINT, filter);
     }
 
     /**
@@ -223,7 +223,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async utmMedium(filter: Filter): Promise<UTMMediumStats[] | APIError> {
-        return await this.performFilteredGet<UTMMediumStats[]>(utmMediumEndpoint, filter);
+        return await this.performFilteredGet<UTMMediumStats[]>(PIRSCH_UTM_MEDIUM_ENDPOINT, filter);
     }
 
     /**
@@ -232,7 +232,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async utmCampaign(filter: Filter): Promise<UTMCampaignStats[] | APIError> {
-        return await this.performFilteredGet<UTMCampaignStats[]>(utmCampaignEndpoint, filter);
+        return await this.performFilteredGet<UTMCampaignStats[]>(PIRSCH_UTM_CAMPAIGN_ENDPOINT, filter);
     }
 
     /**
@@ -241,7 +241,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async utmContent(filter: Filter): Promise<UTMContentStats[] | APIError> {
-        return await this.performFilteredGet<UTMContentStats[]>(utmContentEndpoint, filter);
+        return await this.performFilteredGet<UTMContentStats[]>(PIRSCH_UTM_CONTENT_ENDPOINT, filter);
     }
 
     /**
@@ -250,7 +250,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async utmTerm(filter: Filter): Promise<UTMTermStats[] | APIError> {
-        return await this.performFilteredGet<UTMTermStats[]>(utmTermEndpoint, filter);
+        return await this.performFilteredGet<UTMTermStats[]>(PIRSCH_UTM_TERM_ENDPOINT, filter);
     }
 
     /**
@@ -259,7 +259,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async totalVisitors(filter: Filter): Promise<TotalVisitorStats | APIError> {
-        return await this.performFilteredGet<TotalVisitorStats>(totalVisitorsEndpoint, filter);
+        return await this.performFilteredGet<TotalVisitorStats>(PIRSCH_TOTAL_VISITORS_ENDPOINT, filter);
     }
 
     /**
@@ -268,7 +268,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async visitors(filter: Filter): Promise<VisitorStats[] | APIError> {
-        return await this.performFilteredGet<VisitorStats[]>(visitorsEndpoint, filter);
+        return await this.performFilteredGet<VisitorStats[]>(PIRSCH_VISITORS_ENDPOINT, filter);
     }
 
     /**
@@ -277,7 +277,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async entryPages(filter: Filter): Promise<EntryStats[] | APIError> {
-        return await this.performFilteredGet<EntryStats[]>(entryPagesEndpoint, filter);
+        return await this.performFilteredGet<EntryStats[]>(PIRSCH_ENTRY_PAGES_ENDPOINT, filter);
     }
 
     /**
@@ -286,7 +286,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async exitPages(filter: Filter): Promise<ExitStats[] | APIError> {
-        return await this.performFilteredGet<ExitStats[]>(exitPagesEndpoint, filter);
+        return await this.performFilteredGet<ExitStats[]>(PIRSCH_EXIT_PAGES_ENDPOINT, filter);
     }
 
     /**
@@ -295,7 +295,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async pages(filter: Filter): Promise<PageStats[] | APIError> {
-        return await this.performFilteredGet<PageStats[]>(pagesEndpoint, filter);
+        return await this.performFilteredGet<PageStats[]>(PIRSCH_PAGES_ENDPOINT, filter);
     }
 
     /**
@@ -304,7 +304,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async conversionGoals(filter: Filter): Promise<ConversionGoal[] | APIError> {
-        return await this.performFilteredGet<ConversionGoal[]>(conversionGoalsEndpoint, filter);
+        return await this.performFilteredGet<ConversionGoal[]>(PIRSCH_CONVERSION_GOALS_ENDPOINT, filter);
     }
 
     /**
@@ -313,7 +313,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async events(filter: Filter): Promise<EventStats[] | APIError> {
-        return await this.performFilteredGet<EventStats[]>(eventsEndpoint, filter);
+        return await this.performFilteredGet<EventStats[]>(PIRSCH_EVENTS_ENDPOINT, filter);
     }
 
     /**
@@ -322,7 +322,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async eventMetadata(filter: Filter): Promise<EventStats[] | APIError> {
-        return await this.performFilteredGet<EventStats[]>(eventMetadataEndpoint, filter);
+        return await this.performFilteredGet<EventStats[]>(PIRSCH_EVENT_METADATA_ENDPOINT, filter);
     }
 
     /**
@@ -331,7 +331,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async listEvents(filter: Filter): Promise<EventListStats[] | APIError> {
-        return await this.performFilteredGet<EventListStats[]>(listEventsEndpoint, filter);
+        return await this.performFilteredGet<EventListStats[]>(PIRSCH_LIST_EVENTS_ENDPOINT, filter);
     }
 
     /**
@@ -340,7 +340,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async growth(filter: Filter): Promise<Growth | APIError> {
-        return await this.performFilteredGet<Growth>(growthRateEndpoint, filter);
+        return await this.performFilteredGet<Growth>(PIRSCH_GROWTH_RATE_ENDPOINT, filter);
     }
 
     /**
@@ -349,7 +349,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async activeVisitors(filter: Filter): Promise<ActiveVisitorsData | APIError> {
-        return await this.performFilteredGet<ActiveVisitorsData>(activeVisitorsEndpoint, filter);
+        return await this.performFilteredGet<ActiveVisitorsData>(PIRSCH_ACTIVE_VISITORS_ENDPOINT, filter);
     }
 
     /**
@@ -358,7 +358,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async timeOfDay(filter: Filter): Promise<VisitorHourStats[] | APIError> {
-        return await this.performFilteredGet<VisitorHourStats[]>(timeOfDayEndpoint, filter);
+        return await this.performFilteredGet<VisitorHourStats[]>(PIRSCH_TIME_OF_DAY_ENDPOINT, filter);
     }
 
     /**
@@ -367,7 +367,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async languages(filter: Filter): Promise<LanguageStats[] | APIError> {
-        return await this.performFilteredGet<LanguageStats[]>(languageEndpoint, filter);
+        return await this.performFilteredGet<LanguageStats[]>(PIRSCH_LANGUAGE_ENDPOINT, filter);
     }
 
     /**
@@ -376,7 +376,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async referrer(filter: Filter): Promise<ReferrerStats[] | APIError> {
-        return await this.performFilteredGet<ReferrerStats[]>(referrerEndpoint, filter);
+        return await this.performFilteredGet<ReferrerStats[]>(PIRSCH_REFERRER_ENDPOINT, filter);
     }
 
     /**
@@ -385,7 +385,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async os(filter: Filter): Promise<OSStats[] | APIError> {
-        return await this.performFilteredGet<OSStats[]>(osEndpoint, filter);
+        return await this.performFilteredGet<OSStats[]>(PIRSCH_OS_ENDPOINT, filter);
     }
 
     /**
@@ -394,7 +394,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async osVersions(filter: Filter): Promise<OSVersionStats[] | APIError> {
-        return await this.performFilteredGet<OSVersionStats[]>(osVersionEndpoint, filter);
+        return await this.performFilteredGet<OSVersionStats[]>(PIRSCH_OS_VERSION_ENDPOINT, filter);
     }
 
     /**
@@ -403,7 +403,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async browser(filter: Filter): Promise<BrowserStats[] | APIError> {
-        return await this.performFilteredGet<BrowserStats[]>(browserEndpoint, filter);
+        return await this.performFilteredGet<BrowserStats[]>(PIRSCH_BROWSER_ENDPOINT, filter);
     }
 
     /**
@@ -412,7 +412,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async browserVersions(filter: Filter): Promise<BrowserVersionStats[] | APIError> {
-        return await this.performFilteredGet<BrowserVersionStats[]>(browserVersionEndpoint, filter);
+        return await this.performFilteredGet<BrowserVersionStats[]>(PIRSCH_BROWSER_VERSION_ENDPOINT, filter);
     }
 
     /**
@@ -421,7 +421,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async country(filter: Filter): Promise<CountryStats[] | APIError> {
-        return await this.performFilteredGet<CountryStats[]>(countryEndpoint, filter);
+        return await this.performFilteredGet<CountryStats[]>(PIRSCH_COUNTRY_ENDPOINT, filter);
     }
 
     /**
@@ -430,7 +430,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async city(filter: Filter): Promise<CityStats[] | APIError> {
-        return await this.performFilteredGet<CityStats[]>(cityEndpoint, filter);
+        return await this.performFilteredGet<CityStats[]>(PIRSCH_CITY_ENDPOINT, filter);
     }
 
     /**
@@ -439,7 +439,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async platform(filter: Filter): Promise<PlatformStats[] | APIError> {
-        return await this.performFilteredGet<PlatformStats[]>(platformEndpoint, filter);
+        return await this.performFilteredGet<PlatformStats[]>(PIRSCH_PLATFORM_ENDPOINT, filter);
     }
 
     /**
@@ -448,7 +448,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async screen(filter: Filter): Promise<ScreenClassStats[] | APIError> {
-        return await this.performFilteredGet<ScreenClassStats[]>(screenEndpoint, filter);
+        return await this.performFilteredGet<ScreenClassStats[]>(PIRSCH_SCREEN_ENDPOINT, filter);
     }
 
     /**
@@ -457,7 +457,7 @@ export abstract class Core {
      * @param filter used to filter the result set.
      */
     async keywords(filter: Filter): Promise<Keyword[] | APIError> {
-        return await this.performFilteredGet<Keyword[]>(keywordsEndpoint, filter);
+        return await this.performFilteredGet<Keyword[]>(PIRSCH_KEYWORDS_ENDPOINT, filter);
     }
 
     private async performPost<T extends object>(url: string, data: T, retry = true): Promise<Optional<APIError>> {
@@ -520,7 +520,7 @@ export abstract class Core {
 
     private async refreshToken(): Promise<Optional<APIError>> {
         try {
-            const result = await this.post<AuthenticationResponse>(authenticationEndpoint, {
+            const result = await this.post<AuthenticationResponse>(PIRSCH_AUTHENTICATION_ENDPOINT, {
                 client_id: this.clientId,
                 client_secret: this.clientSecret,
             });
