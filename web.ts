@@ -38,7 +38,7 @@ export class PirschWebClient extends PirschCoreClient {
 
     protected async get<Response>(url: string, options?: PirschHttpOptions): Promise<Response> {
         const result = await this.httpClient.get(url, this.createOptions({ ...options }));
-        const response = await result.json() as unknown;
+        const response = (await result.json()) as unknown;
         return response as Response;
     }
 
@@ -48,7 +48,7 @@ export class PirschWebClient extends PirschCoreClient {
         options?: PirschHttpOptions
     ): Promise<Response> {
         const result = await this.httpClient.post(url, this.createOptions({ ...options, data }));
-        const response = await result.json() as unknown;
+        const response = (await result.json()) as unknown;
         return response as Response;
     }
 
@@ -58,7 +58,7 @@ export class PirschWebClient extends PirschCoreClient {
                 code: error.response.status,
                 validation: {},
                 error: [],
-                ...(await error.response.json() as object),
+                ...((await error.response.json()) as object),
             };
         }
 

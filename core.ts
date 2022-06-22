@@ -147,7 +147,12 @@ export abstract class PirschCoreClient {
      * @param meta optional object containing metadata (only scalar values, like strings, numbers, and booleans)
      * @returns APIError or an empty promise, in case something went wrong
      */
-    async event(name: string, hit: PirschHit, duration = 0, meta?: Record<string, Scalar>): Promise<Optional<PirschApiError>> {
+    async event(
+        name: string,
+        hit: PirschHit,
+        duration = 0,
+        meta?: Record<string, Scalar>
+    ): Promise<Optional<PirschApiError>> {
         if (hit.dnt === "1") {
             return;
         }
