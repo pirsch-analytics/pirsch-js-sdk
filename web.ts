@@ -1,7 +1,8 @@
 import ky, { HTTPError as KyHttpError, Options as KyOptions } from "ky";
-import { PirschTokenClientConfig, PirschApiError, PirschHttpOptions, Optional } from "./types";
+import { PirschTokenClientConfig, PirschHttpOptions, PirschApiErrorResponse } from "./types";
 
 import { PirschCoreClient } from "./core";
+import { PirschApiError, PirschUnknownApiError } from "./shared";
 
 /**
  * Client is used to access the Pirsch API.
@@ -22,7 +23,9 @@ export class PirschWebClient extends PirschCoreClient {
      */
     constructor(configuration: PirschTokenClientConfig) {
         if ("clientId" in configuration || "clientSecret" in configuration) {
-            throw new Error("Do not pass OAuth secrets such as 'clientId' or 'clientSecret' to the web client, as it is insecure!");
+            throw new Error(
+                "Do not pass OAuth secrets such as 'clientId' or 'clientSecret' to the web client, as it is insecure!"
+            );
         }
 
         super(configuration);
@@ -45,17 +48,20 @@ export class PirschWebClient extends PirschCoreClient {
         return response as Response;
     }
 
-    protected async toApiError(error: unknown): Promise<Optional<PirschApiError>> {
-        if (error instanceof KyHttpError) {
-            return {
-                code: error.response.status,
-                validation: {},
-                error: [],
-                ...((await error.response.json()) as object),
-            };
+    protected async toApiError(error: unknown): Promise<PirschApiError> {
+        if (error instanceof PirschApiError) {
+            return error;
         }
 
-        return;
+        if (error instanceof KyHttpError) {
+            return new PirschApiError(error.response.status, (await error.response.json()) as PirschApiErrorResponse);
+        }
+
+        if (error instanceof Error) {
+            return new PirschUnknownApiError(error.message);
+        }
+
+        return new PirschUnknownApiError();
     }
 
     private createOptions({ headers, parameters, data }: PirschHttpOptions & { data?: object }): KyOptions {

@@ -4,16 +4,17 @@ import { URL } from "node:url";
 import axios, { AxiosError as AxiosHttpError, AxiosInstance } from "axios";
 import {
     PirschNodeClientConfig,
-    PirschApiError,
     PirschHttpOptions,
     PirschHit,
     PirschProxyHeader,
     Optional,
     Protocol,
     PirschSnakeCaseHeader,
+    PirschApiErrorResponse,
 } from "./types";
 
 import { PirschCoreClient } from "./core";
+import { PirschApiError, PirschUnknownApiError } from "./shared";
 import { PIRSCH_DEFAULT_PROTOCOL, PIRSCH_REFERRER_QUERY_PARAMETERS, PIRSCH_PROXY_HEADERS } from "./constants";
 
 /**
@@ -122,18 +123,25 @@ export class PirschNodeClient extends PirschCoreClient {
         return result.data;
     }
 
-    protected async toApiError(error: unknown): Promise<Optional<PirschApiError>> {
-        if (error instanceof AxiosHttpError && error.response !== undefined && error.request !== null) {
-            const exception = error as AxiosHttpError<PirschApiError>;
-            return {
-                code: exception.response?.status ?? 500,
-                validation: {},
-                error: [],
-                ...exception.response?.data,
-            };
+    protected async toApiError(error: unknown): Promise<PirschApiError> {
+        if (error instanceof PirschApiError) {
+            return error;
         }
 
-        return;
+        if (error instanceof AxiosHttpError && error.response !== undefined) {
+            const exception = error as AxiosHttpError<PirschApiErrorResponse>;
+
+            return new PirschApiError(
+                exception.response?.status ?? 500,
+                exception.response?.data ?? { validation: {}, error: [] }
+            );
+        }
+
+        if (error instanceof Error) {
+            return new PirschUnknownApiError(error.message);
+        }
+
+        return new PirschUnknownApiError();
     }
 
     private snakeCase<T extends string>(value: T): PirschSnakeCaseHeader<T> {

@@ -63,8 +63,8 @@ export interface PirschNodeClientConfigBase {
 
 export type PirschClientConfig = PirschOAuthClientConfig | PirschTokenClientConfig;
 export type PirschNodeClientConfig =
-    | PirschOAuthClientConfig & PirschNodeClientConfigBase
-    | PirschTokenClientConfig & PirschNodeClientConfigBase;
+    | (PirschOAuthClientConfig & PirschNodeClientConfigBase)
+    | (PirschTokenClientConfig & PirschNodeClientConfigBase);
 
 /**
  * PirschAuthenticationResponse is the authentication response for the API and returns the access token.
@@ -92,11 +92,10 @@ export interface PirschHit {
 }
 
 /**
- * PirschApiError represents an error returned from the API.
+ * PirschApiErrorResponse represents an error returned from the API.
  */
-export interface PirschApiError {
-    code: number;
-    validation: PirschValidation;
+export interface PirschApiErrorResponse {
+    validation?: PirschValidation;
     error: string[];
 }
 

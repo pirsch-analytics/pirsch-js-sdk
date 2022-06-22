@@ -1,7 +1,6 @@
 import {
     PirschClientConfig,
     PirschAuthenticationResponse,
-    PirschApiError,
     PirschHit,
     PirschDomain,
     PirschFilter,
@@ -40,6 +39,7 @@ import {
 } from "./types";
 
 import { PIRSCH_DEFAULT_BASE_URL, PIRSCH_DEFAULT_TIMEOUT, PirschEndpoint } from "./constants";
+import { PirschApiError, PirschDomainNotFoundApiError } from "./shared";
 
 export abstract class PirschCoreClient {
     protected readonly version = "v1";
@@ -69,10 +69,7 @@ export abstract class PirschCoreClient {
      *
      */
     constructor(configuration: PirschClientConfig) {
-        const {
-            baseUrl = PIRSCH_DEFAULT_BASE_URL,
-            timeout = PIRSCH_DEFAULT_TIMEOUT,
-        } = configuration;
+        const { baseUrl = PIRSCH_DEFAULT_BASE_URL, timeout = PIRSCH_DEFAULT_TIMEOUT } = configuration;
 
         this.baseUrl = baseUrl;
         this.timeout = timeout;
@@ -154,11 +151,7 @@ export abstract class PirschCoreClient {
     async domain(): Promise<PirschDomain | PirschApiError> {
         const result = await this.performGet<PirschDomain[]>(PirschEndpoint.DOMAIN);
 
-        const error: PirschApiError = {
-            code: 404,
-            validation: {},
-            error: ["domain not found"],
-        };
+        const error = new PirschDomainNotFoundApiError();
 
         if (Array.isArray(result) && result.length === 0) {
             return error;
@@ -455,12 +448,12 @@ export abstract class PirschCoreClient {
         } catch (error: unknown) {
             const exception = await this.toApiError(error);
 
-            if (exception && this.accessMode === "oauth" && exception.code === 401 && retry) {
+            if (this.accessMode === "oauth" && exception.code === 401 && retry) {
                 await this.refreshToken();
                 return this.performPost(path, data, false);
             }
 
-            throw error;
+            throw exception;
         }
     }
 
@@ -486,12 +479,12 @@ export abstract class PirschCoreClient {
         } catch (error: unknown) {
             const exception = await this.toApiError(error);
 
-            if (exception && this.accessMode === "oauth" && exception.code === 401 && retry) {
+            if (this.accessMode === "oauth" && exception.code === 401 && retry) {
                 await this.refreshToken();
                 return this.performGet<T>(path, parameters, false);
             }
 
-            throw error;
+            throw exception;
         }
     }
 
@@ -519,11 +512,7 @@ export abstract class PirschCoreClient {
 
             const exception = await this.toApiError(error);
 
-            if (exception) {
-                return exception;
-            }
-
-            throw error;
+            return exception;
         }
     }
 
@@ -537,5 +526,5 @@ export abstract class PirschCoreClient {
         options?: PirschHttpOptions
     ): Promise<Response>;
     protected abstract get<Response>(url: string, options?: PirschHttpOptions): Promise<Response>;
-    protected abstract toApiError(error: unknown): Promise<Optional<PirschApiError>>;
+    protected abstract toApiError(error: unknown): Promise<PirschApiError>;
 }
