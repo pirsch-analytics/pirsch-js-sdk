@@ -34,6 +34,7 @@ import {
     PirschExitStats,
     PirschCityStats,
     PirschHttpOptions,
+    PirschAccessMode,
     Scalar,
     Optional,
 } from "./types";
@@ -51,6 +52,8 @@ export abstract class PirschCoreClient {
     protected readonly protocol: string;
     protected readonly baseUrl: string;
     protected readonly timeout: number;
+    protected readonly accessMode: PirschAccessMode;
+
     protected accessToken = "";
 
     /**
@@ -83,12 +86,12 @@ export abstract class PirschCoreClient {
         if ("accessToken" in configuration) {
             const { accessToken } = configuration;
             this.accessToken = accessToken;
-            this.mode = 'access-token'
+            this.accessMode = "access-token";
         } else {
             const { clientId, clientSecret } = configuration;
             this.clientId = clientId;
             this.clientSecret = clientSecret;
-            this.mode = 'oauth'
+            this.accessMode = "oauth";
         }
     }
 
@@ -465,7 +468,7 @@ export abstract class PirschCoreClient {
         } catch (error: unknown) {
             const exception = await this.toApiError(error);
 
-            if (exception && this.clientId && exception.code === 401 && retry) {
+            if (exception && this.accessMode === "oauth" && exception.code === 401 && retry) {
                 await this.refreshToken();
                 return this.performPost(path, data, false);
             }
@@ -496,7 +499,7 @@ export abstract class PirschCoreClient {
         } catch (error: unknown) {
             const exception = await this.toApiError(error);
 
-            if (exception && this.clientId && exception.code === 401 && retry) {
+            if (exception && this.accessMode === "oauth" && exception.code === 401 && retry) {
                 await this.refreshToken();
                 return this.performGet<T>(path, parameters, false);
             }
@@ -510,7 +513,7 @@ export abstract class PirschCoreClient {
     }
 
     private async refreshToken(): Promise<Optional<PirschApiError>> {
-        if (!this.clientId || !this.clientSecret) {
+        if (this.accessMode === "access-token") {
             return;
         }
 

@@ -466,6 +466,11 @@ export interface PirschHttpOptions {
 }
 
 /**
+ * PirschAccessMode type
+ */
+export type PirschAccessMode = "access-token" | "oauth";
+
+/**
  * Scalar type
  */
 export type Scalar = string | number | boolean;
