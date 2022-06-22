@@ -13,9 +13,16 @@ export class PirschWebClient extends PirschCoreClient {
     /**
      * The constructor creates a new client.
      *
-     * @param config You need to pass in the hostname, client ID, and client secret you have configured on the Pirsch dashboard.
-     * It's also recommended to set the proper protocol for your website, else it will be set to http by default.
+     * @param {object} config You need to pass in the **Hostname**, **Client ID**, and **Client Secret** you have configured on the Pirsch dashboard.
+     * It's also recommended to set the proper protocol for your website, else it will be set to `https` by default.
      * All other configuration parameters can be left to their defaults.
+     * @param {string} config.baseUrl The base URL for the pirsch API
+     * @param {number} config.timeout The default HTTP timeout in milliseconds
+     * @param {string} config.clientId The OAuth client ID
+     * @param {string} config.clientSecret The OAuth client secret
+     * @param {string} config.hostname The hostname of the domain to track
+     * @param {string} config.protocol The default HTTP protocol to use for tracking
+     *
      */
     constructor({
         baseUrl = PIRSCH_DEFAULT_BASE_URL,

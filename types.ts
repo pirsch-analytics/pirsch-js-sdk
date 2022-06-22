@@ -2,12 +2,36 @@
  * PirschClientConfig contains the configuration parameters for the Client.
  */
 export interface PirschClientConfig {
-    baseUrl?: string
-    timeout?: number
-    clientId: string
-    clientSecret: string
-    hostname: string
-    protocol?: string
+    /**
+     * The base URL for the pirsch API
+     *
+     * @default 'https://api.pirsch.io'
+     */
+    baseUrl?: string;
+    /**
+     * The default HTTP timeout in milliseconds
+     *
+     * @default 5000
+     */
+    timeout?: number;
+    /**
+     * The OAuth client ID
+     */
+    clientId: string;
+    /**
+     * The OAuth client secret
+     */
+    clientSecret: string;
+    /**
+     * The domain to track
+     */
+    hostname: string;
+    /**
+     * The default HTTP protocol to use for tracking
+     *
+     * @default 'https'
+     */
+    protocol?: string;
 }
 
 /**
