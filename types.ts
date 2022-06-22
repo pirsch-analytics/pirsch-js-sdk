@@ -23,7 +23,7 @@ export interface PirschClientConfigBase {
      *
      * @default 'https'
      */
-    protocol?: string;
+    protocol?: Protocol;
 }
 
 /**
@@ -469,6 +469,11 @@ export interface PirschHttpOptions {
  * PirschAccessMode type
  */
 export type PirschAccessMode = "access-token" | "oauth";
+
+/**
+ * Protocol type
+ */
+export type Protocol = "http" | "https";
 
 /**
  * Scalar type

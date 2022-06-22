@@ -37,6 +37,7 @@ import {
     PirschAccessMode,
     Scalar,
     Optional,
+    Protocol,
 } from "./types";
 
 import { PIRSCH_DEFAULT_BASE_URL, PIRSCH_DEFAULT_TIMEOUT, PIRSCH_DEFAULT_PROTOCOL, PirschEndpoint } from "./constants";
@@ -49,7 +50,7 @@ export abstract class PirschCoreClient {
     protected readonly clientSecret?: string;
 
     protected readonly hostname: string;
-    protected readonly protocol: string;
+    protected readonly protocol: Protocol;
     protected readonly baseUrl: string;
     protected readonly timeout: number;
     protected readonly accessMode: PirschAccessMode;
