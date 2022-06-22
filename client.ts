@@ -4,13 +4,13 @@ import { URL } from "node:url";
 import axios, { AxiosError, AxiosInstance } from "axios";
 import { PirschClientConfig, PirschApiError, PirschHttpOptions, PirschHit, Optional } from "./types";
 
-import { Core } from "./core";
+import { PirschCoreClient } from "./core";
 import { PIRSCH_DEFAULT_BASE_URL, PIRSCH_DEFAULT_TIMEOUT, PIRSCH_DEFAULT_PROTOCOL, PIRSCH_REFERRER_QUERY_PARAMETERS} from "./constants";
 
 /**
  * Client is used to access the Pirsch API.
  */
-export class Client extends Core {
+export class PirschNodeClient extends PirschCoreClient {
     private httpClient: AxiosInstance;
 
     /**
@@ -115,3 +115,6 @@ export class Client extends Core {
         return;
     }
 }
+
+export const Pirsch = PirschNodeClient;
+export const Client = PirschNodeClient;

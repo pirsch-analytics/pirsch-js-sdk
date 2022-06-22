@@ -1,13 +1,13 @@
 import ky, { HTTPError, Options } from "ky";
 import { PirschClientConfig, PirschApiError, PirschHttpOptions, Optional } from "./types";
 
-import { Core } from "./core";
+import { PirschCoreClient } from "./core";
 import { PIRSCH_DEFAULT_BASE_URL, PIRSCH_DEFAULT_TIMEOUT, PIRSCH_DEFAULT_PROTOCOL } from "./constants";
 
 /**
  * Client is used to access the Pirsch API.
  */
-export class Client extends Core {
+export class PirschWebClient extends PirschCoreClient {
     private httpClient: typeof ky;
 
     /**
@@ -66,3 +66,6 @@ export class Client extends Core {
         };
     }
 }
+
+export const Pirsch = PirschWebClient;
+export const Client = PirschWebClient;

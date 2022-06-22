@@ -79,7 +79,7 @@ import {
     PIRSCH_KEYWORDS_ENDPOINT,
 } from "./constants";
 
-export abstract class Core {
+export abstract class PirschCoreClient {
     protected readonly clientId: string;
     protected readonly clientSecret: string;
     protected readonly hostname: string;
