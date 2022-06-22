@@ -1,7 +1,7 @@
 import { IncomingHttpHeaders, IncomingMessage } from "node:http";
 import { URL } from "node:url";
 
-import axios, { AxiosError, AxiosInstance } from "axios";
+import axios, { AxiosError as AxiosHttpError, AxiosInstance } from "axios";
 import { PirschClientConfig, PirschApiError, PirschHttpOptions, PirschHit, Optional } from "./types";
 
 import { PirschCoreClient } from "./core";
@@ -102,8 +102,8 @@ export class PirschNodeClient extends PirschCoreClient {
     }
 
     protected async toApiError(error: unknown): Promise<Optional<PirschApiError>> {
-        if (error instanceof AxiosError && error.response !== undefined && error.request !== null) {
-            const exception = error as AxiosError<PirschApiError>;
+        if (error instanceof AxiosHttpError && error.response !== undefined && error.request !== null) {
+            const exception = error as AxiosHttpError<PirschApiError>;
             return {
                 code: exception.response?.status ?? 500,
                 validation: {},

@@ -1,4 +1,4 @@
-import ky, { HTTPError, Options } from "ky";
+import ky, { HTTPError as KyHttpError, Options as KyOptions } from "ky";
 import { PirschClientConfig, PirschApiError, PirschHttpOptions, Optional } from "./types";
 
 import { PirschCoreClient } from "./core";
@@ -46,7 +46,7 @@ export class PirschWebClient extends PirschCoreClient {
     }
 
     protected async toApiError(error: unknown): Promise<Optional<PirschApiError>> {
-        if (error instanceof HTTPError) {
+        if (error instanceof KyHttpError) {
             return {
                 code: error.response.status,
                 validation: {},
@@ -58,7 +58,7 @@ export class PirschWebClient extends PirschCoreClient {
         return;
     }
 
-    private createOptions({ headers, parameters, data }: PirschHttpOptions & { data?: object }): Options {
+    private createOptions({ headers, parameters, data }: PirschHttpOptions & { data?: object }): KyOptions {
         return {
             headers,
             json: data,
