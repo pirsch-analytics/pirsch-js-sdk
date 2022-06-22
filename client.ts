@@ -5,7 +5,12 @@ import axios, { AxiosError as AxiosHttpError, AxiosInstance } from "axios";
 import { PirschClientConfig, PirschApiError, PirschHttpOptions, PirschHit, Optional } from "./types";
 
 import { PirschCoreClient } from "./core";
-import { PIRSCH_DEFAULT_BASE_URL, PIRSCH_DEFAULT_TIMEOUT, PIRSCH_DEFAULT_PROTOCOL, PIRSCH_REFERRER_QUERY_PARAMETERS} from "./constants";
+import {
+    PIRSCH_DEFAULT_BASE_URL,
+    PIRSCH_DEFAULT_TIMEOUT,
+    PIRSCH_DEFAULT_PROTOCOL,
+    PIRSCH_REFERRER_QUERY_PARAMETERS,
+} from "./constants";
 
 /**
  * Client is used to access the Pirsch API.

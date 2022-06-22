@@ -38,12 +38,7 @@ import {
     Optional,
 } from "./types";
 
-import {
-    PIRSCH_DEFAULT_BASE_URL,
-    PIRSCH_DEFAULT_TIMEOUT,
-    PIRSCH_DEFAULT_PROTOCOL,
-    PirschEndpoint,
-} from "./constants";
+import { PIRSCH_DEFAULT_BASE_URL, PIRSCH_DEFAULT_TIMEOUT, PIRSCH_DEFAULT_PROTOCOL, PirschEndpoint } from "./constants";
 
 export abstract class PirschCoreClient {
     protected readonly version = "v1";
