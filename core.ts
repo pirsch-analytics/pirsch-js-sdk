@@ -42,41 +42,7 @@ import {
     PIRSCH_DEFAULT_BASE_URL,
     PIRSCH_DEFAULT_TIMEOUT,
     PIRSCH_DEFAULT_PROTOCOL,
-    PIRSCH_AUTHENTICATION_ENDPOINT,
-    PIRSCH_HIT_ENDPOINT,
-    PIRSCH_EVENT_ENDPOINT,
-    PIRSCH_SESSION_ENDPOINT,
-    PIRSCH_DOMAIN_ENDPOINT,
-    PIRSCH_SESSION_DURATION_ENDPOINT,
-    PIRSCH_TIME_ON_PAGE_ENDPOINT,
-    PIRSCH_UTM_SOURCE_ENDPOINT,
-    PIRSCH_UTM_MEDIUM_ENDPOINT,
-    PIRSCH_UTM_CAMPAIGN_ENDPOINT,
-    PIRSCH_UTM_CONTENT_ENDPOINT,
-    PIRSCH_UTM_TERM_ENDPOINT,
-    PIRSCH_TOTAL_VISITORS_ENDPOINT,
-    PIRSCH_VISITORS_ENDPOINT,
-    PIRSCH_PAGES_ENDPOINT,
-    PIRSCH_ENTRY_PAGES_ENDPOINT,
-    PIRSCH_EXIT_PAGES_ENDPOINT,
-    PIRSCH_CONVERSION_GOALS_ENDPOINT,
-    PIRSCH_EVENTS_ENDPOINT,
-    PIRSCH_EVENT_METADATA_ENDPOINT,
-    PIRSCH_LIST_EVENTS_ENDPOINT,
-    PIRSCH_GROWTH_RATE_ENDPOINT,
-    PIRSCH_ACTIVE_VISITORS_ENDPOINT,
-    PIRSCH_TIME_OF_DAY_ENDPOINT,
-    PIRSCH_LANGUAGE_ENDPOINT,
-    PIRSCH_REFERRER_ENDPOINT,
-    PIRSCH_OS_ENDPOINT,
-    PIRSCH_OS_VERSION_ENDPOINT,
-    PIRSCH_BROWSER_ENDPOINT,
-    PIRSCH_BROWSER_VERSION_ENDPOINT,
-    PIRSCH_COUNTRY_ENDPOINT,
-    PIRSCH_CITY_ENDPOINT,
-    PIRSCH_PLATFORM_ENDPOINT,
-    PIRSCH_SCREEN_ENDPOINT,
-    PIRSCH_KEYWORDS_ENDPOINT,
+    PirschEndpoint,
 } from "./constants";
 
 export abstract class PirschCoreClient {
@@ -137,7 +103,7 @@ export abstract class PirschCoreClient {
             return;
         }
 
-        return await this.performPost(PIRSCH_HIT_ENDPOINT, hit);
+        return await this.performPost(PirschEndpoint.HIT, hit);
     }
 
     /**
@@ -160,7 +126,7 @@ export abstract class PirschCoreClient {
             return;
         }
 
-        return await this.performPost(PIRSCH_EVENT_ENDPOINT, {
+        return await this.performPost(PirschEndpoint.EVENT, {
             event_name: name,
             event_duration: duration,
             event_meta: meta,
@@ -179,7 +145,7 @@ export abstract class PirschCoreClient {
             return;
         }
 
-        return await this.performPost(PIRSCH_SESSION_ENDPOINT, hit);
+        return await this.performPost(PirschEndpoint.SESSION, hit);
     }
 
     /**
@@ -188,7 +154,7 @@ export abstract class PirschCoreClient {
      * @returns Domain object for this client.
      */
     async domain(): Promise<PirschDomain | PirschApiError> {
-        const result = await this.performGet<PirschDomain[]>(PIRSCH_DOMAIN_ENDPOINT);
+        const result = await this.performGet<PirschDomain[]>(PirschEndpoint.DOMAIN);
 
         const error: PirschApiError = {
             code: 404,
@@ -211,7 +177,7 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async sessionDuration(filter: PirschFilter): Promise<PirschTimeSpentStats[] | PirschApiError> {
-        return await this.performFilteredGet<PirschTimeSpentStats[]>(PIRSCH_SESSION_DURATION_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschTimeSpentStats[]>(PirschEndpoint.SESSION_DURATION, filter);
     }
 
     /**
@@ -220,7 +186,7 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async timeOnPage(filter: PirschFilter): Promise<PirschTimeSpentStats[] | PirschApiError> {
-        return await this.performFilteredGet<PirschTimeSpentStats[]>(PIRSCH_TIME_ON_PAGE_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschTimeSpentStats[]>(PirschEndpoint.TIME_ON_PAGE, filter);
     }
 
     /**
@@ -229,7 +195,7 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async utmSource(filter: PirschFilter): Promise<PirschUTMSourceStats[] | PirschApiError> {
-        return await this.performFilteredGet<PirschUTMSourceStats[]>(PIRSCH_UTM_SOURCE_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschUTMSourceStats[]>(PirschEndpoint.UTM_SOURCE, filter);
     }
 
     /**
@@ -238,7 +204,7 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async utmMedium(filter: PirschFilter): Promise<PirschUTMMediumStats[] | PirschApiError> {
-        return await this.performFilteredGet<PirschUTMMediumStats[]>(PIRSCH_UTM_MEDIUM_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschUTMMediumStats[]>(PirschEndpoint.UTM_MEDIUM, filter);
     }
 
     /**
@@ -247,7 +213,7 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async utmCampaign(filter: PirschFilter): Promise<PirschUTMCampaignStats[] | PirschApiError> {
-        return await this.performFilteredGet<PirschUTMCampaignStats[]>(PIRSCH_UTM_CAMPAIGN_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschUTMCampaignStats[]>(PirschEndpoint.UTM_CAMPAIGN, filter);
     }
 
     /**
@@ -256,7 +222,7 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async utmContent(filter: PirschFilter): Promise<PirschUTMContentStats[] | PirschApiError> {
-        return await this.performFilteredGet<PirschUTMContentStats[]>(PIRSCH_UTM_CONTENT_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschUTMContentStats[]>(PirschEndpoint.UTM_CONTENT, filter);
     }
 
     /**
@@ -265,7 +231,7 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async utmTerm(filter: PirschFilter): Promise<PirschUTMTermStats[] | PirschApiError> {
-        return await this.performFilteredGet<PirschUTMTermStats[]>(PIRSCH_UTM_TERM_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschUTMTermStats[]>(PirschEndpoint.UTM_TERM, filter);
     }
 
     /**
@@ -274,7 +240,7 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async totalVisitors(filter: PirschFilter): Promise<PirschTotalVisitorStats | PirschApiError> {
-        return await this.performFilteredGet<PirschTotalVisitorStats>(PIRSCH_TOTAL_VISITORS_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschTotalVisitorStats>(PirschEndpoint.TOTAL_VISITORS, filter);
     }
 
     /**
@@ -283,7 +249,7 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async visitors(filter: PirschFilter): Promise<PirschVisitorStats[] | PirschApiError> {
-        return await this.performFilteredGet<PirschVisitorStats[]>(PIRSCH_VISITORS_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschVisitorStats[]>(PirschEndpoint.VISITORS, filter);
     }
 
     /**
@@ -292,7 +258,7 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async entryPages(filter: PirschFilter): Promise<PirschEntryStats[] | PirschApiError> {
-        return await this.performFilteredGet<PirschEntryStats[]>(PIRSCH_ENTRY_PAGES_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschEntryStats[]>(PirschEndpoint.ENTRY_PAGES, filter);
     }
 
     /**
@@ -301,7 +267,7 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async exitPages(filter: PirschFilter): Promise<PirschExitStats[] | PirschApiError> {
-        return await this.performFilteredGet<PirschExitStats[]>(PIRSCH_EXIT_PAGES_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschExitStats[]>(PirschEndpoint.EXIT_PAGES, filter);
     }
 
     /**
@@ -310,7 +276,7 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async pages(filter: PirschFilter): Promise<PirschPageStats[] | PirschApiError> {
-        return await this.performFilteredGet<PirschPageStats[]>(PIRSCH_PAGES_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschPageStats[]>(PirschEndpoint.PAGES, filter);
     }
 
     /**
@@ -319,7 +285,7 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async conversionGoals(filter: PirschFilter): Promise<PirschConversionGoal[] | PirschApiError> {
-        return await this.performFilteredGet<PirschConversionGoal[]>(PIRSCH_CONVERSION_GOALS_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschConversionGoal[]>(PirschEndpoint.CONVERSION_GOALS, filter);
     }
 
     /**
@@ -328,7 +294,7 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async events(filter: PirschFilter): Promise<PirschEventStats[] | PirschApiError> {
-        return await this.performFilteredGet<PirschEventStats[]>(PIRSCH_EVENTS_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschEventStats[]>(PirschEndpoint.EVENTS, filter);
     }
 
     /**
@@ -337,7 +303,7 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async eventMetadata(filter: PirschFilter): Promise<PirschEventStats[] | PirschApiError> {
-        return await this.performFilteredGet<PirschEventStats[]>(PIRSCH_EVENT_METADATA_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschEventStats[]>(PirschEndpoint.EVENT_METADATA, filter);
     }
 
     /**
@@ -346,7 +312,7 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async listEvents(filter: PirschFilter): Promise<PirschEventListStats[] | PirschApiError> {
-        return await this.performFilteredGet<PirschEventListStats[]>(PIRSCH_LIST_EVENTS_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschEventListStats[]>(PirschEndpoint.LIST_EVENTS, filter);
     }
 
     /**
@@ -355,7 +321,7 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async growth(filter: PirschFilter): Promise<PirschGrowth | PirschApiError> {
-        return await this.performFilteredGet<PirschGrowth>(PIRSCH_GROWTH_RATE_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschGrowth>(PirschEndpoint.GROWTH_RATE, filter);
     }
 
     /**
@@ -364,7 +330,7 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async activeVisitors(filter: PirschFilter): Promise<PirschActiveVisitorsData | PirschApiError> {
-        return await this.performFilteredGet<PirschActiveVisitorsData>(PIRSCH_ACTIVE_VISITORS_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschActiveVisitorsData>(PirschEndpoint.ACTIVE_VISITORS, filter);
     }
 
     /**
@@ -373,7 +339,7 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async timeOfDay(filter: PirschFilter): Promise<PirschVisitorHourStats[] | PirschApiError> {
-        return await this.performFilteredGet<PirschVisitorHourStats[]>(PIRSCH_TIME_OF_DAY_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschVisitorHourStats[]>(PirschEndpoint.TIME_OF_DAY, filter);
     }
 
     /**
@@ -382,7 +348,7 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async languages(filter: PirschFilter): Promise<PirschLanguageStats[] | PirschApiError> {
-        return await this.performFilteredGet<PirschLanguageStats[]>(PIRSCH_LANGUAGE_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschLanguageStats[]>(PirschEndpoint.LANGUAGE, filter);
     }
 
     /**
@@ -391,7 +357,7 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async referrer(filter: PirschFilter): Promise<PirschReferrerStats[] | PirschApiError> {
-        return await this.performFilteredGet<PirschReferrerStats[]>(PIRSCH_REFERRER_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschReferrerStats[]>(PirschEndpoint.REFERRER, filter);
     }
 
     /**
@@ -400,7 +366,7 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async os(filter: PirschFilter): Promise<PirschOSStats[] | PirschApiError> {
-        return await this.performFilteredGet<PirschOSStats[]>(PIRSCH_OS_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschOSStats[]>(PirschEndpoint.OS, filter);
     }
 
     /**
@@ -409,7 +375,7 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async osVersions(filter: PirschFilter): Promise<PirschOSVersionStats[] | PirschApiError> {
-        return await this.performFilteredGet<PirschOSVersionStats[]>(PIRSCH_OS_VERSION_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschOSVersionStats[]>(PirschEndpoint.OS_VERSION, filter);
     }
 
     /**
@@ -418,7 +384,7 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async browser(filter: PirschFilter): Promise<PirschBrowserStats[] | PirschApiError> {
-        return await this.performFilteredGet<PirschBrowserStats[]>(PIRSCH_BROWSER_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschBrowserStats[]>(PirschEndpoint.BROWSER, filter);
     }
 
     /**
@@ -427,7 +393,7 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async browserVersions(filter: PirschFilter): Promise<PirschBrowserVersionStats[] | PirschApiError> {
-        return await this.performFilteredGet<PirschBrowserVersionStats[]>(PIRSCH_BROWSER_VERSION_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschBrowserVersionStats[]>(PirschEndpoint.BROWSER_VERSION, filter);
     }
 
     /**
@@ -436,7 +402,7 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async country(filter: PirschFilter): Promise<PirschCountryStats[] | PirschApiError> {
-        return await this.performFilteredGet<PirschCountryStats[]>(PIRSCH_COUNTRY_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschCountryStats[]>(PirschEndpoint.COUNTRY, filter);
     }
 
     /**
@@ -445,7 +411,7 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async city(filter: PirschFilter): Promise<PirschCityStats[] | PirschApiError> {
-        return await this.performFilteredGet<PirschCityStats[]>(PIRSCH_CITY_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschCityStats[]>(PirschEndpoint.CITY, filter);
     }
 
     /**
@@ -454,7 +420,7 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async platform(filter: PirschFilter): Promise<PirschPlatformStats[] | PirschApiError> {
-        return await this.performFilteredGet<PirschPlatformStats[]>(PIRSCH_PLATFORM_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschPlatformStats[]>(PirschEndpoint.PLATFORM, filter);
     }
 
     /**
@@ -463,7 +429,7 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async screen(filter: PirschFilter): Promise<PirschScreenClassStats[] | PirschApiError> {
-        return await this.performFilteredGet<PirschScreenClassStats[]>(PIRSCH_SCREEN_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschScreenClassStats[]>(PirschEndpoint.SCREEN, filter);
     }
 
     /**
@@ -472,10 +438,14 @@ export abstract class PirschCoreClient {
      * @param filter used to filter the result set.
      */
     async keywords(filter: PirschFilter): Promise<PirschKeyword[] | PirschApiError> {
-        return await this.performFilteredGet<PirschKeyword[]>(PIRSCH_KEYWORDS_ENDPOINT, filter);
+        return await this.performFilteredGet<PirschKeyword[]>(PirschEndpoint.KEYWORDS, filter);
     }
 
-    private async performPost<T extends object>(path: string, data: T, retry = true): Promise<Optional<PirschApiError>> {
+    private async performPost<T extends object>(
+        path: PirschEndpoint,
+        data: T,
+        retry = true
+    ): Promise<Optional<PirschApiError>> {
         try {
             await this.post(
                 this.generateUrl(path),
@@ -503,7 +473,11 @@ export abstract class PirschCoreClient {
         }
     }
 
-    private async performGet<T>(path: string, parameters: object = {}, retry = true): Promise<T | PirschApiError> {
+    private async performGet<T>(
+        path: PirschEndpoint,
+        parameters: object = {},
+        retry = true
+    ): Promise<T | PirschApiError> {
         try {
             if (!this.accessToken && retry) {
                 await this.refreshToken();
@@ -529,16 +503,19 @@ export abstract class PirschCoreClient {
         }
     }
 
-    private async performFilteredGet<T>(url: string, filter: PirschFilter): Promise<T | PirschApiError> {
+    private async performFilteredGet<T>(url: PirschEndpoint, filter: PirschFilter): Promise<T | PirschApiError> {
         return this.performGet<T>(url, filter);
     }
 
     private async refreshToken(): Promise<Optional<PirschApiError>> {
         try {
-            const result = await this.post<PirschAuthenticationResponse>(this.generateUrl(PIRSCH_AUTHENTICATION_ENDPOINT), {
-                client_id: this.clientId,
-                client_secret: this.clientSecret,
-            });
+            const result = await this.post<PirschAuthenticationResponse>(
+                this.generateUrl(PirschEndpoint.AUTHENTICATION),
+                {
+                    client_id: this.clientId,
+                    client_secret: this.clientSecret,
+                }
+            );
             this.accessToken = result.access_token;
             return;
         } catch (error: unknown) {
@@ -554,8 +531,8 @@ export abstract class PirschCoreClient {
         }
     }
 
-    private generateUrl(path: string): string {
-        return '/' + [this.endpoint, this.version, path].join('/');
+    private generateUrl(path: PirschEndpoint): string {
+        return "/" + [this.endpoint, this.version, path].join("/");
     }
 
     protected abstract post<Response, Data extends object = object>(
