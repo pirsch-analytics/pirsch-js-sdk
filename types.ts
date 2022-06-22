@@ -1,7 +1,7 @@
 /**
- * PirschClientConfig contains the configuration parameters for the Client.
+ * PirschClientConfigBase contains the base configuration parameters for the Client.
  */
-export interface PirschClientConfig {
+export interface PirschClientConfigBase {
     /**
      * The base URL for the pirsch API
      *
@@ -15,14 +15,6 @@ export interface PirschClientConfig {
      */
     timeout?: number;
     /**
-     * The OAuth client ID
-     */
-    clientId: string;
-    /**
-     * The OAuth client secret
-     */
-    clientSecret: string;
-    /**
      * The hostname of the domain to track
      */
     hostname: string;
@@ -33,6 +25,32 @@ export interface PirschClientConfig {
      */
     protocol?: string;
 }
+
+/**
+ * PirschOAuthClientConfig contains the configuration parameters for the Client.
+ */
+export interface PirschOAuthClientConfig extends PirschClientConfigBase {
+    /**
+     * The OAuth client ID
+     */
+    clientId: string;
+    /**
+     * The OAuth client secret
+     */
+    clientSecret: string;
+}
+
+/**
+ * PirschTokenClientConfig contains the configuration parameters for the Client.
+ */
+export interface PirschTokenClientConfig extends PirschClientConfigBase {
+    /**
+     * The secret access token
+     */
+    accessToken: string;
+}
+
+export type PirschClientConfig = PirschOAuthClientConfig | PirschTokenClientConfig;
 
 /**
  * PirschAuthenticationResponse is the authentication response for the API and returns the access token.

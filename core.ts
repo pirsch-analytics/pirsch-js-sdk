@@ -44,8 +44,9 @@ export abstract class PirschCoreClient {
     protected readonly version = "v1";
     protected readonly endpoint = "api";
 
-    protected readonly clientId: string;
-    protected readonly clientSecret: string;
+    protected readonly clientId?: string;
+    protected readonly clientSecret?: string;
+
     protected readonly hostname: string;
     protected readonly protocol: string;
     protected readonly baseUrl: string;
@@ -55,35 +56,40 @@ export abstract class PirschCoreClient {
     /**
      * The constructor creates a new client.
      *
-     * @param {object} config You need to pass in the **Hostname**, **Client ID**, and **Client Secret** you have configured on the Pirsch dashboard.
+     * @param {object} configuration You need to pass in the **Hostname**, **Client ID**, and **Client Secret** you have configured on the Pirsch dashboard.
      * It's also recommended to set the proper protocol for your website, else it will be set to `https` by default.
      * All other configuration parameters can be left to their defaults.
-     * @param {string} config.baseUrl The base URL for the pirsch API
-     * @param {number} config.timeout The default HTTP timeout in milliseconds
-     * @param {string} config.clientId The OAuth client ID
-     * @param {string} config.clientSecret The OAuth client secret
-     * @param {string} config.hostname The hostname of the domain to track
-     * @param {string} config.protocol The default HTTP protocol to use for tracking
+     * @param {string} configuration.baseUrl The base URL for the pirsch API
+     * @param {number} configuration.timeout The default HTTP timeout in milliseconds
+     * @param {string} configuration.clientId The OAuth client ID
+     * @param {string} configuration.clientSecret The OAuth client secret
+     * @param {string} configuration.hostname The hostname of the domain to track
+     * @param {string} configuration.protocol The default HTTP protocol to use for tracking
      *
      */
-    constructor({
-        baseUrl = PIRSCH_DEFAULT_BASE_URL,
-        timeout = PIRSCH_DEFAULT_TIMEOUT,
-        protocol = PIRSCH_DEFAULT_PROTOCOL,
-        hostname,
-        clientId,
-        clientSecret,
-    }: PirschClientConfig) {
-        if (!clientId) {
-            this.accessToken = clientSecret;
-        }
+    constructor(configuration: PirschClientConfig) {
+        const {
+            baseUrl = PIRSCH_DEFAULT_BASE_URL,
+            timeout = PIRSCH_DEFAULT_TIMEOUT,
+            protocol = PIRSCH_DEFAULT_PROTOCOL,
+            hostname,
+        } = configuration;
 
         this.baseUrl = baseUrl;
         this.timeout = timeout;
-        this.clientId = clientId;
-        this.clientSecret = clientSecret;
         this.hostname = hostname;
         this.protocol = protocol;
+
+        if ("accessToken" in configuration) {
+            const { accessToken } = configuration;
+            this.accessToken = accessToken;
+            this.mode = 'access-token'
+        } else {
+            const { clientId, clientSecret } = configuration;
+            this.clientId = clientId;
+            this.clientSecret = clientSecret;
+            this.mode = 'oauth'
+        }
     }
 
     /**
@@ -485,6 +491,7 @@ export abstract class PirschCoreClient {
                 },
                 parameters,
             });
+
             return data;
         } catch (error: unknown) {
             const exception = await this.toApiError(error);
@@ -503,6 +510,10 @@ export abstract class PirschCoreClient {
     }
 
     private async refreshToken(): Promise<Optional<PirschApiError>> {
+        if (!this.clientId || !this.clientSecret) {
+            return;
+        }
+
         try {
             const result = await this.post<PirschAuthenticationResponse>(
                 this.generateUrl(PirschEndpoint.AUTHENTICATION),

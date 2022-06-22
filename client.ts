@@ -5,12 +5,7 @@ import axios, { AxiosError as AxiosHttpError, AxiosInstance } from "axios";
 import { PirschClientConfig, PirschApiError, PirschHttpOptions, PirschHit, Optional } from "./types";
 
 import { PirschCoreClient } from "./core";
-import {
-    PIRSCH_DEFAULT_BASE_URL,
-    PIRSCH_DEFAULT_TIMEOUT,
-    PIRSCH_DEFAULT_PROTOCOL,
-    PIRSCH_REFERRER_QUERY_PARAMETERS,
-} from "./constants";
+import { PIRSCH_REFERRER_QUERY_PARAMETERS } from "./constants";
 
 /**
  * Client is used to access the Pirsch API.
@@ -21,26 +16,19 @@ export class PirschNodeClient extends PirschCoreClient {
     /**
      * The constructor creates a new client.
      *
-     * @param {object} config You need to pass in the **Hostname**, **Client ID**, and **Client Secret** you have configured on the Pirsch dashboard.
+     * @param {object} configuration You need to pass in the **Hostname**, **Client ID**, and **Client Secret** you have configured on the Pirsch dashboard.
      * It's also recommended to set the proper protocol for your website, else it will be set to `https` by default.
      * All other configuration parameters can be left to their defaults.
-     * @param {string} config.baseUrl The base URL for the pirsch API
-     * @param {number} config.timeout The default HTTP timeout in milliseconds
-     * @param {string} config.clientId The OAuth client ID
-     * @param {string} config.clientSecret The OAuth client secret
-     * @param {string} config.hostname The hostname of the domain to track
-     * @param {string} config.protocol The default HTTP protocol to use for tracking
+     * @param {string} configuration.baseUrl The base URL for the pirsch API
+     * @param {number} configuration.timeout The default HTTP timeout in milliseconds
+     * @param {string} configuration.clientId The OAuth client ID
+     * @param {string} configuration.clientSecret The OAuth client secret
+     * @param {string} configuration.hostname The hostname of the domain to track
+     * @param {string} configuration.protocol The default HTTP protocol to use for tracking
      *
      */
-    constructor({
-        baseUrl = PIRSCH_DEFAULT_BASE_URL,
-        timeout = PIRSCH_DEFAULT_TIMEOUT,
-        protocol = PIRSCH_DEFAULT_PROTOCOL,
-        hostname,
-        clientId,
-        clientSecret,
-    }: PirschClientConfig) {
-        super({ baseUrl, timeout, protocol, hostname, clientId, clientSecret });
+    constructor(configuration: PirschClientConfig) {
+        super(configuration);
         this.httpClient = axios.create({ baseURL: this.baseUrl, timeout: this.timeout });
     }
 
