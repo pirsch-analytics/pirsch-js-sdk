@@ -14,16 +14,6 @@ export interface PirschClientConfigBase {
      * @default 5000
      */
     timeout?: number;
-    /**
-     * The hostname of the domain to track
-     */
-    hostname: string;
-    /**
-     * The default HTTP protocol to use for tracking
-     *
-     * @default 'https'
-     */
-    protocol?: Protocol;
 }
 
 /**
@@ -50,7 +40,23 @@ export interface PirschTokenClientConfig extends PirschClientConfigBase {
     accessToken: string;
 }
 
+export interface PirschNodeClientConfigBase {
+    /**
+     * The hostname of the domain to track
+     */
+    hostname: string;
+    /**
+     * The default HTTP protocol to use for tracking
+     *
+     * @default 'https'
+     */
+    protocol?: Protocol;
+}
+
 export type PirschClientConfig = PirschOAuthClientConfig | PirschTokenClientConfig;
+export type PirschNodeClientConfig =
+    | PirschOAuthClientConfig & PirschNodeClientConfigBase
+    | PirschTokenClientConfig & PirschNodeClientConfigBase;
 
 /**
  * PirschAuthenticationResponse is the authentication response for the API and returns the access token.

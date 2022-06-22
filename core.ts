@@ -37,10 +37,9 @@ import {
     PirschAccessMode,
     Scalar,
     Optional,
-    Protocol,
 } from "./types";
 
-import { PIRSCH_DEFAULT_BASE_URL, PIRSCH_DEFAULT_TIMEOUT, PIRSCH_DEFAULT_PROTOCOL, PirschEndpoint } from "./constants";
+import { PIRSCH_DEFAULT_BASE_URL, PIRSCH_DEFAULT_TIMEOUT, PirschEndpoint } from "./constants";
 
 export abstract class PirschCoreClient {
     protected readonly version = "v1";
@@ -49,8 +48,6 @@ export abstract class PirschCoreClient {
     protected readonly clientId?: string;
     protected readonly clientSecret?: string;
 
-    protected readonly hostname: string;
-    protected readonly protocol: Protocol;
     protected readonly baseUrl: string;
     protected readonly timeout: number;
     protected readonly accessMode: PirschAccessMode;
@@ -75,14 +72,10 @@ export abstract class PirschCoreClient {
         const {
             baseUrl = PIRSCH_DEFAULT_BASE_URL,
             timeout = PIRSCH_DEFAULT_TIMEOUT,
-            protocol = PIRSCH_DEFAULT_PROTOCOL,
-            hostname,
         } = configuration;
 
         this.baseUrl = baseUrl;
         this.timeout = timeout;
-        this.hostname = hostname;
-        this.protocol = protocol;
 
         if ("accessToken" in configuration) {
             const { accessToken } = configuration;
@@ -452,19 +445,12 @@ export abstract class PirschCoreClient {
         retry = true
     ): Promise<Optional<PirschApiError>> {
         try {
-            await this.post(
-                this.generateUrl(path),
-                {
-                    hostname: this.hostname,
-                    ...data,
+            await this.post(this.generateUrl(path), data, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${this.accessToken}`,
                 },
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${this.accessToken}`,
-                    },
-                }
-            );
+            });
             return;
         } catch (error: unknown) {
             const exception = await this.toApiError(error);

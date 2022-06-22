@@ -2,15 +2,18 @@ import { IncomingHttpHeaders, IncomingMessage } from "node:http";
 import { URL } from "node:url";
 
 import axios, { AxiosError as AxiosHttpError, AxiosInstance } from "axios";
-import { PirschClientConfig, PirschApiError, PirschHttpOptions, PirschHit, Optional } from "./types";
+import { PirschNodeClientConfig, PirschApiError, PirschHttpOptions, PirschHit, Optional, Protocol } from "./types";
 
 import { PirschCoreClient } from "./core";
-import { PIRSCH_REFERRER_QUERY_PARAMETERS } from "./constants";
+import { PIRSCH_DEFAULT_PROTOCOL, PIRSCH_REFERRER_QUERY_PARAMETERS } from "./constants";
 
 /**
  * Client is used to access the Pirsch API.
  */
 export class PirschNodeClient extends PirschCoreClient {
+    protected readonly hostname: string;
+    protected readonly protocol: Protocol;
+
     private httpClient: AxiosInstance;
 
     /**
@@ -27,8 +30,13 @@ export class PirschNodeClient extends PirschCoreClient {
      * @param {string} configuration.protocol The default HTTP protocol to use for tracking
      *
      */
-    constructor(configuration: PirschClientConfig) {
+    constructor(configuration: PirschNodeClientConfig) {
         super(configuration);
+        const { protocol = PIRSCH_DEFAULT_PROTOCOL, hostname } = configuration;
+
+        this.hostname = hostname;
+        this.protocol = protocol;
+
         this.httpClient = axios.create({ baseURL: this.baseUrl, timeout: this.timeout });
     }
 

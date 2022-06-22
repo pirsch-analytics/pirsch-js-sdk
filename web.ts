@@ -18,8 +18,6 @@ export class PirschWebClient extends PirschCoreClient {
      * @param {string} configuration.baseUrl The base URL for the pirsch API
      * @param {number} configuration.timeout The default HTTP timeout in milliseconds
      * @param {string} configuration.accessToken The access token
-     * @param {string} configuration.hostname The hostname of the domain to track
-     * @param {string} configuration.protocol The default HTTP protocol to use for tracking
      *
      */
     constructor(configuration: PirschTokenClientConfig) {
