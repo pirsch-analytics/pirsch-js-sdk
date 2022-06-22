@@ -2,7 +2,7 @@ import { IncomingHttpHeaders, IncomingMessage } from "node:http";
 import { URL } from "node:url";
 
 import axios, { AxiosError, AxiosInstance } from "axios";
-import { ClientConfig, APIError, Optional, HttpOptions, Hit } from "./types";
+import { PirschClientConfig, PirschApiError, PirschHttpOptions, PirschHit, Optional } from "./types";
 
 import { Core } from "./core";
 import { PIRSCH_DEFAULT_BASE_URL, PIRSCH_DEFAULT_TIMEOUT, PIRSCH_DEFAULT_PROTOCOL, PIRSCH_REFERRER_QUERY_PARAMETERS} from "./constants";
@@ -27,7 +27,7 @@ export class Client extends Core {
         hostname,
         clientId,
         clientSecret,
-    }: ClientConfig) {
+    }: PirschClientConfig) {
         super({ baseUrl, timeout, protocol, hostname, clientId, clientSecret });
         this.httpClient = axios.create({ baseURL: this.baseUrl, timeout: this.timeout });
     }
@@ -38,7 +38,7 @@ export class Client extends Core {
      * @param request the Node request object from the http package.
      * @returns Hit object containing all necessary fields.
      */
-    public hitFromRequest(request: IncomingMessage): Hit {
+    public hitFromRequest(request: IncomingMessage): PirschHit {
         const url = new URL(request.url ?? "", `${this.protocol}://${this.hostname}`);
         return {
             url: url.toString(),
@@ -85,7 +85,7 @@ export class Client extends Core {
         return this.getHeader(headers, name) ?? "";
     }
 
-    protected async get<Response>(url: string, options?: HttpOptions): Promise<Response> {
+    protected async get<Response>(url: string, options?: PirschHttpOptions): Promise<Response> {
         const result = await this.httpClient.get<Response>(url, options);
 
         return result.data;
@@ -94,16 +94,16 @@ export class Client extends Core {
     protected async post<Response, Data extends object = object>(
         url: string,
         data: Data,
-        options?: HttpOptions
+        options?: PirschHttpOptions
     ): Promise<Response> {
         const result = await this.httpClient.post<Response>(url, data, options);
 
         return result.data;
     }
 
-    protected async toApiError(error: unknown): Promise<Optional<APIError>> {
+    protected async toApiError(error: unknown): Promise<Optional<PirschApiError>> {
         if (error instanceof AxiosError && error.response !== undefined && error.request !== null) {
-            const exception = error as AxiosError<APIError>;
+            const exception = error as AxiosError<PirschApiError>;
             return {
                 code: exception.response?.status ?? 500,
                 validation: {},

@@ -1,7 +1,7 @@
 /**
- * ClientConfig contains the configuration parameters for the Client.
+ * PirschClientConfig contains the configuration parameters for the Client.
  */
-export interface ClientConfig {
+export interface PirschClientConfig {
     baseUrl?: string
     timeout?: number
     clientId: string
@@ -11,18 +11,18 @@ export interface ClientConfig {
 }
 
 /**
- * AuthenticationResponse is the authentication response for the API and returns the access token.
+ * PirschAuthenticationResponse is the authentication response for the API and returns the access token.
  */
-export interface AuthenticationResponse {
+export interface PirschAuthenticationResponse {
     access_token: string
 }
 
 /**
- * Hit contains all required fields to send a hit to Pirsch. The URL, IP, and User-Agent are mandatory,
+ * PirschHit contains all required fields to send a hit to Pirsch. The URL, IP, and User-Agent are mandatory,
  * all other fields can be left empty, but it's highly recommended to send all fields to generate reliable data.
  * The fields can be set from the request headers.
  */
-export interface Hit {
+export interface PirschHit {
     url: string
     ip: string
     cf_connecting_ip: string
@@ -36,31 +36,31 @@ export interface Hit {
 }
 
 /**
- * APIError represents an error returned from the API.
+ * PirschApiError represents an error returned from the API.
  */
-export interface APIError {
+export interface PirschApiError {
     code: number;
-    validation: Validation
+    validation: PirschValidation
     error: string[]
 }
 
 /**
- * Validation is a validation error string for a specific field.
+ * PirschValidation is a validation error string for a specific field.
  */
-export type Validation = Record<string, string>;
+export type PirschValidation = Record<string, string>;
 
-export type Scale = "day" | "week" | "month" | "year";
+export type PirschScale = "day" | "week" | "month" | "year";
 
 /**
- * Filter is used to filter statistics.
+ * PirschFilter is used to filter statistics.
  * DomainID, From, and To are required dates (the time is ignored).
  */
-export interface Filter {
+export interface PirschFilter {
     id: string
     from: Date
     to: Date
     start: number
-    scale: Scale
+    scale: PirschScale
     path?: string
     pattern?: string
     entry_path?: string
@@ -88,18 +88,18 @@ export interface Filter {
 }
 
 /**
- * BaseEntity contains the base data for all entities.
+ * PirschBaseEntity contains the base data for all entities.
  */
-export interface BaseEntity {
+export interface PirschBaseEntity {
     id: string
     def_time: Date
     mod_time: Date
 }
 
 /**
- * Domain is a domain on the dashboard.
+ * PirschDomain is a domain on the dashboard.
  */
-export interface Domain extends BaseEntity {
+export interface PirschDomain extends PirschBaseEntity {
     user_id: string
     hostname: string
     subdomain: string
@@ -113,9 +113,9 @@ export interface Domain extends BaseEntity {
 }
 
 /**
- * TimeSpentStats is the time spent on the website or specific pages.
+ * PirschTimeSpentStats is the time spent on the website or specific pages.
  */
-export interface TimeSpentStats {
+export interface PirschTimeSpentStats {
     day?: Date
     week?: Date
     month?: Date
@@ -126,52 +126,52 @@ export interface TimeSpentStats {
 }
 
 /**
- * MetaStats is the base for meta result types (languages, countries, ...).
+ * PirschMetaStats is the base for meta result types (languages, countries, ...).
  */
-export interface MetaStats {
+export interface PirschMetaStats {
     visitors: number
     relative_visitors: number
 }
 
 /**
- * UTMSourceStats is the result export interface for utm source statistics.
+ * PirschUTMSourceStats is the result export interface for utm source statistics.
  */
-export interface UTMSourceStats extends MetaStats {
+export interface PirschUTMSourceStats extends PirschMetaStats {
     utm_source: string
 }
 
 /**
- * UTMMediumStats is the result export interface for utm medium statistics.
+ * PirschUTMMediumStats is the result export interface for utm medium statistics.
  */
-export interface UTMMediumStats extends MetaStats {
+export interface PirschUTMMediumStats extends PirschMetaStats {
     utm_medium: string
 }
 
 /**
- * UTMCampaignStats is the result export interface for utm campaign statistics.
+ * PirschUTMCampaignStats is the result export interface for utm campaign statistics.
  */
-export interface UTMCampaignStats extends MetaStats {
+export interface PirschUTMCampaignStats extends PirschMetaStats {
     utm_campaign: string
 }
 
 /**
- * UTMContentStats is the result export interface for utm content statistics.
+ * PirschUTMContentStats is the result export interface for utm content statistics.
  */
-export interface UTMContentStats extends MetaStats {
+export interface PirschUTMContentStats extends PirschMetaStats {
     utm_content: string
 }
 
 /**
- * UTMTermStats is the result export interface for utm term statistics.
+ * PirschUTMTermStats is the result export interface for utm term statistics.
  */
-export interface UTMTermStats extends MetaStats {
+export interface PirschUTMTermStats extends PirschMetaStats {
     utm_term: string
 }
 
 /**
- * TotalVisitorStats is the result export interface for total visitor statistics.
+ * PirschTotalVisitorStats is the result export interface for total visitor statistics.
  */
- export interface TotalVisitorStats {
+ export interface PirschTotalVisitorStats {
     visitors: number
     views: number
     sessions: number
@@ -180,9 +180,9 @@ export interface UTMTermStats extends MetaStats {
 }
 
 /**
- * VisitorStats is the result export interface for visitor statistics.
+ * PirschVisitorStats is the result export interface for visitor statistics.
  */
-export interface VisitorStats {
+export interface PirschVisitorStats {
     day?: Date
     week?: Date
     month?: Date
@@ -195,9 +195,9 @@ export interface VisitorStats {
 }
 
 /**
- * PageStats is the result export interface for page statistics.
+ * PirschPageStats is the result export interface for page statistics.
  */
-export interface PageStats {
+export interface PirschPageStats {
     path: string
     visitors: number
     views: number
@@ -210,9 +210,9 @@ export interface PageStats {
 }
 
 /*
- * EntryStats is the result type for entry page statistics.
+ * PirschEntryStats is the result type for entry page statistics.
  */
-export interface EntryStats {
+export interface PirschEntryStats {
 	path: string
 	title: string
 	visitors: number
@@ -223,9 +223,9 @@ export interface EntryStats {
 }
 
 /*
- * ExitStats is the result type for exit page statistics.
+ * PirschExitStats is the result type for exit page statistics.
  */
-export interface ExitStats {
+export interface PirschExitStats {
 	exit_path: string
 	title: string
 	visitors: number
@@ -235,9 +235,9 @@ export interface ExitStats {
 }
 
 /**
- * ConversionGoal is a conversion goal as configured on the dashboard.
+ * PirschConversionGoal is a conversion goal as configured on the dashboard.
  */
-export interface ConversionGoal extends BaseEntity {
+export interface PirschConversionGoal extends PirschBaseEntity {
     domain_id: string
     name: string
     path_pattern: string
@@ -248,8 +248,8 @@ export interface ConversionGoal extends BaseEntity {
     email_reached: boolean
 }
 
-// EventStats is the result type for custom events.
-export interface EventStats {
+// PirschEventStats is the result type for custom events.
+export interface PirschEventStats {
 	name: string
 	visitors: number
 	views: number
@@ -259,8 +259,8 @@ export interface EventStats {
 	meta_value: string
 }
 
-// EventListStats is the result type for a custom event list.
-export interface EventListStats {
+// PirschEventListStats is the result type for a custom event list.
+export interface PirschEventListStats {
 	name: string
 	meta: Record<string, string>
 	visitors: number
@@ -268,26 +268,26 @@ export interface EventListStats {
 }
 
 /**
- * PageConversionsStats is the result export interface for page conversions.
+ * PirschPageConversionsStats is the result export interface for page conversions.
  */
-export interface PageConversionsStats {
+export interface PirschPageConversionsStats {
     visitors: number
     views: number
     cr: number
 }
 
 /**
- * ConversionGoalStats are the statistics for a conversion goal.
+ * PirschConversionGoalStats are the statistics for a conversion goal.
  */
-export interface ConversionGoalStats {
-    page_goal: ConversionGoal
-    stats: PageConversionsStats
+export interface PirschConversionGoalStats {
+    page_goal: PirschConversionGoal
+    stats: PirschPageConversionsStats
 }
 
 /**
- * Growth represents the visitors, views, sessions, bounces, and average session duration growth between two time periods.
+ * PirschGrowth represents the visitors, views, sessions, bounces, and average session duration growth between two time periods.
  */
-export interface Growth {
+export interface PirschGrowth {
     visitors_growth: number
     views_growth: number
     sessions_growth: number
@@ -296,26 +296,26 @@ export interface Growth {
 }
 
 /**
- * ActiveVisitorStats is the result export interface for active visitor statistics.
+ * PirschActiveVisitorStats is the result export interface for active visitor statistics.
  */
-export interface ActiveVisitorStats {
+export interface PirschActiveVisitorStats {
     path: string
     title: string
     visitors: number
 }
 
 /**
- * ActiveVisitorsData contains the active visitors data.
+ * PirschActiveVisitorsData contains the active visitors data.
  */
-export interface ActiveVisitorsData {
-    stats: ActiveVisitorStats[]
+export interface PirschActiveVisitorsData {
+    stats: PirschActiveVisitorStats[]
     visitors: number
 }
 
 /**
- * VisitorHourStats is the result export interface for visitor statistics grouped by time of day.
+ * PirschVisitorHourStats is the result export interface for visitor statistics grouped by time of day.
  */
-export interface VisitorHourStats {
+export interface PirschVisitorHourStats {
     hour: number
     visitors: number
     views: number
@@ -325,56 +325,56 @@ export interface VisitorHourStats {
 }
 
 /**
- * LanguageStats is the result export interface for language statistics.
+ * PirschLanguageStats is the result export interface for language statistics.
  */
-export interface LanguageStats extends MetaStats {
+export interface PirschLanguageStats extends PirschMetaStats {
     language: string
 }
 
 /**
- * CountryStats is the result export interface for country statistics.
+ * PirschCountryStats is the result export interface for country statistics.
  */
-export interface CountryStats extends MetaStats {
+export interface PirschCountryStats extends PirschMetaStats {
     country_code: string
 }
 
 /*
- * CityStats is the result type for city statistics.
+ * PirschCityStats is the result type for city statistics.
  */
-export interface CityStats extends MetaStats {
+export interface PirschCityStats extends PirschMetaStats {
 	city: string
 }
 
 /**
- * BrowserStats is the result export interface for browser statistics.
+ * PirschBrowserStats is the result export interface for browser statistics.
  */
-export interface BrowserStats extends MetaStats {
+export interface PirschBrowserStats extends PirschMetaStats {
     browser: string
 }
 
-// BrowserVersionStats is the result type for browser version statistics.
-export interface BrowserVersionStats extends MetaStats {
+// PirschBrowserVersionStats is the result type for browser version statistics.
+export interface PirschBrowserVersionStats extends PirschMetaStats {
 	browser: string
 	browser_version: string
 }
 
 /**
- * OSStats is the result export interface for operating system statistics.
+ * PirschOSStats is the result export interface for operating system statistics.
  */
-export interface OSStats extends MetaStats {
+export interface PirschOSStats extends PirschMetaStats {
     os: string
 }
 
-// OSVersionStats is the result type for operating system version statistics.
-export interface OSVersionStats extends MetaStats {
+// PirschOSVersionStats is the result type for operating system version statistics.
+export interface PirschOSVersionStats extends PirschMetaStats {
 	os: string
 	os_version: string
 }
 
 /**
- * ReferrerStats is the result export interface for referrer statistics.
+ * PirschReferrerStats is the result export interface for referrer statistics.
  */
-export interface ReferrerStats {
+export interface PirschReferrerStats {
     referrer: string
     referrer_name: string
     referrer_icon: string
@@ -386,9 +386,9 @@ export interface ReferrerStats {
 }
 
 /**
- * PlatformStats is the result export interface for platform statistics.
+ * PirschPlatformStats is the result export interface for platform statistics.
  */
-export interface PlatformStats {
+export interface PirschPlatformStats {
     platform_desktop: number
     platform_mobile: number
     platform_unknown: number
@@ -398,21 +398,29 @@ export interface PlatformStats {
 }
 
 /**
- * ScreenClassStats is the result export interface for screen class statistics.
+ * PirschScreenClassStats is the result export interface for screen class statistics.
  */
-export interface ScreenClassStats extends MetaStats {
+export interface PirschScreenClassStats extends PirschMetaStats {
     screen_class: string
 }
 
 /**
- * Keyword is the result export interface for keyword statistics.
+ * PirschKeyword is the result export interface for keyword statistics.
  */
-export interface Keyword {
+export interface PirschKeyword {
     keys: string[]
     clicks: number
     impressions: number
     ctr: number
     position: number
+}
+
+/**
+ * PirschHttpOptions type
+ */
+export interface PirschHttpOptions {
+    headers?: Record<string, string>;
+    parameters?: object;
 }
 
 /**
@@ -424,11 +432,3 @@ export type Scalar = string | number | boolean;
  * Optional type
  */
 export type Optional<T> = T | undefined;
-
-/**
- * HttpOptions type
- */
-export interface HttpOptions {
-    headers?: Record<string, string>;
-    parameters?: object;
-}

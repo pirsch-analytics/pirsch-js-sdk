@@ -1,5 +1,5 @@
 import ky, { HTTPError, Options } from "ky";
-import { ClientConfig, APIError, Optional, HttpOptions } from "./types";
+import { PirschClientConfig, PirschApiError, PirschHttpOptions, Optional } from "./types";
 
 import { Core } from "./core";
 import { PIRSCH_DEFAULT_BASE_URL, PIRSCH_DEFAULT_TIMEOUT, PIRSCH_DEFAULT_PROTOCOL } from "./constants";
@@ -24,12 +24,12 @@ export class Client extends Core {
         hostname,
         clientId,
         clientSecret,
-    }: ClientConfig) {
+    }: PirschClientConfig) {
         super({ baseUrl, timeout, protocol, hostname, clientId, clientSecret });
         this.httpClient = ky.create({ prefixUrl: baseUrl, timeout });
     }
 
-    protected async get<Response>(url: string, options?: HttpOptions): Promise<Response> {
+    protected async get<Response>(url: string, options?: PirschHttpOptions): Promise<Response> {
         const result = await this.httpClient.get(url, this.createOptions({ ...options }));
         const response = await result.json() as unknown;
         return response as Response;
@@ -38,14 +38,14 @@ export class Client extends Core {
     protected async post<Response, Data extends object = object>(
         url: string,
         data: Data,
-        options?: HttpOptions
+        options?: PirschHttpOptions
     ): Promise<Response> {
         const result = await this.httpClient.post(url, this.createOptions({ ...options, data }));
         const response = await result.json() as unknown;
         return response as Response;
     }
 
-    protected async toApiError(error: unknown): Promise<Optional<APIError>> {
+    protected async toApiError(error: unknown): Promise<Optional<PirschApiError>> {
         if (error instanceof HTTPError) {
             return {
                 code: error.response.status,
@@ -58,7 +58,7 @@ export class Client extends Core {
         return;
     }
 
-    private createOptions({ headers, parameters, data }: HttpOptions & { data?: object }): Options {
+    private createOptions({ headers, parameters, data }: PirschHttpOptions & { data?: object }): Options {
         return {
             headers,
             json: data,

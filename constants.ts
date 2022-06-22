@@ -1,6 +1,7 @@
 export const PIRSCH_DEFAULT_BASE_URL = "https://api.pirsch.io" as const;
 export const PIRSCH_DEFAULT_TIMEOUT = 5000 as const;
 export const PIRSCH_DEFAULT_PROTOCOL = "https" as const;
+
 export const PIRSCH_AUTHENTICATION_ENDPOINT = "/api/v1/token" as const;
 export const PIRSCH_HIT_ENDPOINT = "/api/v1/hit" as const;
 export const PIRSCH_EVENT_ENDPOINT = "/api/v1/event" as const;
@@ -36,4 +37,5 @@ export const PIRSCH_CITY_ENDPOINT = "/api/v1/statistics/city" as const;
 export const PIRSCH_PLATFORM_ENDPOINT = "/api/v1/statistics/platform" as const;
 export const PIRSCH_SCREEN_ENDPOINT = "/api/v1/statistics/screen" as const;
 export const PIRSCH_KEYWORDS_ENDPOINT = "/api/v1/statistics/keywords" as const;
+
 export const PIRSCH_REFERRER_QUERY_PARAMETERS = ["ref", "referer", "referrer", "source", "utm_source"] as const;
