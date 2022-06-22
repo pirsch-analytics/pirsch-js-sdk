@@ -2,10 +2,19 @@ import { IncomingHttpHeaders, IncomingMessage } from "node:http";
 import { URL } from "node:url";
 
 import axios, { AxiosError as AxiosHttpError, AxiosInstance } from "axios";
-import { PirschNodeClientConfig, PirschApiError, PirschHttpOptions, PirschHit, Optional, Protocol } from "./types";
+import {
+    PirschNodeClientConfig,
+    PirschApiError,
+    PirschHttpOptions,
+    PirschHit,
+    PirschProxyHeader,
+    Optional,
+    Protocol,
+    PirschSnakeCaseHeader,
+} from "./types";
 
 import { PirschCoreClient } from "./core";
-import { PIRSCH_DEFAULT_PROTOCOL, PIRSCH_REFERRER_QUERY_PARAMETERS } from "./constants";
+import { PIRSCH_DEFAULT_PROTOCOL, PIRSCH_REFERRER_QUERY_PARAMETERS, PIRSCH_PROXY_HEADERS } from "./constants";
 
 /**
  * Client is used to access the Pirsch API.
@@ -13,6 +22,7 @@ import { PIRSCH_DEFAULT_PROTOCOL, PIRSCH_REFERRER_QUERY_PARAMETERS } from "./con
 export class PirschNodeClient extends PirschCoreClient {
     protected readonly hostname: string;
     protected readonly protocol: Protocol;
+    protected readonly trustedProxyHeaders?: PirschProxyHeader[];
 
     private httpClient: AxiosInstance;
 
@@ -48,18 +58,25 @@ export class PirschNodeClient extends PirschCoreClient {
      */
     public hitFromRequest(request: IncomingMessage): PirschHit {
         const url = new URL(request.url ?? "", `${this.protocol}://${this.hostname}`);
-        return {
+
+        const element: PirschHit = {
             url: url.toString(),
             ip: request.socket.remoteAddress ?? "",
-            cf_connecting_ip: this.getHeaderWithDefault(request.headers, "cf-connecting-ip"),
-            x_forwarded_for: this.getHeaderWithDefault(request.headers, "x-forwarded-for"),
-            forwarded: this.getHeaderWithDefault(request.headers, "forwarded"),
-            x_real_ip: this.getHeaderWithDefault(request.headers, "x-real-ip"),
-            dnt: this.getHeaderWithDefault(request.headers, "dnt"),
-            user_agent: this.getHeaderWithDefault(request.headers, "user-agent"),
-            accept_language: this.getHeaderWithDefault(request.headers, "accept-language"),
+            dnt: this.getHeader(request.headers, "dnt"),
+            user_agent: this.getHeader(request.headers, "user-agent"),
+            accept_language: this.getHeader(request.headers, "accept-language"),
             referrer: this.getReferrer(request, url),
         };
+
+        if (this.trustedProxyHeaders && this.trustedProxyHeaders.length > 0) {
+            for (const header of this.trustedProxyHeaders.filter(header => {
+                return PIRSCH_PROXY_HEADERS.includes(header);
+            })) {
+                element[this.snakeCase(header)] = this.getHeader(request.headers, header);
+            }
+        }
+
+        return element;
     }
 
     private getReferrer(request: IncomingMessage, url: URL): string {
@@ -87,10 +104,6 @@ export class PirschNodeClient extends PirschCoreClient {
         }
 
         return header;
-    }
-
-    private getHeaderWithDefault(headers: IncomingHttpHeaders, name: string): string {
-        return this.getHeader(headers, name) ?? "";
     }
 
     protected async get<Response>(url: string, options?: PirschHttpOptions): Promise<Response> {
@@ -121,6 +134,10 @@ export class PirschNodeClient extends PirschCoreClient {
         }
 
         return;
+    }
+
+    private snakeCase<T extends string>(value: T): PirschSnakeCaseHeader<T> {
+        return value.replaceAll("-", "_") as PirschSnakeCaseHeader<T>;
     }
 }
 

@@ -1,3 +1,5 @@
+import { PIRSCH_PROXY_HEADERS } from "./constants";
+
 /**
  * PirschClientConfigBase contains the base configuration parameters for the Client.
  */
@@ -51,6 +53,12 @@ export interface PirschNodeClientConfigBase {
      * @default 'https'
      */
     protocol?: Protocol;
+    /**
+     * The proxy headers to trust
+     *
+     * @default undefined
+     */
+    trustedProxyHeaders?: PirschProxyHeader[];
 }
 
 export type PirschClientConfig = PirschOAuthClientConfig | PirschTokenClientConfig;
@@ -73,14 +81,14 @@ export interface PirschAuthenticationResponse {
 export interface PirschHit {
     url: string;
     ip: string;
-    cf_connecting_ip: string;
-    x_forwarded_for: string;
-    forwarded: string;
-    x_real_ip: string;
-    dnt: string;
-    user_agent: string;
-    accept_language: string;
-    referrer: string;
+    cf_connecting_ip?: string;
+    x_forwarded_for?: string;
+    forwarded?: string;
+    x_real_ip?: string;
+    dnt?: string;
+    user_agent?: string;
+    accept_language?: string;
+    referrer?: string;
 }
 
 /**
@@ -470,6 +478,18 @@ export interface PirschHttpOptions {
     headers?: Record<string, string>;
     parameters?: object;
 }
+
+/**
+ * PirschProxyHeader type
+ */
+export type PirschProxyHeader = typeof PIRSCH_PROXY_HEADERS[number];
+
+/**
+ * PirschCamelCaseHeader type
+ */
+export type PirschSnakeCaseHeader<Header extends string> = Header extends `${infer A}-${infer B}`
+    ? `${A}_${PirschSnakeCaseHeader<B>}`
+    : Header;
 
 /**
  * PirschAccessMode type

@@ -24,6 +24,7 @@
     "noUnusedParameters": true,
     "outDir": "dist/",
     "pretty": true,
+    "lib": ["es2022"],
     "skipLibCheck": true,
     "strict": true,
     "strictFunctionTypes": true,

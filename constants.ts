@@ -4,6 +4,8 @@ export const PIRSCH_DEFAULT_PROTOCOL = "https" as const;
 
 export const PIRSCH_REFERRER_QUERY_PARAMETERS = ["ref", "referer", "referrer", "source", "utm_source"] as const;
 
+export const PIRSCH_PROXY_HEADERS = ["cf-connecting-ip", "x-forwarded-for", "forwarded", "x-real-ip"] as const;
+
 export enum PirschEndpoint {
     AUTHENTICATION = "token",
     HIT = "hit",
