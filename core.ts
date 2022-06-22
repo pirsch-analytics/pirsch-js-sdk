@@ -80,6 +80,9 @@ import {
 } from "./constants";
 
 export abstract class PirschCoreClient {
+    protected readonly version = "v1";
+    protected readonly endpoint = "api";
+
     protected readonly clientId: string;
     protected readonly clientSecret: string;
     protected readonly hostname: string;
@@ -472,10 +475,10 @@ export abstract class PirschCoreClient {
         return await this.performFilteredGet<PirschKeyword[]>(PIRSCH_KEYWORDS_ENDPOINT, filter);
     }
 
-    private async performPost<T extends object>(url: string, data: T, retry = true): Promise<Optional<PirschApiError>> {
+    private async performPost<T extends object>(path: string, data: T, retry = true): Promise<Optional<PirschApiError>> {
         try {
             await this.post(
-                url,
+                this.generateUrl(path),
                 {
                     hostname: this.hostname,
                     ...data,
@@ -493,20 +496,20 @@ export abstract class PirschCoreClient {
 
             if (exception && this.clientId && exception.code === 401 && retry) {
                 await this.refreshToken();
-                return this.performPost(url, data, false);
+                return this.performPost(path, data, false);
             }
 
             throw error;
         }
     }
 
-    private async performGet<T>(url: string, parameters: object = {}, retry = true): Promise<T | PirschApiError> {
+    private async performGet<T>(path: string, parameters: object = {}, retry = true): Promise<T | PirschApiError> {
         try {
             if (!this.accessToken && retry) {
                 await this.refreshToken();
             }
 
-            const data = await this.get<T>(url, {
+            const data = await this.get<T>(this.generateUrl(path), {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${this.accessToken}`,
@@ -519,7 +522,7 @@ export abstract class PirschCoreClient {
 
             if (exception && this.clientId && exception.code === 401 && retry) {
                 await this.refreshToken();
-                return this.performGet<T>(url, parameters, false);
+                return this.performGet<T>(path, parameters, false);
             }
 
             throw error;
@@ -532,7 +535,7 @@ export abstract class PirschCoreClient {
 
     private async refreshToken(): Promise<Optional<PirschApiError>> {
         try {
-            const result = await this.post<PirschAuthenticationResponse>(PIRSCH_AUTHENTICATION_ENDPOINT, {
+            const result = await this.post<PirschAuthenticationResponse>(this.generateUrl(PIRSCH_AUTHENTICATION_ENDPOINT), {
                 client_id: this.clientId,
                 client_secret: this.clientSecret,
             });
@@ -549,6 +552,10 @@ export abstract class PirschCoreClient {
 
             throw error;
         }
+    }
+
+    private generateUrl(path: string): string {
+        return '/' + [this.endpoint, this.version, path].join('/');
     }
 
     protected abstract post<Response, Data extends object = object>(
