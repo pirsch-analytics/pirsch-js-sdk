@@ -81,12 +81,21 @@ export abstract class PirschCoreClient extends PirschCommon {
             this.assertAccessTokenCredentials({ accessToken });
             this.accessToken = accessToken;
             this.accessMode = "access-token";
-        } else {
+        } else if ("clientId" in configuration && "clientSecret" in configuration) {
             const { clientId, clientSecret } = configuration;
             this.assertOauthCredentials({ clientId, clientSecret });
             this.clientId = clientId;
             this.clientSecret = clientSecret;
             this.accessMode = "oauth";
+        } else {
+            throw new Error(
+                `Missing credentials, please supply either '${JSON.stringify({
+                    clientId: "value",
+                    clientSecret: "value",
+                })}' or  '${JSON.stringify({
+                    accessToken: "value"
+                })}'!`
+            );
         }
     }
 
