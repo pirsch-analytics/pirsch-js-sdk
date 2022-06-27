@@ -244,7 +244,7 @@ export class PirschWebClient extends PirschCommon {
         }
 
         if (error instanceof KyHttpError) {
-            return new PirschApiError(error.response.status, (await error.response.json()) as PirschApiErrorResponse);
+            return new PirschApiError(error.response?.status, (await error.response?.json()) as PirschApiErrorResponse);
         }
 
         if (error instanceof Error) {
@@ -255,11 +255,21 @@ export class PirschWebClient extends PirschCommon {
     }
 
     private createOptions({ headers, parameters, data }: PirschHttpOptions & { data?: object }): KyOptions {
-        return {
+        const element: KyOptions = {
             headers,
             json: data,
             searchParams: parameters as Record<string, string>,
+            throwHttpErrors: true,
+            parseJson: text => {
+                try {
+                    return JSON.parse(text) as unknown;
+                } catch {
+                    return;
+                }
+            },
         };
+
+        return element;
     }
 }
 
