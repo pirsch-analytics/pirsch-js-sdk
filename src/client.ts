@@ -20,7 +20,7 @@ import { PIRSCH_DEFAULT_PROTOCOL, PIRSCH_REFERRER_QUERY_PARAMETERS, PIRSCH_PROXY
 /**
  * Client is used to access the Pirsch API.
  */
-export class PirschNodeClient extends PirschCoreClient {
+export class PirschNodeApiClient extends PirschCoreClient {
     protected readonly hostname: string;
     protected readonly protocol: Protocol;
     protected readonly trustedProxyHeaders?: PirschProxyHeader[];
@@ -149,5 +149,5 @@ export class PirschNodeClient extends PirschCoreClient {
     }
 }
 
-export const Pirsch = PirschNodeClient;
-export const Client = PirschNodeClient;
+export const Pirsch = PirschNodeApiClient;
+export const Client = PirschNodeApiClient;
