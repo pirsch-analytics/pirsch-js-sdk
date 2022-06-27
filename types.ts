@@ -42,6 +42,20 @@ export interface PirschTokenClientConfig extends PirschClientConfigBase {
     accessToken: string;
 }
 
+/**
+ * IdentificationCode contains the configuration parameters for the Client.
+ */
+export interface PirschIdentificationCodeClientConfig extends PirschClientConfigBase {
+    /**
+     * The public identification code
+     */
+    identificationCode: string;
+    /**
+     * The hostname of the domain to track
+     */
+    hostname?: string;
+}
+
 export interface PirschNodeClientConfigBase {
     /**
      * The hostname of the domain to track
@@ -89,6 +103,22 @@ export interface PirschHit {
     user_agent?: string;
     accept_language?: string;
     referrer?: string;
+}
+
+/**
+ * PirschBrowserHit contains all required fields to send a browser hit to Pirsch. The URL and User-Agent are mandatory,
+ * all other fields can be left empty, but it's highly recommended to send all fields to generate reliable data.
+ * The fields can be set from the request headers.
+ */
+export interface PirschBrowserHit {
+    url: string;
+    title: string;
+    dnt?: string;
+    user_agent?: string;
+    accept_language?: string;
+    referrer?: string;
+    screen_width?: number;
+    screen_height?: number;
 }
 
 /**
