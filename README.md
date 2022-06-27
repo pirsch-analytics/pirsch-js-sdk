@@ -45,6 +45,26 @@ createServer((request, response) => {
 }).listen(8765);
 ```
 
+Here is how you can do the same in the browser:
+
+```js
+// Import the Pirsch client.
+import { Pirsch } from "pirsch-sdk/web";
+
+// Create a client with the identification code you have configured on the Pirsch dashboard.
+const client = new Pirsch({
+    identificationCode: "<identification_code>"
+});
+
+const main = async () => {
+    await api.hit();
+
+    await api.event("test-event", 60, { clicks: 1, test: "xyz" });
+}
+
+void main();
+```
+
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md).
