@@ -22,6 +22,7 @@
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "baseUrl": "src/",
     "outDir": "dist/",
     "pretty": true,
     "lib": ["es2022", "dom", "dom.iterable"],
@@ -31,5 +32,6 @@
     "strictNullChecks": true,
     "target": "es2015"
   },
+  "include": ["src/*.ts"],
   "exclude": ["tmp/"]
 }
