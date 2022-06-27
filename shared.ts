@@ -1,5 +1,11 @@
 import { PirschApiErrorResponse } from "./types";
-import { PIRSCH_CLIENT_ID_LENGTH, PIRSCH_CLIENT_SECRET_LENGTH, PIRSCH_ACCESS_TOKEN_LENGTH, PIRSCH_IDENTIFICATION_CODE_LENGTH, PIRSCH_ACCESS_TOKEN_PREFIX } from "./constants";
+import {
+    PIRSCH_CLIENT_ID_LENGTH,
+    PIRSCH_CLIENT_SECRET_LENGTH,
+    PIRSCH_ACCESS_TOKEN_LENGTH,
+    PIRSCH_IDENTIFICATION_CODE_LENGTH,
+    PIRSCH_ACCESS_TOKEN_PREFIX,
+} from "./constants";
 
 export abstract class PirschCommon {
     protected assertOauthCredentials({ clientId, clientSecret }: { clientId: string; clientSecret: string }) {
@@ -14,11 +20,10 @@ export abstract class PirschCommon {
 
     protected assertAccessTokenCredentials({ accessToken }: { accessToken: string }) {
         if (!accessToken.startsWith(PIRSCH_ACCESS_TOKEN_PREFIX)) {
-
             throw new Error(`Invalid Access Token, should start with '${PIRSCH_ACCESS_TOKEN_PREFIX}'!`);
         }
 
-        if (accessToken.length !== PIRSCH_ACCESS_TOKEN_LENGTH + PIRSCH_ACCESS_TOKEN_PREFIX.length ) {
+        if (accessToken.length !== PIRSCH_ACCESS_TOKEN_LENGTH + PIRSCH_ACCESS_TOKEN_PREFIX.length) {
             throw new Error(`Invalid Access Token, should be of length '${PIRSCH_ACCESS_TOKEN_LENGTH}'!`);
         }
     }

@@ -23,9 +23,7 @@ export class PirschWebApiClient extends PirschCoreClient {
      */
     constructor(configuration: PirschTokenClientConfig) {
         if ("clientId" in configuration || "clientSecret" in configuration) {
-            throw new Error(
-                "Do not pass OAuth secrets such as 'clientId' or 'clientSecret' to the web client, as it is insecure!"
-            );
+            throw new Error("Do not pass OAuth secrets such as 'clientId' or 'clientSecret' to the web client!");
         }
 
         super(configuration);

@@ -78,7 +78,7 @@ export abstract class PirschCoreClient extends PirschCommon {
 
         if ("accessToken" in configuration) {
             const { accessToken } = configuration;
-            this.assertAccessTokenCredentials({accessToken});
+            this.assertAccessTokenCredentials({ accessToken });
             this.accessToken = accessToken;
             this.accessMode = "access-token";
         } else {
@@ -153,7 +153,7 @@ export abstract class PirschCoreClient extends PirschCommon {
      * @returns Domain object for this client.
      */
     async domain(): Promise<PirschDomain | PirschApiError> {
-        this.accessModeCheck('domain');
+        this.accessModeCheck("domain");
 
         const result = await this.performGet<PirschDomain[]>(PirschEndpoint.DOMAIN);
 
@@ -587,7 +587,7 @@ export abstract class PirschCoreClient extends PirschCommon {
     }
 
     private accessModeCheck(methodName: string) {
-        if (this.accessMode === 'access-token') {
+        if (this.accessMode === "access-token") {
             throw new PirschInvalidAccessModeApiError(methodName);
         }
     }
