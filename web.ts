@@ -97,16 +97,17 @@ export class PirschWebClient extends PirschCommon {
             return;
         }
 
-        await this.post(PirschEndpoint.EVENT, {
-            headers: { "Content-Type": "application/json" },
-            data: {
-                client_id: this.identificationCode,
+        await this.post(
+            PirschEndpoint.EVENT,
+            {
+                identification_code: this.identificationCode,
                 event_name: name,
                 event_duration: duration,
-                event_meta: meta,
-                ...hit,
+                event_meta: this.prepareScalarObject(meta),
+                ...data,
             },
-        });
+            { headers: { "Content-Type": "application/json" } }
+        );
     }
 
     /**
@@ -142,16 +143,19 @@ export class PirschWebClient extends PirschCommon {
             return;
         }
 
-        await this.post(PirschEndpoint.EVENT, {
-            headers: { "Content-Type": "application/json" },
-            data: {
-                client_id: this.identificationCode,
+        await this.post(
+            PirschEndpoint.EVENT,
+            {
+                identification_code: this.identificationCode,
                 event_name: name,
                 event_duration: duration,
-                event_meta: meta,
+                event_meta: this.prepareScalarObject(meta),
                 ...hit,
             },
-        });
+            {
+                headers: { "Content-Type": "application/json" },
+            }
+        );
     }
 
     /**
@@ -162,32 +166,37 @@ export class PirschWebClient extends PirschCommon {
     public hitFromBrowser(): PirschBrowserHit {
         const element: PirschBrowserHit = {
             url: this.generateUrl(),
-            dnt: navigator.doNotTrack ?? "0",
             title: document.title,
-            user_agent: navigator.userAgent,
             referrer: document.referrer,
             screen_width: screen.width,
             screen_height: screen.height,
         };
+
+        if (navigator.doNotTrack === "1") {
+            element.dnt = navigator.doNotTrack;
+        }
 
         return element;
     }
 
     private browserHitToGetParameters(data: PirschBrowserHit) {
         const hit: {
-            client_id: string;
+            code: string;
             nc: number;
             url: string;
-            t: string;
+            t?: string;
             ref?: string;
             w?: number;
             h?: number;
         } = {
-            client_id: this.identificationCode,
             nc: Date.now(),
+            code: this.identificationCode,
             url: data.url,
-            t: data.title,
         };
+
+        if (data.title) {
+            hit.t = data.title;
+        }
 
         if (data.referrer) {
             hit.ref = data.referrer;
@@ -257,8 +266,7 @@ export class PirschWebClient extends PirschCommon {
     private createOptions({ headers, parameters, data }: PirschHttpOptions & { data?: object }): KyOptions {
         const element: KyOptions = {
             headers,
-            json: data,
-            searchParams: parameters as Record<string, string>,
+            searchParams: parameters as Record<string, Scalar>,
             throwHttpErrors: true,
             parseJson: text => {
                 try {
@@ -268,6 +276,10 @@ export class PirschWebClient extends PirschCommon {
                 }
             },
         };
+
+        if (data) {
+            element.json = data;
+        }
 
         return element;
     }

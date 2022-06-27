@@ -15,7 +15,8 @@ module.exports = {
         "prettier",
     ],
     rules: {
-        '@typescript-eslint/require-await': 'off',
+        "@typescript-eslint/require-await": "off",
+        "@typescript-eslint/no-unnecessary-condition": "off",
         "unicorn/catch-error-name": [
             "error",
             {

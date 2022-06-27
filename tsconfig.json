@@ -29,6 +29,7 @@
     "strict": true,
     "strictFunctionTypes": true,
     "strictNullChecks": true,
-    "target": "es2015",
-  }
+    "target": "es2015"
+  },
+  "exclude": ["tmp/"]
 }

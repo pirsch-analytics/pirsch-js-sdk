@@ -137,7 +137,7 @@ export abstract class PirschCoreClient extends PirschCommon {
         return await this.performPost(PirschEndpoint.EVENT, {
             event_name: name,
             event_duration: duration,
-            event_meta: meta,
+            event_meta: this.prepareScalarObject(meta),
             ...hit,
         });
     }

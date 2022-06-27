@@ -112,9 +112,8 @@ export interface PirschHit {
  */
 export interface PirschBrowserHit {
     url: string;
-    title: string;
+    title?: string;
     dnt?: string;
-    user_agent?: string;
     accept_language?: string;
     referrer?: string;
     screen_width?: number;

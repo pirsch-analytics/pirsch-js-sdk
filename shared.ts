@@ -1,4 +1,4 @@
-import { PirschApiErrorResponse } from "./types";
+import { Optional, PirschApiErrorResponse, Scalar } from "./types";
 import {
     PIRSCH_CLIENT_ID_LENGTH,
     PIRSCH_CLIENT_SECRET_LENGTH,
@@ -32,6 +32,22 @@ export abstract class PirschCommon {
         if (identificationCode.length !== PIRSCH_IDENTIFICATION_CODE_LENGTH) {
             throw new Error(`Invalid Identification Code, should be of length '${PIRSCH_IDENTIFICATION_CODE_LENGTH}'!`);
         }
+    }
+
+    protected prepareScalarObject(value?: Record<string, Scalar>): Optional<Record<string, string>> {
+        if (!value) {
+            return value;
+        }
+
+        return Object.fromEntries(
+            Object.entries(value).map(([key, value]) => {
+                if (typeof value === 'string') {
+                    return [key, value]
+                }
+
+                return [key, value.toString()]
+            })
+        );
     }
 }
 
