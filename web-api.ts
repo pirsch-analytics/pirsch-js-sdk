@@ -7,7 +7,7 @@ import { PirschApiError, PirschUnknownApiError } from "./shared";
 /**
  * Client is used to access the Pirsch API.
  */
-export class PirschWebClient extends PirschCoreClient {
+export class PirschWebApiClient extends PirschCoreClient {
     private httpClient: typeof ky;
 
     /**
@@ -73,5 +73,5 @@ export class PirschWebClient extends PirschCoreClient {
     }
 }
 
-export const Pirsch = PirschWebClient;
-export const Client = PirschWebClient;
+export const Pirsch = PirschWebApiClient;
+export const Client = PirschWebApiClient;
