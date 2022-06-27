@@ -93,7 +93,7 @@ export abstract class PirschCoreClient extends PirschCommon {
                     clientId: "value",
                     clientSecret: "value",
                 })}' or  '${JSON.stringify({
-                    accessToken: "value"
+                    accessToken: "value",
                 })}'!`
             );
         }

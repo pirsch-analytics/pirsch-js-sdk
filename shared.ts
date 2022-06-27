@@ -41,11 +41,11 @@ export abstract class PirschCommon {
 
         return Object.fromEntries(
             Object.entries(value).map(([key, value]) => {
-                if (typeof value === 'string') {
-                    return [key, value]
+                if (typeof value === "string") {
+                    return [key, value];
                 }
 
-                return [key, value.toString()]
+                return [key, value.toString()];
             })
         );
     }
