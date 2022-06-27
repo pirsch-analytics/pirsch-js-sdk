@@ -39,9 +39,9 @@ import {
 } from "./types";
 
 import { PIRSCH_DEFAULT_BASE_URL, PIRSCH_DEFAULT_TIMEOUT, PirschEndpoint } from "./constants";
-import { PirschApiError, PirschDomainNotFoundApiError, PirschInvalidAccessModeApiError } from "./shared";
+import { PirschApiError, PirschCommon, PirschDomainNotFoundApiError, PirschInvalidAccessModeApiError } from "./shared";
 
-export abstract class PirschCoreClient {
+export abstract class PirschCoreClient extends PirschCommon {
     protected readonly version = "v1";
     protected readonly endpoint = "api";
 
@@ -69,6 +69,8 @@ export abstract class PirschCoreClient {
      *
      */
     constructor(configuration: PirschClientConfig) {
+        super();
+
         const { baseUrl = PIRSCH_DEFAULT_BASE_URL, timeout = PIRSCH_DEFAULT_TIMEOUT } = configuration;
 
         this.baseUrl = baseUrl;
@@ -76,10 +78,12 @@ export abstract class PirschCoreClient {
 
         if ("accessToken" in configuration) {
             const { accessToken } = configuration;
+            this.assertAccessTokenCredentials({accessToken});
             this.accessToken = accessToken;
             this.accessMode = "access-token";
         } else {
             const { clientId, clientSecret } = configuration;
+            this.assertOauthCredentials({ clientId, clientSecret });
             this.clientId = clientId;
             this.clientSecret = clientSecret;
             this.accessMode = "oauth";

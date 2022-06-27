@@ -6,6 +6,13 @@ export const PIRSCH_REFERRER_QUERY_PARAMETERS = ["ref", "referer", "referrer", "
 
 export const PIRSCH_PROXY_HEADERS = ["cf-connecting-ip", "x-forwarded-for", "forwarded", "x-real-ip"] as const;
 
+export const PIRSCH_ACCESS_TOKEN_PREFIX = 'pa_' as const;
+
+export const PIRSCH_CLIENT_ID_LENGTH = 32 as const;
+export const PIRSCH_CLIENT_SECRET_LENGTH = 64 as const;
+export const PIRSCH_ACCESS_TOKEN_LENGTH = 45 as const;
+export const PIRSCH_IDENTIFICATION_CODE_LENGTH = 32 as const;
+
 export enum PirschEndpoint {
     AUTHENTICATION = "token",
     HIT = "hit",

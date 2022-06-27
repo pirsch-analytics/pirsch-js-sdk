@@ -1,4 +1,34 @@
 import { PirschApiErrorResponse } from "./types";
+import { PIRSCH_CLIENT_ID_LENGTH, PIRSCH_CLIENT_SECRET_LENGTH, PIRSCH_ACCESS_TOKEN_LENGTH, PIRSCH_IDENTIFICATION_CODE_LENGTH, PIRSCH_ACCESS_TOKEN_PREFIX } from "./constants";
+
+export abstract class PirschCommon {
+    protected assertOauthCredentials({ clientId, clientSecret }: { clientId: string; clientSecret: string }) {
+        if (clientId.length !== PIRSCH_CLIENT_ID_LENGTH) {
+            throw new Error(`Invalid Client ID, should be of length '${PIRSCH_CLIENT_ID_LENGTH}'!`);
+        }
+
+        if (clientSecret.length !== PIRSCH_CLIENT_SECRET_LENGTH) {
+            throw new Error(`Invalid Client ID, should be of length '${PIRSCH_CLIENT_ID_LENGTH}'!`);
+        }
+    }
+
+    protected assertAccessTokenCredentials({ accessToken }: { accessToken: string }) {
+        if (!accessToken.startsWith(PIRSCH_ACCESS_TOKEN_PREFIX)) {
+
+            throw new Error(`Invalid Access Token, should start with '${PIRSCH_ACCESS_TOKEN_PREFIX}'!`);
+        }
+
+        if (accessToken.length !== PIRSCH_ACCESS_TOKEN_LENGTH + PIRSCH_ACCESS_TOKEN_PREFIX.length ) {
+            throw new Error(`Invalid Access Token, should be of length '${PIRSCH_ACCESS_TOKEN_LENGTH}'!`);
+        }
+    }
+
+    protected assertIdentificationCodeCredentials({ identificationCode }: { identificationCode: string }) {
+        if (identificationCode.length !== PIRSCH_IDENTIFICATION_CODE_LENGTH) {
+            throw new Error(`Invalid Identification Code, should be of length '${PIRSCH_IDENTIFICATION_CODE_LENGTH}'!`);
+        }
+    }
+}
 
 export class PirschApiError extends Error {
     public code: number;
