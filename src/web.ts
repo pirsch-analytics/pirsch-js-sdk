@@ -7,7 +7,7 @@ import {
     Scalar,
 } from "./types";
 
-import { PirschApiError, PirschCommon, PirschUnknownApiError } from "./shared";
+import { PirschApiError, PirschCommon, PirschUnknownApiError } from "./common";
 import { PirschEndpoint, PIRSCH_DEFAULT_BASE_URL, PIRSCH_DEFAULT_TIMEOUT, PIRSCH_URL_LENGTH_LIMIT } from "./constants";
 
 /**

@@ -39,7 +39,7 @@ import {
 } from "./types";
 
 import { PIRSCH_DEFAULT_BASE_URL, PIRSCH_DEFAULT_TIMEOUT, PirschEndpoint } from "./constants";
-import { PirschApiError, PirschCommon, PirschDomainNotFoundApiError, PirschInvalidAccessModeApiError } from "./shared";
+import { PirschApiError, PirschCommon, PirschDomainNotFoundApiError, PirschInvalidAccessModeApiError } from "./common";
 
 export abstract class PirschCoreClient extends PirschCommon {
     protected readonly version = "v1";

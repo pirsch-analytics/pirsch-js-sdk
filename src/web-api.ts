@@ -2,7 +2,7 @@ import ky, { HTTPError as KyHttpError, Options as KyOptions } from "ky";
 import { PirschTokenClientConfig, PirschHttpOptions, PirschApiErrorResponse } from "./types";
 
 import { PirschCoreClient } from "./core";
-import { PirschApiError, PirschUnknownApiError } from "./shared";
+import { PirschApiError, PirschUnknownApiError } from "./common";
 
 /**
  * Client is used to access the Pirsch API.

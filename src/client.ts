@@ -14,7 +14,7 @@ import {
 } from "./types";
 
 import { PirschCoreClient } from "./core";
-import { PirschApiError, PirschUnknownApiError } from "./shared";
+import { PirschApiError, PirschUnknownApiError } from "./common";
 import { PIRSCH_DEFAULT_PROTOCOL, PIRSCH_REFERRER_QUERY_PARAMETERS, PIRSCH_PROXY_HEADERS } from "./constants";
 
 /**
