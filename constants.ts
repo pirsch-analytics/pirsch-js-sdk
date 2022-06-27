@@ -16,8 +16,6 @@ export const PIRSCH_IDENTIFICATION_CODE_LENGTH = 32 as const;
 export const PIRSCH_URL_LENGTH_LIMIT = 1800 as const;
 
 export enum PirschEndpoint {
-    BROWSER_HIT = "pirsch",
-    BROWSER_EVENT = "pirsch-event",
     AUTHENTICATION = "token",
     HIT = "hit",
     EVENT = "event",

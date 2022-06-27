@@ -74,7 +74,7 @@ export class PirschWebClient extends PirschCommon {
             return;
         }
 
-        await this.get(PirschEndpoint.BROWSER_HIT, { parameters });
+        await this.get(PirschEndpoint.HIT, { parameters });
     }
 
     /**
@@ -97,7 +97,7 @@ export class PirschWebClient extends PirschCommon {
             return;
         }
 
-        await this.post(PirschEndpoint.BROWSER_EVENT, {
+        await this.post(PirschEndpoint.EVENT, {
             headers: { "Content-Type": "application/json" },
             data: {
                 client_id: this.identificationCode,
@@ -121,7 +121,7 @@ export class PirschWebClient extends PirschCommon {
             return;
         }
 
-        await this.get(PirschEndpoint.BROWSER_HIT, { parameters });
+        await this.get(PirschEndpoint.HIT, { parameters });
     }
 
     /**
@@ -142,7 +142,7 @@ export class PirschWebClient extends PirschCommon {
             return;
         }
 
-        await this.post(PirschEndpoint.BROWSER_EVENT, {
+        await this.post(PirschEndpoint.EVENT, {
             headers: { "Content-Type": "application/json" },
             data: {
                 client_id: this.identificationCode,
