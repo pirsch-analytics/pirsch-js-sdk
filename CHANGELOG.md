@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.0
+
+* added support for browsers
+* general improvements of the package interface
+
 ## 1.4.1
 
 * added single access token that don't require to query an access token using oAuth
