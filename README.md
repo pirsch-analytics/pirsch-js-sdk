@@ -65,6 +65,15 @@ const main = async () => {
 void main();
 ```
 
+## FAQ
+
+> This module export three Clients (`pirsch-sdk`, `pirsch-sdk/web-api` and `pirsch-sdk/web`), what are the differences?
+
+ - `pirsch-sdk` and `pirsch-sdk/web-api` are based on the same core logic, and function the same. It can be used to access and sending data via the API. `pirsch-sdk/web-api` is a version of the Node client that works in the web. You will rarely need to use this version though.
+ - `pirsch-sdk/web` is a modular version of the JS Snippet, that has no automatic functionality. You need to send any hits or events yourself.
+
+> :information_source: Basically your choice will be between `pirsch-sdk` (Node, backend, accessing or sending data) or `pirsch-sdk/web`, (Browser, frontend, sending data) in 99% of the cases.
+
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md).
