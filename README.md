@@ -57,9 +57,9 @@ const client = new Pirsch({
 });
 
 const main = async () => {
-    await api.hit();
+    await client.hit();
 
-    await api.event("test-event", 60, { clicks: 1, test: "xyz" });
+    await client.event("test-event", 60, { clicks: 1, test: "xyz" });
 }
 
 void main();
