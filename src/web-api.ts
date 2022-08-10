@@ -1,4 +1,4 @@
-import ky, { HTTPError as KyHttpError, Options as KyOptions } from "ky";
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
 import { PirschTokenClientConfig, PirschHttpOptions, PirschApiErrorResponse } from "./types";
 
 import { PirschCoreClient } from "./core";
@@ -8,7 +8,7 @@ import { PirschApiError, PirschUnknownApiError } from "./common";
  * Client is used to access the Pirsch API.
  */
 export class PirschWebApiClient extends PirschCoreClient {
-    private httpClient: typeof ky;
+    private httpClient: AxiosInstance;
 
     /**
      * The constructor creates a new client.
@@ -27,13 +27,16 @@ export class PirschWebApiClient extends PirschCoreClient {
         }
 
         super(configuration);
-        this.httpClient = ky.create({ prefixUrl: this.baseUrl, timeout: this.timeout });
+        this.httpClient = axios.create({
+            baseURL: this.baseUrl,
+            timeout: this.timeout,
+        });
     }
 
     protected async get<Response>(url: string, options?: PirschHttpOptions): Promise<Response> {
-        const result = await this.httpClient.get(url, this.createOptions({ ...options }));
-        const response = (await result.json()) as unknown;
-        return response as Response;
+        const result = await this.httpClient.get<Response>(url, this.createOptions({ ...options }));
+
+        return result.data;
     }
 
     protected async post<Response, Data extends object = object>(
@@ -41,9 +44,9 @@ export class PirschWebApiClient extends PirschCoreClient {
         data: Data,
         options?: PirschHttpOptions
     ): Promise<Response> {
-        const result = await this.httpClient.post(url, this.createOptions({ ...options, data }));
-        const response = (await result.json()) as unknown;
-        return response as Response;
+        const result = await this.httpClient.post<Response>(url, data, this.createOptions({ ...options, data }));
+
+        return result.data;
     }
 
     protected async toApiError(error: unknown): Promise<PirschApiError> {
@@ -51,8 +54,8 @@ export class PirschWebApiClient extends PirschCoreClient {
             return error;
         }
 
-        if (error instanceof KyHttpError) {
-            return new PirschApiError(error.response.status, (await error.response.json()) as PirschApiErrorResponse);
+        if (error instanceof AxiosError) {
+            return new PirschApiError(error.response?.status ?? 400, error.response?.data as PirschApiErrorResponse);
         }
 
         if (error instanceof Error) {
@@ -62,11 +65,11 @@ export class PirschWebApiClient extends PirschCoreClient {
         return new PirschUnknownApiError();
     }
 
-    private createOptions({ headers, parameters, data }: PirschHttpOptions & { data?: object }): KyOptions {
+    private createOptions({ headers, parameters, data }: PirschHttpOptions & { data?: object }): AxiosRequestConfig {
         return {
             headers,
-            json: data,
-            searchParams: parameters as Record<string, string>,
+            params: parameters as Record<string, string>,
+            data,
         };
     }
 }
