@@ -1,4 +1,3 @@
-import ky, { HTTPError as KyHttpError, Options as KyOptions } from "ky";
 import {
     PirschIdentificationCodeClientConfig,
     PirschHttpOptions,
@@ -9,6 +8,7 @@ import {
 
 import { PirschApiError, PirschCommon, PirschUnknownApiError } from "./common";
 import { PirschEndpoint, PIRSCH_DEFAULT_BASE_URL, PIRSCH_DEFAULT_TIMEOUT, PIRSCH_URL_LENGTH_LIMIT } from "./constants";
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
 
 /**
  * Client is used to access the Pirsch API.
@@ -20,7 +20,7 @@ export class PirschWebClient extends PirschCommon {
     private readonly identificationCode: string;
     private readonly hostname?: string;
 
-    private httpClient: typeof ky;
+    private httpClient: AxiosInstance;
 
     /**
      * The constructor creates a new client.
@@ -58,7 +58,7 @@ export class PirschWebClient extends PirschCommon {
         this.identificationCode = identificationCode;
         this.hostname = hostname;
 
-        this.httpClient = ky.create({ prefixUrl: this.baseUrl, timeout: this.timeout });
+        this.httpClient = axios.create({ baseURL: this.baseUrl, timeout: this.timeout });
     }
 
     /**
@@ -221,9 +221,8 @@ export class PirschWebClient extends PirschCommon {
 
     protected async get<Response>(url: string, options?: PirschHttpOptions): Promise<Response> {
         try {
-            const result = await this.httpClient.get(url, this.createOptions({ ...options }));
-            const response = (await result.json()) as unknown;
-            return response as Response;
+            const result = await this.httpClient.get<Response>(url, this.createOptions({ ...options }));
+            return result.data;
         } catch (error: unknown) {
             const exception = await this.toApiError(error);
 
@@ -237,12 +236,10 @@ export class PirschWebClient extends PirschCommon {
         options?: PirschHttpOptions
     ): Promise<Response> {
         try {
-            const result = await this.httpClient.post(url, this.createOptions({ ...options, data }));
-            const response = (await result.json()) as unknown;
-            return response as Response;
+            const result = await this.httpClient.post<Response>(url, data, this.createOptions(options ?? {}));
+            return result.data;
         } catch (error: unknown) {
             const exception = await this.toApiError(error);
-
             throw exception;
         }
     }
@@ -252,8 +249,8 @@ export class PirschWebClient extends PirschCommon {
             return error;
         }
 
-        if (error instanceof KyHttpError) {
-            return new PirschApiError(error.response?.status, (await error.response?.json()) as PirschApiErrorResponse);
+        if (error instanceof AxiosError) {
+            return new PirschApiError(error.response?.status ?? 400, error.response?.data as PirschApiErrorResponse);
         }
 
         if (error instanceof Error) {
@@ -263,25 +260,11 @@ export class PirschWebClient extends PirschCommon {
         return new PirschUnknownApiError();
     }
 
-    private createOptions({ headers, parameters, data }: PirschHttpOptions & { data?: object }): KyOptions {
-        const element: KyOptions = {
+    private createOptions({ headers, parameters }: PirschHttpOptions): AxiosRequestConfig {
+        return {
             headers,
-            searchParams: parameters as Record<string, Scalar>,
-            throwHttpErrors: true,
-            parseJson: text => {
-                try {
-                    return JSON.parse(text) as unknown;
-                } catch {
-                    return;
-                }
-            },
+            params: parameters as Record<string, Scalar>,
         };
-
-        if (data) {
-            element.json = data;
-        }
-
-        return element;
     }
 }
 
