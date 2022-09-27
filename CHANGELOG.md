@@ -4,6 +4,7 @@
 
 * added support for browsers
 * general improvements of the package interface
+* updated dependencies
 
 ## 1.4.1
 
