@@ -5,6 +5,12 @@
 
 This is the official JavaScript client SDK for Pirsch. For details, please check out our [documentation](https://docs.pirsch.io/).
 
+## Installation
+
+```
+npm i pirsch-sdk
+```
+
 ## Usage
 
 Here is a quick demo on how to use this library in NodeJS:

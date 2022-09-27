@@ -143,8 +143,8 @@ export interface PirschFilter {
     id: string;
     from: Date;
     to: Date;
-    start: number;
-    scale: PirschScale;
+    start?: number;
+    scale?: PirschScale;
     path?: string;
     pattern?: string;
     entry_path?: string;
