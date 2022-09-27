@@ -534,7 +534,7 @@ export abstract class PirschCoreClient extends PirschCommon {
 
     private async performGet<T>(
         path: PirschEndpoint,
-        parameters: object = {},
+        params: object = {},
         retry = true
     ): Promise<T | PirschApiError> {
         try {
@@ -547,7 +547,7 @@ export abstract class PirschCoreClient extends PirschCommon {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${this.accessToken}`,
                 },
-                parameters,
+                params,
             });
 
             return data;
@@ -556,7 +556,7 @@ export abstract class PirschCoreClient extends PirschCommon {
 
             if (this.accessMode === "oauth" && exception.code === 401 && retry) {
                 await this.refreshToken();
-                return this.performGet<T>(path, parameters, false);
+                return this.performGet<T>(path, params, false);
             }
 
             throw exception;

@@ -68,13 +68,13 @@ export class PirschWebClient extends PirschCommon {
      */
     public async hit(hit?: Partial<PirschBrowserHit>): Promise<void> {
         const data = { ...this.hitFromBrowser(), ...hit };
-        const parameters = this.browserHitToGetParameters(data);
+        const params = this.browserHitToGetParameters(data);
 
         if (data.dnt === "1") {
             return;
         }
 
-        await this.get(PirschEndpoint.HIT, { parameters });
+        await this.get(PirschEndpoint.HIT, { params });
     }
 
     /**
@@ -116,13 +116,13 @@ export class PirschWebClient extends PirschCommon {
      * @param hit data for the request.
      */
     public async customHit(hit: PirschBrowserHit): Promise<void> {
-        const parameters = this.browserHitToGetParameters(hit);
+        const params = this.browserHitToGetParameters(hit);
 
         if (hit.dnt === "1") {
             return;
         }
 
-        await this.get(PirschEndpoint.HIT, { parameters });
+        await this.get(PirschEndpoint.HIT, { params });
     }
 
     /**
@@ -260,10 +260,10 @@ export class PirschWebClient extends PirschCommon {
         return new PirschUnknownApiError();
     }
 
-    private createOptions({ headers, parameters }: PirschHttpOptions): AxiosRequestConfig {
+    private createOptions({ headers, params }: PirschHttpOptions): AxiosRequestConfig {
         return {
             headers,
-            params: parameters as Record<string, Scalar>,
+            params: params as Record<string, Scalar>,
         };
     }
 }
