@@ -108,8 +108,9 @@ export class PirschNodeApiClient extends PirschCoreClient {
     }
 
     protected async get<Response>(url: string, options?: PirschHttpOptions): Promise<Response> {
-        const result = await this.httpClient.get<Response>(url, options);
+        console.log(options);
 
+        const result = await this.httpClient.get<Response>(url, options);
         return result.data;
     }
 
@@ -119,7 +120,6 @@ export class PirschNodeApiClient extends PirschCoreClient {
         options?: PirschHttpOptions
     ): Promise<Response> {
         const result = await this.httpClient.post<Response>(url, data, options);
-
         return result.data;
     }
 
