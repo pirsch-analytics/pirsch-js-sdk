@@ -78,8 +78,9 @@ export class PirschNodeApiClient extends PirschCoreClient {
                     typeof request.headers[header] === "string";
                 });
 
-            if (header && (!element.ip || element.ip === "")) {
+            if (header) {
                 const result = this.getHeader(request.headers, header);
+
                 if (result) {
                     element.ip = result;
                 }
