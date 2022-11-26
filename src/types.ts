@@ -95,14 +95,13 @@ export interface PirschAuthenticationResponse {
 export interface PirschHit {
     url: string;
     ip: string;
-    cf_connecting_ip?: string;
-    x_forwarded_for?: string;
-    forwarded?: string;
-    x_real_ip?: string;
     dnt?: string;
-    user_agent?: string;
+    user_agent: string;
     accept_language?: string;
-    referrer?: string;
+    title?: string;
+    referrer: string;
+    screen_width?: number;
+    screen_height?: number;
 }
 
 /**
@@ -504,20 +503,13 @@ export interface PirschKeyword {
  */
 export interface PirschHttpOptions {
     headers?: Record<string, string>;
-    params?: object;
+    parameters?: object;
 }
 
 /**
  * PirschProxyHeader type
  */
 export type PirschProxyHeader = typeof PIRSCH_PROXY_HEADERS[number];
-
-/**
- * PirschCamelCaseHeader type
- */
-export type PirschSnakeCaseHeader<Header extends string> = Header extends `${infer A}-${infer B}`
-    ? `${A}_${PirschSnakeCaseHeader<B>}`
-    : Header;
 
 /**
  * PirschAccessMode type
