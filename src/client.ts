@@ -9,7 +9,6 @@ import {
     PirschProxyHeader,
     Optional,
     Protocol,
-    PirschSnakeCaseHeader,
     PirschApiErrorResponse,
 } from "./types";
 
@@ -43,10 +42,11 @@ export class PirschNodeApiClient extends PirschCoreClient {
      */
     constructor(configuration: PirschNodeClientConfig) {
         super(configuration);
-        const { protocol = PIRSCH_DEFAULT_PROTOCOL, hostname } = configuration;
+        const { protocol = PIRSCH_DEFAULT_PROTOCOL, hostname, trustedProxyHeaders } = configuration;
 
         this.hostname = hostname;
         this.protocol = protocol;
+        this.trustedProxyHeaders = trustedProxyHeaders;
 
         this.httpClient = axios.create({ baseURL: this.baseUrl, timeout: this.timeout });
     }
@@ -70,10 +70,19 @@ export class PirschNodeApiClient extends PirschCoreClient {
         };
 
         if (this.trustedProxyHeaders && this.trustedProxyHeaders.length > 0) {
-            for (const header of this.trustedProxyHeaders.filter(header => {
-                return PIRSCH_PROXY_HEADERS.includes(header);
-            })) {
-                element[this.snakeCase(header)] = this.getHeader(request.headers, header);
+            const header = this.trustedProxyHeaders
+                .filter(header => {
+                    return PIRSCH_PROXY_HEADERS.includes(header);
+                })
+                .find(header => {
+                    typeof request.headers[header] === "string";
+                });
+
+            if (header && (!element.ip || element.ip === "")) {
+                const result = this.getHeader(request.headers, header);
+                if (result) {
+                    element.ip = result;
+                }
             }
         }
 
@@ -140,10 +149,6 @@ export class PirschNodeApiClient extends PirschCoreClient {
         }
 
         return new PirschUnknownApiError();
-    }
-
-    private snakeCase<T extends string>(value: T): PirschSnakeCaseHeader<T> {
-        return value.replaceAll("-", "_") as PirschSnakeCaseHeader<T>;
     }
 }
 
