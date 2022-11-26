@@ -65,10 +65,10 @@ export class PirschWebApiClient extends PirschCoreClient {
         return new PirschUnknownApiError();
     }
 
-    private createOptions({ headers, params, data }: PirschHttpOptions & { data?: object }): AxiosRequestConfig {
+    private createOptions({ headers, parameters, data }: PirschHttpOptions & { data?: object }): AxiosRequestConfig {
         return {
             headers,
-            params: params as Record<string, string>,
+            params: parameters as Record<string, string>,
             data,
         };
     }

@@ -504,7 +504,7 @@ export interface PirschKeyword {
  */
 export interface PirschHttpOptions {
     headers?: Record<string, string>;
-    params?: object;
+    parameters?: object;
 }
 
 /**
