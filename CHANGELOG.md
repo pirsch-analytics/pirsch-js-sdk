@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0.1
+
+* add title, screen_width and screen_height parameters
+* fix trustedProxyHeaders behavior
+* remove deprecated cf_connecting_ip, x_forwarded_for, forwarded and x_real_ip fields
+* updated dependencies
+
 ## 2.0.0
 
 * added support for browsers
