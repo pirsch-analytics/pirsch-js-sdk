@@ -64,7 +64,7 @@ export class PirschNodeApiClient extends PirschCoreClient {
             url: url.toString(),
             ip: request.socket.remoteAddress ?? "",
             dnt: this.getHeader(request.headers, "dnt"),
-            user_agent: this.getHeader(request.headers, "user-agent"),
+            user_agent: this.getHeader(request.headers, "user-agent") ?? "",
             accept_language: this.getHeader(request.headers, "accept-language"),
             referrer: this.getReferrer(request, url),
         };

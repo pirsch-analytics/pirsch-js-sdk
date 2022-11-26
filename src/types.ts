@@ -100,9 +100,12 @@ export interface PirschHit {
     forwarded?: string;
     x_real_ip?: string;
     dnt?: string;
-    user_agent?: string;
+    user_agent: string;
     accept_language?: string;
-    referrer?: string;
+    title?: string;
+    referrer: string;
+    screen_width?: number;
+    screen_height?: number;
 }
 
 /**
