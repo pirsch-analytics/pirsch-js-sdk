@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.2
+
+* fixed build
+
 ## 2.0.1
 
 * add title, screen_width and screen_height parameters
