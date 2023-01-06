@@ -105,6 +105,24 @@ export interface PirschHit {
 }
 
 /**
+ * PirschEvent contains all required fields to send a event to Pirsch. The Name, URL, IP, and User-Agent are mandatory,
+ * all other fields can be left empty, but it's highly recommended to send all fields to generate reliable data.
+ * The fields can be set from the request headers.
+ */
+export interface PirschEvent extends PirschHit {
+    event_name: string;
+    event_duration?: number;
+    event_meta?: Record<string, Scalar>;
+}
+
+/**
+ * PirschSession contains all required fields to send a session to Pirsch. The IP and User-Agent are mandatory,
+ * all other fields can be left empty, but it's highly recommended to send all fields to generate reliable data.
+ * The fields can be set from the request headers.
+ */
+export type PirschSession = Pick<PirschEvent, "ip" | "dnt" | "user_agent">;
+
+/**
  * PirschBrowserHit contains all required fields to send a browser hit to Pirsch. The URL and User-Agent are mandatory,
  * all other fields can be left empty, but it's highly recommended to send all fields to generate reliable data.
  * The fields can be set from the request headers.

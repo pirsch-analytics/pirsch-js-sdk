@@ -36,6 +36,8 @@ import {
     PirschAccessMode,
     Scalar,
     Optional,
+    PirschEvent,
+    PirschSession,
 } from "./types";
 
 import { PIRSCH_DEFAULT_BASE_URL, PIRSCH_DEFAULT_TIMEOUT, PirschEndpoint } from "./constants";
@@ -134,26 +136,28 @@ export abstract class PirschCoreClient extends PirschCommon {
             return;
         }
 
-        return await this.performPost(PirschEndpoint.EVENT, {
+        const event: PirschEvent = {
             event_name: name,
             event_duration: duration,
             event_meta: this.prepareScalarObject(meta),
             ...hit,
-        });
+        };
+
+        return await this.performPost(PirschEndpoint.EVENT, event);
     }
 
     /**
      * session keeps a session alive.
      *
-     * @param hit all required data for the request.
+     * @param session all required data for the request.
      * @returns APIError or an empty promise, in case something went wrong
      */
-    async session(hit: PirschHit): Promise<Optional<PirschApiError>> {
-        if (hit.dnt === "1") {
+    async session(session: PirschSession): Promise<Optional<PirschApiError>> {
+        if (session.dnt === "1") {
             return;
         }
 
-        return await this.performPost(PirschEndpoint.SESSION, hit);
+        return await this.performPost(PirschEndpoint.SESSION, session);
     }
 
     /**
