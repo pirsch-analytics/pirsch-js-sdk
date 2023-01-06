@@ -18,8 +18,11 @@ export const PIRSCH_URL_LENGTH_LIMIT = 1800 as const;
 export enum PirschEndpoint {
     AUTHENTICATION = "token",
     HIT = "hit",
+    HIT_BATCH = "hit/batch",
     EVENT = "event",
+    EVENT_BATCH = "event/batch",
     SESSION = "session",
+    SESSION_BATCH = "session/batch",
     DOMAIN = "domain",
     SESSION_DURATION = "statistics/duration/session",
     TIME_ON_PAGE = "statistics/duration/page",

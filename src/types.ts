@@ -105,6 +105,15 @@ export interface PirschHit {
 }
 
 /**
+ * PirschBatchHit contains all required fields to send batched hits to Pirsch. The URL, IP, and User-Agent are mandatory,
+ * all other fields can be left empty, but it's highly recommended to send all fields to generate reliable data.
+ * The fields can be set from the request headers.
+ */
+export interface PirschBatchHit extends PirschHit {
+    time: string;
+}
+
+/**
  * PirschEvent contains all required fields to send a event to Pirsch. The Name, URL, IP, and User-Agent are mandatory,
  * all other fields can be left empty, but it's highly recommended to send all fields to generate reliable data.
  * The fields can be set from the request headers.
@@ -116,11 +125,29 @@ export interface PirschEvent extends PirschHit {
 }
 
 /**
+ * PirschBatchEvent contains all required fields to send batched events to Pirsch. The Name, URL, IP, and User-Agent are mandatory,
+ * all other fields can be left empty, but it's highly recommended to send all fields to generate reliable data.
+ * The fields can be set from the request headers.
+ */
+export interface PirschBatchEvent extends PirschEvent {
+    time: string;
+}
+
+/**
  * PirschSession contains all required fields to send a session to Pirsch. The IP and User-Agent are mandatory,
  * all other fields can be left empty, but it's highly recommended to send all fields to generate reliable data.
  * The fields can be set from the request headers.
  */
 export type PirschSession = Pick<PirschEvent, "ip" | "dnt" | "user_agent">;
+
+/**
+ * PirschBatchSession contains all required fields to send batched sessions to Pirsch. The IP and User-Agent are mandatory,
+ * all other fields can be left empty, but it's highly recommended to send all fields to generate reliable data.
+ * The fields can be set from the request headers.
+ */
+export interface PirschBatchSession extends PirschSession {
+    time: string;
+}
 
 /**
  * PirschBrowserHit contains all required fields to send a browser hit to Pirsch. The URL and User-Agent are mandatory,
