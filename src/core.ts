@@ -36,6 +36,11 @@ import {
     PirschAccessMode,
     Scalar,
     Optional,
+    PirschEvent,
+    PirschSession,
+    PirschBatchHit,
+    PirschBatchSession,
+    PirschBatchEvent,
 } from "./types";
 
 import { PIRSCH_DEFAULT_BASE_URL, PIRSCH_DEFAULT_TIMEOUT, PirschEndpoint } from "./constants";
@@ -115,6 +120,22 @@ export abstract class PirschCoreClient extends PirschCommon {
     }
 
     /**
+     * batchHit sends batched hits to Pirsch.
+     *
+     * @param hits all required data for the request.
+     * @returns APIError or an empty promise, in case something went wrong
+     */
+    async batchHits(hits: PirschBatchHit[]): Promise<Optional<PirschApiError>> {
+        const filtered = hits.filter(hit => hit.dnt !== "1");
+
+        if (filtered.length === 0) {
+            return;
+        }
+
+        return await this.performPost(PirschEndpoint.HIT_BATCH, filtered);
+    }
+
+    /**
      * event sends an event to Pirsch. Make sure you call it in all request handlers you want to track.
      * Also, make sure to filter out unwanted pathnames (like /favicon.ico in your root handler for example).
      *
@@ -134,26 +155,80 @@ export abstract class PirschCoreClient extends PirschCommon {
             return;
         }
 
-        return await this.performPost(PirschEndpoint.EVENT, {
+        const event: PirschEvent = {
             event_name: name,
             event_duration: duration,
             event_meta: this.prepareScalarObject(meta),
             ...hit,
+        };
+
+        return await this.performPost(PirschEndpoint.EVENT, event);
+    }
+
+    /**
+     * batchEvents sends batched events to Pirsch.
+     *
+     * @param events all required data for the request.
+     * @returns APIError or an empty promise, in case something went wrong
+     */
+    async batchEvents(
+        events: {
+            name: string;
+            hit: PirschHit;
+            time: string;
+            duration?: number;
+            meta?: Record<string, Scalar>;
+        }[]
+    ): Promise<Optional<PirschApiError>> {
+        const filtered = events.filter(event => event.hit.dnt !== "1");
+
+        if (filtered.length === 0) {
+            return;
+        }
+
+        const results = filtered.map(({ name, hit, time, duration = 0, meta }) => {
+            const event: PirschBatchEvent = {
+                event_name: name,
+                event_duration: duration,
+                event_meta: this.prepareScalarObject(meta),
+                time,
+                ...hit,
+            };
+
+            return event;
         });
+
+        return await this.performPost(PirschEndpoint.EVENT_BATCH, results);
     }
 
     /**
      * session keeps a session alive.
      *
-     * @param hit all required data for the request.
+     * @param session all required data for the request.
      * @returns APIError or an empty promise, in case something went wrong
      */
-    async session(hit: PirschHit): Promise<Optional<PirschApiError>> {
-        if (hit.dnt === "1") {
+    async session(session: PirschSession): Promise<Optional<PirschApiError>> {
+        if (session.dnt === "1") {
             return;
         }
 
-        return await this.performPost(PirschEndpoint.SESSION, hit);
+        return await this.performPost(PirschEndpoint.SESSION, session);
+    }
+
+    /**
+     * batchSessions keeps batched sessions alive.
+     *
+     * @param sessions all required data for the request.
+     * @returns APIError or an empty promise, in case something went wrong
+     */
+    async batchSessions(sessions: PirschBatchSession[]): Promise<Optional<PirschApiError>> {
+        const filtered = sessions.filter(session => session.dnt !== "1");
+
+        if (filtered.length === 0) {
+            return;
+        }
+
+        return await this.performPost(PirschEndpoint.SESSION_BATCH, filtered);
     }
 
     /**
