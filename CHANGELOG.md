@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.1.0
+
+* added support for batch inserts (page views, events, sessions)
+* updated dependencies
+
 ## 2.0.2
 
 * fixed build
