@@ -75,7 +75,7 @@ export class PirschNodeApiClient extends PirschCoreClient {
                     return PIRSCH_PROXY_HEADERS.includes(header);
                 })
                 .find(header => {
-                    typeof request.headers[header] === "string";
+                    return typeof request.headers[header] === "string";
                 });
 
             if (header) {
