@@ -13,6 +13,14 @@ npm i pirsch-sdk
 
 ## Usage
 
+### Configuration
+
+The SDK is configured using the constructor. We recommend using an access key instead of a client ID + secret if you only need write access (sending page views and events), as it saves a roundtrip to the server when refreshing the access token.
+
+If you run your server-side integration behind a proxy or load balancer, make sure you correctly configure `trustedProxyHeaders`. They will be used to extract the real visitor IP for each request. They will be used in the order they are passed into the configuration. Possible values are: `"cf-connecting-ip", "x-forwarded-for", "forwarded", "x-real-ip"`.
+
+### Server-Side
+
 Here is a quick demo on how to use this library in NodeJS:
 
 ```js
@@ -27,7 +35,7 @@ const client = new Pirsch({
     hostname: "example.com",
     protocol: "http", // used to parse the request URL, default is https
     clientId: "<client_id>",
-    clientSecret: "<client_secret>"
+    clientSecret: "<client_secret or access_key>"
 });
 
 // Create your http handler and start the server.
@@ -50,6 +58,8 @@ createServer((request, response) => {
     response.end();
 }).listen(8765);
 ```
+
+### Client-Side
 
 Here is how you can do the same in the browser:
 

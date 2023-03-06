@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.1.2
+
+* improved `PirschApiError`
+* updated dependencies
+
 ## 2.1.1
 
 * fix trustedProxyHeaders

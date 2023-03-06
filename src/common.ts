@@ -56,7 +56,10 @@ export class PirschApiError extends Error {
     public data: PirschApiErrorResponse;
 
     public constructor(code: number, data: PirschApiErrorResponse) {
-        const message = data?.error?.at(0) ?? (code === 404 ? "not found" : undefined) ?? "an unknown error occurred!";
+        const message = data?.error?.at(0) ??
+            (data?.validation ? `validation error (${code}): ${JSON.stringify(data.validation)}` : undefined) ??
+            (code === 404 ? "not found" : undefined) ??
+            `status ${code}: an unknown error occurred!`;
         super(message);
         this.name = "PirschApiError";
         this.code = code;
