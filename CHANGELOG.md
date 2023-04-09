@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.3
+
+* fixed axios request parameters
+
 ## 2.1.2
 
 * improved `PirschApiError`
