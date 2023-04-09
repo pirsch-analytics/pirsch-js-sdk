@@ -1,7 +1,7 @@
 import { IncomingHttpHeaders, IncomingMessage } from "node:http";
 import { URL } from "node:url";
 
-import axios, { AxiosError as AxiosHttpError, AxiosInstance } from "axios";
+import axios, { AxiosError as AxiosHttpError, AxiosInstance, AxiosRequestConfig } from "axios";
 import {
     PirschNodeClientConfig,
     PirschHttpOptions,
@@ -118,7 +118,8 @@ export class PirschNodeApiClient extends PirschCoreClient {
     }
 
     protected async get<Response>(url: string, options?: PirschHttpOptions): Promise<Response> {
-        const result = await this.httpClient.get<Response>(url, options);
+        const result = await this.httpClient.get<Response>(url, this.httpOptionsToAxiosOptions(options));
+
         return result.data;
     }
 
@@ -127,7 +128,7 @@ export class PirschNodeApiClient extends PirschCoreClient {
         data: Data,
         options?: PirschHttpOptions
     ): Promise<Response> {
-        const result = await this.httpClient.post<Response>(url, data, options);
+        const result = await this.httpClient.post<Response>(url, data, this.httpOptionsToAxiosOptions(options));
         return result.data;
     }
 
@@ -150,6 +151,20 @@ export class PirschNodeApiClient extends PirschCoreClient {
         }
 
         return new PirschUnknownApiError();
+    }
+
+    protected httpOptionsToAxiosOptions(options?: PirschHttpOptions): AxiosRequestConfig {
+        const result: AxiosRequestConfig = {};
+
+        if (options?.headers) {
+            result.headers = options.headers;
+        }
+
+        if (options?.parameters) {
+            result.params = options.parameters;
+        }
+
+        return result;
     }
 }
 
