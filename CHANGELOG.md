@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.0
+
+* improved error handling
+
 ## 2.1.3
 
 * fixed axios request parameters
