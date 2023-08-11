@@ -3,6 +3,8 @@
 ## 2.2.0
 
 * improved error handling
+* upgraded to TypeScript 5
+* updated dependencies
 
 ## 2.1.3
 
