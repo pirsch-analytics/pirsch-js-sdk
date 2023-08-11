@@ -86,8 +86,8 @@ export class PirschInvalidAccessModeApiError extends PirschApiError {
 }
 
 export class PirschUnknownApiError extends PirschApiError {
-    public constructor(message?: string) {
-        const error = message ? [message] : [];
+    public constructor(message: string) {
+        const error = [message];
         super(500, { error });
         this.name = "PirschUnknownApiError";
     }

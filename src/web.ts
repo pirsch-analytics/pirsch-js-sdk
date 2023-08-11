@@ -253,11 +253,19 @@ export class PirschWebClient extends PirschCommon {
             return new PirschApiError(error.response?.status ?? 400, error.response?.data as PirschApiErrorResponse);
         }
 
+        if (typeof error === 'object' && error !== null && 'response' in error && typeof error.response === 'object' && error.response !== null && 'status' in error.response && 'data' in error.response) {
+            return new PirschApiError(error.response.status as number ?? 400, error.response?.data as PirschApiErrorResponse);
+        }
+
         if (error instanceof Error) {
             return new PirschUnknownApiError(error.message);
         }
 
-        return new PirschUnknownApiError();
+        if (typeof error === 'object' && error !== null && 'message' in error && typeof error.message === 'string') {
+            return new PirschUnknownApiError(error.message);
+        }
+
+        return new PirschUnknownApiError(JSON.stringify(error));
     }
 
     private createOptions({ headers, parameters }: PirschHttpOptions): AxiosRequestConfig {
