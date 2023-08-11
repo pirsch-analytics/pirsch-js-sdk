@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.1
+
+* fixed request parameter
+
 ## 2.2.0
 
 * improved error handling
