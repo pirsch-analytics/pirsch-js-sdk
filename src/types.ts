@@ -99,7 +99,7 @@ export interface PirschHit {
     user_agent: string;
     accept_language?: string;
     title?: string;
-    referrer: string;
+    referrer?: string;
     screen_width?: number;
     screen_height?: number;
 }
