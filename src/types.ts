@@ -98,6 +98,12 @@ export interface PirschHit {
     dnt?: string;
     user_agent: string;
     accept_language?: string;
+    sec_ch_ua?: string;
+	sec_ch_ua_mobile?: string;
+	sec_ch_ua_platform?: string;
+	sec_ch_ua_platform_version?: string;
+	sec_ch_width?: string;
+    sec_ch_viewport_width?: string;
     title?: string;
     referrer?: string;
     screen_width?: number;

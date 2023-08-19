@@ -66,6 +66,12 @@ export class PirschNodeApiClient extends PirschCoreClient {
             dnt: this.getHeader(request.headers, "dnt"),
             user_agent: this.getHeader(request.headers, "user-agent") ?? "",
             accept_language: this.getHeader(request.headers, "accept-language"),
+            sec_ch_ua: this.getHeader(request.headers, "Sec-CH-UA"),
+            sec_ch_ua_mobile: this.getHeader(request.headers, "Sec-CH-UA-Mobile"),
+            sec_ch_ua_platform: this.getHeader(request.headers, "Sec-CH-UA-Platform"),
+            sec_ch_ua_platform_version: this.getHeader(request.headers, "Sec-CH-UA-Platform-Version"),
+            sec_ch_width: this.getHeader(request.headers, "Sec-CH-Width"),
+            sec_ch_viewport_width: this.getHeader(request.headers, "Sec-CH-Viewport-Width"),
             referrer: this.getReferrer(request, url),
         };
 

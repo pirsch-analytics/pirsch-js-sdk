@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.3.0
+
+* added optional client hint headers
+* updated dependencies
+
 ## 2.2.1
 
 * fixed request parameter
