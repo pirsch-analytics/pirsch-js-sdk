@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.4.0
+
+* added new custom metric fields
+* added missing event meta, timezone, offset, sort, direction, and search fields in `PirschFilter`
+* removed screen_width and screen_height from `PirschFilter`
+* updated dependencies
+
 ## 2.3.0
 
 * added optional client hint headers

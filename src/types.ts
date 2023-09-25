@@ -183,7 +183,20 @@ export interface PirschApiErrorResponse {
  */
 export type PirschValidation = Record<string, string>;
 
+/**
+ * PirschScale sets the time period over which data is aggregated by.
+ */
 export type PirschScale = "day" | "week" | "month" | "year";
+
+/**
+ * CustomMetricType sets the custom metric aggregation type.
+ */
+export type PirschCustomMetricType = "integer" | "float";
+
+/**
+ * PirschSortDirection is used to sort results.
+ */
+export type PirschSortDirection = "asc" | "desc";
 
 /**
  * PirschFilter is used to filter statistics.
@@ -195,6 +208,7 @@ export interface PirschFilter {
     to: Date;
     start?: number;
     scale?: PirschScale;
+    tz?: string;
     path?: string;
     pattern?: string;
     entry_path?: string;
@@ -210,14 +224,18 @@ export interface PirschFilter {
     browser?: string;
     platform?: string;
     screen_class?: string;
-    screen_width?: number;
-    screen_height?: number;
     utm_source?: string;
     utm_medium?: string;
     utm_campaign?: string;
     utm_content?: string;
     utm_term?: string;
+    custom_metric_key?: string;
+	custom_metric_type?: PirschCustomMetricType;
+    search?: string;
+    offset?: number;
     limit?: number;
+    sort?: string;
+    direction?: PirschSortDirection;
     include_avg_time_on_page?: boolean;
 }
 
@@ -235,6 +253,7 @@ export interface PirschBaseEntity {
  */
 export interface PirschDomain extends PirschBaseEntity {
     user_id: string;
+    organization_id: string;
     hostname: string;
     subdomain: string;
     identification_code: string;
@@ -244,6 +263,17 @@ export interface PirschDomain extends PirschBaseEntity {
     gsc_domain?: string;
     new_owner?: number;
     timezone?: string;
+	group_by_title: boolean;
+	active_visitors_seconds?: number;
+	disable_scripts: boolean;
+	statistics_start?: Date;
+	imported_statistics: boolean;
+	theme_id: string;
+	theme: Object;
+	custom_domain?: string;
+	user_role: string;
+	settings: Object;
+	theme_settings: Object;
 }
 
 /**
@@ -311,6 +341,9 @@ export interface PirschTotalVisitorStats {
     sessions: number;
     bounces: number;
     bounce_rate: number;
+    cr: number;
+	custom_metric_avg: number;
+	custom_metric_total: number;
 }
 
 /**
@@ -326,6 +359,9 @@ export interface PirschVisitorStats {
     sessions: number;
     bounces: number;
     bounce_rate: number;
+    cr: number;
+	custom_metric_avg: number;
+	custom_metric_total: number;
 }
 
 /**
@@ -427,6 +463,9 @@ export interface PirschGrowth {
     sessions_growth: number;
     bounces_growth: number;
     time_spent_growth: number;
+    cr_growth: number;
+	custom_metric_avg_growth: number;
+	custom_metric_total_growth: number;
 }
 
 /**
@@ -456,6 +495,9 @@ export interface PirschVisitorHourStats {
     sessions: number;
     bounces: number;
     bounce_rate: number;
+    cr: number;
+	custom_metric_avg: number;
+	custom_metric_total: number;
 }
 
 /**
