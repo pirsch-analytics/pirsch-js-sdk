@@ -86,7 +86,7 @@ export abstract class PirschCoreClient extends PirschCommon {
             this.assertAccessTokenCredentials({ accessToken });
             this.accessToken = accessToken;
             this.accessMode = "access-token";
-        } else if ("clientId" in configuration && "clientSecret" in configuration) {
+        } else if ("clientId" in configuration || "clientSecret" in configuration) {
             const { clientId, clientSecret } = configuration;
             this.assertOauthCredentials({ clientId, clientSecret });
             this.clientId = clientId;

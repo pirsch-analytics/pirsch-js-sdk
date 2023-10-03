@@ -1,9 +1,9 @@
 {
   "name": "pirsch-sdk",
-  "version": "2.4.0",
-  "description": "JavaScript client SDK for Pirsch.",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "version": "2.4.1",
+  "description": "TypeScript/JavaScript client SDK for Pirsch.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "rm -rf dist && tsc",
     "watch": "tsc --watch",

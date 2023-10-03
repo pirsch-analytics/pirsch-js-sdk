@@ -8,8 +8,8 @@ import {
 } from "./constants";
 
 export abstract class PirschCommon {
-    protected assertOauthCredentials({ clientId, clientSecret }: { clientId: string; clientSecret: string }) {
-        if (clientId.length !== PIRSCH_CLIENT_ID_LENGTH) {
+    protected assertOauthCredentials({ clientId, clientSecret }: { clientId?: string; clientSecret: string }) {
+        if (clientId?.length !== PIRSCH_CLIENT_ID_LENGTH) {
             throw new Error(`Invalid Client ID, should be of length '${PIRSCH_CLIENT_ID_LENGTH}'!`);
         }
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.4.1
+
+* fixed entrypoint
+* fixed configuration validation
+
 ## 2.4.0
 
 * added new custom metric fields

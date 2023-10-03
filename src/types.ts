@@ -25,7 +25,7 @@ export interface PirschOAuthClientConfig extends PirschClientConfigBase {
     /**
      * The OAuth client ID
      */
-    clientId: string;
+    clientId?: string;
     /**
      * The OAuth client secret
      */
