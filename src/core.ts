@@ -62,14 +62,13 @@ export abstract class PirschCoreClient extends PirschCommon {
     /**
      * The constructor creates a new client.
      *
-     * @param {object} configuration You need to pass in the **Hostname**, **Client ID**, and **Client Secret** you have configured on the Pirsch dashboard.
+     * @param {object} configuration You need to pass in the **Client ID** and **Client Secret** or **Access Key** you have configured on the Pirsch dashboard.
      * It's also recommended to set the proper protocol for your website, else it will be set to `https` by default.
      * All other configuration parameters can be left to their defaults.
      * @param {string} configuration.baseUrl The base URL for the pirsch API
      * @param {number} configuration.timeout The default HTTP timeout in milliseconds
      * @param {string} configuration.clientId The OAuth client ID
      * @param {string} configuration.clientSecret The OAuth client secret
-     * @param {string} configuration.hostname The hostname of the domain to track
      * @param {string} configuration.protocol The default HTTP protocol to use for tracking
      *
      */

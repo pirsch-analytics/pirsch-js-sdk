@@ -25,12 +25,13 @@ export class PirschWebClient extends PirschCommon {
     /**
      * The constructor creates a new client.
      *
-     * @param {object} configuration You need to pass in the **Hostname** and **Access Token** you have configured on the Pirsch dashboard.
+     * @param {object} configuration You need to pass in the **Identification Code** you have configured on the Pirsch dashboard.
      * It's also recommended to set the proper protocol for your website, else it will be set to `https` by default.
      * All other configuration parameters can be left to their defaults.
      * @param {string} configuration.baseUrl The base URL for the pirsch API
      * @param {number} configuration.timeout The default HTTP timeout in milliseconds
      * @param {string} configuration.identificationCode The identification code
+     * @param {string} configuration.hostname The hostname to rewrite the URL. Usually only required for testing
      *
      */
     constructor(configuration: PirschIdentificationCodeClientConfig) {

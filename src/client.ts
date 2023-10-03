@@ -29,7 +29,7 @@ export class PirschNodeApiClient extends PirschCoreClient {
     /**
      * The constructor creates a new client.
      *
-     * @param {object} configuration You need to pass in the **Hostname**, **Client ID**, and **Client Secret** you have configured on the Pirsch dashboard.
+     * @param {object} configuration You need to pass in the **Hostname**, **Client ID** and **Client Secret** or **Access Key** you have configured on the Pirsch dashboard.
      * It's also recommended to set the proper protocol for your website, else it will be set to `https` by default.
      * All other configuration parameters can be left to their defaults.
      * @param {string} configuration.baseUrl The base URL for the pirsch API

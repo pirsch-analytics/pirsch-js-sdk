@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.2
+
+* improved inline docs
+
 ## 2.4.1
 
 * fixed entrypoint
