@@ -22,13 +22,6 @@
     "sdk",
     "api"
   ],
-  "files": [
-    "package.json",
-    "README.md",
-    "CHANGELOG.md",
-    "LICENSE",
-    "dist/**"
-  ],
   "author": "Emvi Software GmbH",
   "license": "MIT",
   "bugs": {
