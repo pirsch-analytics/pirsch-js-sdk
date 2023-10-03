@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.4.4
+
+* fixed package structure
+
+## 2.4.3
+
+* fixed package structure
+
 ## 2.4.2
 
 * improved inline docs

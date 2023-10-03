@@ -1,6 +1,6 @@
 {
   "name": "pirsch-sdk",
-  "version": "2.4.2",
+  "version": "2.4.4",
   "description": "TypeScript/JavaScript client SDK for Pirsch.",
   "main": "index.js",
   "types": "index.d.ts",
@@ -21,13 +21,6 @@
     "client",
     "sdk",
     "api"
-  ],
-  "files": [
-    "package.json",
-    "README.md",
-    "CHANGELOG.md",
-    "LICENSE",
-    "dist/**"
   ],
   "author": "Emvi Software GmbH",
   "license": "MIT",
