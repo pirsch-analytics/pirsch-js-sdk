@@ -2,12 +2,14 @@
   "name": "pirsch-sdk",
   "version": "2.4.2",
   "description": "TypeScript/JavaScript client SDK for Pirsch.",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "build": "rm -rf dist && tsc",
     "watch": "tsc --watch",
-    "release": "rm -rf dist/ && npm run build && npm publish"
+    "package-dist": "rm -rf dist/ && npm run build && mkdir -p dist/ && cp package.json LICENSE README.md dist/",
+    "package-link": "npm run package-dist && cd dist/ && npm link",
+    "release": "npm run package-dist && npm publish dist/"
   },
   "repository": {
     "type": "git",
