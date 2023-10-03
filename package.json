@@ -2,12 +2,12 @@
   "name": "pirsch-sdk",
   "version": "2.4.2",
   "description": "TypeScript/JavaScript client SDK for Pirsch.",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "rm -rf dist && tsc",
     "watch": "tsc --watch",
-    "release": "rm -rf dist/ && npm run build && mkdir -p dist/ && cp package.json LICENSE README.md dist/ && npm publish dist/"
+    "release": "rm -rf dist/ && npm run build && npm publish"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,13 @@
     "client",
     "sdk",
     "api"
+  ],
+  "files": [
+    "package.json",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "dist/**"
   ],
   "author": "Emvi Software GmbH",
   "license": "MIT",
