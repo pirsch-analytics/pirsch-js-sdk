@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.5
+
+* updated dependencies
+
 ## 2.4.4
 
 * fixed package structure
