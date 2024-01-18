@@ -40,6 +40,7 @@ export enum PirschEndpoint {
     EVENTS = "statistics/events",
     EVENT_METADATA = "statistics/event/meta",
     LIST_EVENTS = "statistics/event/list",
+    EVENTS_PAGES = "statistics/event/page",
     GROWTH_RATE = "statistics/growth",
     ACTIVE_VISITORS = "statistics/active",
     TIME_OF_DAY = "statistics/hours",

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.5.0
+
+* added event pages endpoint
+* fixed missing title in PirschPageStats
+* updated dependencies
+
 ## 2.4.6
 
 * updated dependencies

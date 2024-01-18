@@ -407,6 +407,7 @@ export abstract class PirschCoreClient extends PirschCommon {
 
     /**
      * eventMetadata returns the metadata for a single event.
+     * The event name and metadata key must be set in the filter, or otherwise no results will be returned.
      *
      * @param filter used to filter the result set.
      */
@@ -425,6 +426,18 @@ export abstract class PirschCoreClient extends PirschCommon {
         this.accessModeCheck("listEvents");
 
         return await this.performFilteredGet<PirschEventListStats[]>(PirschEndpoint.LIST_EVENTS, filter);
+    }
+
+    /**
+     * eventPages returns all pages an event has been triggered on.
+     * The event name must be set in the filter, or otherwise no results will be returned.
+     *
+     * @param filter used to filter the result set.
+     */
+    async eventPages(filter: PirschFilter): Promise<PirschPageStats[] | PirschApiError> {
+        this.accessModeCheck("eventPages");
+
+        return await this.performFilteredGet<PirschPageStats[]>(PirschEndpoint.EVENTS_PAGES, filter);
     }
 
     /**

@@ -369,6 +369,7 @@ export interface PirschVisitorStats {
  */
 export interface PirschPageStats {
     path: string;
+    title: string;
     visitors: number;
     views: number;
     sessions: number;
