@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.6.0
+
+* added tags to page views and filter
+* added reading tag statistics
+* added meta key-value pairs to filter
+* added missing fields to data model
+* updated dependencies
+
 ## 2.5.0
 
 * added event pages endpoint

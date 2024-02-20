@@ -41,6 +41,7 @@ import {
     PirschBatchHit,
     PirschBatchSession,
     PirschBatchEvent,
+    TagStats,
 } from "./types";
 
 import { PIRSCH_DEFAULT_BASE_URL, PIRSCH_DEFAULT_TIMEOUT, PirschEndpoint } from "./constants";
@@ -584,6 +585,28 @@ export abstract class PirschCoreClient extends PirschCommon {
     }
 
     /**
+     * screen returns the screen classes used by visitors.
+     *
+     * @param filter used to filter the result set.
+     */
+    async tagKeys(filter: PirschFilter): Promise<TagStats[] | PirschApiError> {
+        this.accessModeCheck("tag_keys");
+
+        return await this.performFilteredGet<TagStats[]>(PirschEndpoint.TAG_KEYS, filter);
+    }
+
+    /**
+     * screen returns the screen classes used by visitors.
+     *
+     * @param filter used to filter the result set.
+     */
+    async tags(filter: PirschFilter): Promise<TagStats[] | PirschApiError> {
+        this.accessModeCheck("tags");
+
+        return await this.performFilteredGet<TagStats[]>(PirschEndpoint.TAG_DETAILS, filter);
+    }
+
+    /**
      * keywords returns the Google keywords, rank, and CTR.
      *
      * @param filter used to filter the result set.
@@ -651,7 +674,61 @@ export abstract class PirschCoreClient extends PirschCommon {
     }
 
     private async performFilteredGet<T>(url: PirschEndpoint, filter: PirschFilter): Promise<T | PirschApiError> {
-        return this.performGet<T>(url, filter);
+        return this.performGet<T>(url, this.getFilterParams(filter));
+    }
+
+    private getFilterParams(filter: PirschFilter): Record<string, any> {
+        const params: Record<string, any> = {
+            id: filter.id,
+            from: filter.from,
+            to: filter.to,
+            start: filter.start,
+            scale: filter.scale,
+            tz: filter.tz,
+            path: filter.path,
+            pattern: filter.pattern,
+            entry_path: filter.entry_path,
+            exit_path: filter.exit_path,
+            event: filter.event,
+            event_meta_key: filter.event_meta_key,
+            language: filter.language,
+            country: filter.country,
+            city: filter.city,
+            referrer: filter.referrer,
+            referrer_name: filter.referrer_name,
+            os: filter.os,
+            browser: filter.browser,
+            platform: filter.platform,
+            screen_class: filter.screen_class,
+            utm_source: filter.utm_source,
+            utm_medium: filter.utm_medium,
+            utm_campaign: filter.utm_campaign,
+            utm_content: filter.utm_content,
+            utm_term: filter.utm_term,
+            tag: filter.tag,
+            custom_metric_key: filter.custom_metric_key,
+            custom_metric_type: filter.custom_metric_type,
+            search: filter.search,
+            offset: filter.offset,
+            limit: filter.limit,
+            sort: filter.sort,
+            direction: filter.direction,
+            include_avg_time_on_page: filter.include_avg_time_on_page
+        };
+
+        if (filter.event_meta) {
+            for (const [key, value] of Object.entries(filter.event_meta)) {
+                params[`meta_${key}`] = value;
+            }
+        }
+
+        if (filter.tags) {
+            for (const [key, value] of Object.entries(filter.tags)) {
+                params[`tag_${key}`] = value;
+            }
+        }
+
+        return params;
     }
 
     private async refreshToken(): Promise<Optional<PirschApiError>> {

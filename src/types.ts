@@ -108,6 +108,7 @@ export interface PirschHit {
     referrer?: string;
     screen_width?: number;
     screen_height?: number;
+    tags?: Record<string, Scalar>;
 }
 
 /**
@@ -168,6 +169,7 @@ export interface PirschBrowserHit {
     referrer?: string;
     screen_width?: number;
     screen_height?: number;
+    tags?: Record<string, Scalar>;
 }
 
 /**
@@ -215,6 +217,7 @@ export interface PirschFilter {
     exit_path?: string;
     event?: string;
     event_meta_key?: string;
+    event_meta?: Record<string, Scalar>;
     language?: string;
     country?: string;
     city?: string;
@@ -229,6 +232,8 @@ export interface PirschFilter {
     utm_campaign?: string;
     utm_content?: string;
     utm_term?: string;
+    tag?: string;
+	tags?: Record<string, Scalar>;
     custom_metric_key?: string;
 	custom_metric_type?: PirschCustomMetricType;
     search?: string;
@@ -271,9 +276,12 @@ export interface PirschDomain extends PirschBaseEntity {
 	theme_id: string;
 	theme: Object;
 	custom_domain?: string;
+    display_name?: string;
 	user_role: string;
 	settings: Object;
 	theme_settings: Object;
+    pinned: boolean;
+    subscription_active: boolean;
 }
 
 /**
@@ -579,6 +587,18 @@ export interface PirschPlatformStats {
  */
 export interface PirschScreenClassStats extends PirschMetaStats {
     screen_class: string;
+}
+
+/**
+ * TagStats is the result export interface for tag statistics.
+ */
+export interface TagStats {
+	key: string;
+	value: string;
+	visitors: number;
+	views: number;
+	relative_visitors: number;
+	relative_views: number;
 }
 
 /**

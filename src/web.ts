@@ -181,34 +181,32 @@ export class PirschWebClient extends PirschCommon {
     }
 
     private browserHitToGetParameters(data: PirschBrowserHit) {
-        const hit: {
-            code: string;
-            nc: number;
-            url: string;
-            t?: string;
-            ref?: string;
-            w?: number;
-            h?: number;
-        } = {
+        const hit: Record<string, any> = {
             nc: Date.now(),
             code: this.identificationCode,
             url: data.url,
         };
 
         if (data.title) {
-            hit.t = data.title;
+            hit['t'] = data.title;
         }
 
         if (data.referrer) {
-            hit.ref = data.referrer;
+            hit['ref'] = data.referrer;
         }
 
         if (data.screen_width) {
-            hit.w = data.screen_width;
+            hit['w'] = data.screen_width;
         }
 
         if (data.screen_height) {
-            hit.h = data.screen_height;
+            hit['h'] = data.screen_height;
+        }
+
+        if (data.tags) {
+            for (const [key, value] of Object.entries(data.tags)) {
+                hit[`tag_${key.replaceAll("-", " ")}`] = value || 1;
+            }
         }
 
         return hit;

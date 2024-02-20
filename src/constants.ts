@@ -55,4 +55,6 @@ export enum PirschEndpoint {
     PLATFORM = "statistics/platform",
     SCREEN = "statistics/screen",
     KEYWORDS = "statistics/keywords",
+    TAG_KEYS = "statistics/tags",
+	TAG_DETAILS = "statistics/tag/details"
 }
