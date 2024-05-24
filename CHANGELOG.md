@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.7.0
+
+* updated dependencies
+
 ## 2.6.0
 
 * added tags to page views and filter
