@@ -42,6 +42,7 @@ import {
     PirschBatchSession,
     PirschBatchEvent,
     TagStats,
+    PirschRegionStats,
 } from "./types";
 
 import { PIRSCH_DEFAULT_BASE_URL, PIRSCH_DEFAULT_TIMEOUT, PirschEndpoint } from "./constants";
@@ -112,10 +113,6 @@ export abstract class PirschCoreClient extends PirschCommon {
      * @returns APIError or an empty promise, in case something went wrong
      */
     async hit(hit: PirschHit): Promise<Optional<PirschApiError>> {
-        if (hit.dnt === "1") {
-            return;
-        }
-
         return await this.performPost(PirschEndpoint.HIT, hit);
     }
 
@@ -126,13 +123,7 @@ export abstract class PirschCoreClient extends PirschCommon {
      * @returns APIError or an empty promise, in case something went wrong
      */
     async batchHits(hits: PirschBatchHit[]): Promise<Optional<PirschApiError>> {
-        const filtered = hits.filter(hit => hit.dnt !== "1");
-
-        if (filtered.length === 0) {
-            return;
-        }
-
-        return await this.performPost(PirschEndpoint.HIT_BATCH, filtered);
+        return await this.performPost(PirschEndpoint.HIT_BATCH, hits);
     }
 
     /**
@@ -151,10 +142,6 @@ export abstract class PirschCoreClient extends PirschCommon {
         duration = 0,
         meta?: Record<string, Scalar>
     ): Promise<Optional<PirschApiError>> {
-        if (hit.dnt === "1") {
-            return;
-        }
-
         const event: PirschEvent = {
             event_name: name,
             event_duration: duration,
@@ -180,13 +167,7 @@ export abstract class PirschCoreClient extends PirschCommon {
             meta?: Record<string, Scalar>;
         }[]
     ): Promise<Optional<PirschApiError>> {
-        const filtered = events.filter(event => event.hit.dnt !== "1");
-
-        if (filtered.length === 0) {
-            return;
-        }
-
-        const results = filtered.map(({ name, hit, time, duration = 0, meta }) => {
+        const results = events.map(({ name, hit, time, duration = 0, meta }) => {
             const event: PirschBatchEvent = {
                 event_name: name,
                 event_duration: duration,
@@ -208,10 +189,6 @@ export abstract class PirschCoreClient extends PirschCommon {
      * @returns APIError or an empty promise, in case something went wrong
      */
     async session(session: PirschSession): Promise<Optional<PirschApiError>> {
-        if (session.dnt === "1") {
-            return;
-        }
-
         return await this.performPost(PirschEndpoint.SESSION, session);
     }
 
@@ -222,13 +199,7 @@ export abstract class PirschCoreClient extends PirschCommon {
      * @returns APIError or an empty promise, in case something went wrong
      */
     async batchSessions(sessions: PirschBatchSession[]): Promise<Optional<PirschApiError>> {
-        const filtered = sessions.filter(session => session.dnt !== "1");
-
-        if (filtered.length === 0) {
-            return;
-        }
-
-        return await this.performPost(PirschEndpoint.SESSION_BATCH, filtered);
+        return await this.performPost(PirschEndpoint.SESSION_BATCH, sessions);
     }
 
     /**
@@ -552,6 +523,17 @@ export abstract class PirschCoreClient extends PirschCommon {
     }
 
     /**
+     * region returns regional statistics.
+     *
+     * @param filter used to filter the result set.
+     */
+    async region(filter: PirschFilter): Promise<PirschRegionStats[] | PirschApiError> {
+        this.accessModeCheck("region");
+
+        return await this.performFilteredGet<PirschRegionStats[]>(PirschEndpoint.REGION, filter);
+    }
+
+    /**
      * city returns city statistics.
      *
      * @param filter used to filter the result set.
@@ -693,6 +675,7 @@ export abstract class PirschCoreClient extends PirschCommon {
             event_meta_key: filter.event_meta_key,
             language: filter.language,
             country: filter.country,
+            region: filter.region,
             city: filter.city,
             referrer: filter.referrer,
             referrer_name: filter.referrer_name,

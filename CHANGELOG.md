@@ -2,6 +2,8 @@
 
 ## 2.7.0
 
+* added regional statistics
+* removed DNT
 * updated dependencies
 
 ## 2.6.0

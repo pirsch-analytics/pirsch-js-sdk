@@ -70,11 +70,6 @@ export class PirschWebClient extends PirschCommon {
     public async hit(hit?: Partial<PirschBrowserHit>): Promise<void> {
         const data = { ...this.hitFromBrowser(), ...hit };
         const parameters = this.browserHitToGetParameters(data);
-
-        if (data.dnt === "1") {
-            return;
-        }
-
         await this.get(PirschEndpoint.HIT, { parameters });
     }
 
@@ -93,11 +88,6 @@ export class PirschWebClient extends PirschCommon {
         hit?: Partial<PirschBrowserHit>
     ): Promise<void> {
         const data = { ...this.hitFromBrowser(), ...hit };
-
-        if (data.dnt === "1") {
-            return;
-        }
-
         await this.post(
             PirschEndpoint.EVENT,
             {
@@ -118,11 +108,6 @@ export class PirschWebClient extends PirschCommon {
      */
     public async customHit(hit: PirschBrowserHit): Promise<void> {
         const parameters = this.browserHitToGetParameters(hit);
-
-        if (hit.dnt === "1") {
-            return;
-        }
-
         await this.get(PirschEndpoint.HIT, { parameters });
     }
 
@@ -140,10 +125,6 @@ export class PirschWebClient extends PirschCommon {
         hit: PirschBrowserHit,
         meta?: Record<string, Scalar>
     ): Promise<void> {
-        if (hit.dnt === "1") {
-            return;
-        }
-
         await this.post(
             PirschEndpoint.EVENT,
             {
@@ -165,19 +146,13 @@ export class PirschWebClient extends PirschCommon {
      * @returns Hit object containing all necessary fields.
      */
     public hitFromBrowser(): PirschBrowserHit {
-        const element: PirschBrowserHit = {
+        return {
             url: this.generateUrl(),
             title: document.title,
             referrer: document.referrer,
             screen_width: screen.width,
             screen_height: screen.height,
         };
-
-        if (navigator.doNotTrack === "1") {
-            element.dnt = navigator.doNotTrack;
-        }
-
-        return element;
     }
 
     private browserHitToGetParameters(data: PirschBrowserHit) {

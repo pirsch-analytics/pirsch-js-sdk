@@ -51,6 +51,7 @@ export enum PirschEndpoint {
     BROWSER = "statistics/browser",
     BROWSER_VERSION = "statistics/browser/version",
     COUNTRY = "statistics/country",
+    REGION = "statistics/region",
     CITY = "statistics/city",
     PLATFORM = "statistics/platform",
     SCREEN = "statistics/screen",

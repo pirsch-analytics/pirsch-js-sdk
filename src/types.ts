@@ -95,7 +95,6 @@ export interface PirschAuthenticationResponse {
 export interface PirschHit {
     url: string;
     ip: string;
-    dnt?: string;
     user_agent: string;
     accept_language?: string;
     sec_ch_ua?: string;
@@ -145,7 +144,7 @@ export interface PirschBatchEvent extends PirschEvent {
  * all other fields can be left empty, but it's highly recommended to send all fields to generate reliable data.
  * The fields can be set from the request headers.
  */
-export type PirschSession = Pick<PirschEvent, "ip" | "dnt" | "user_agent">;
+export type PirschSession = Pick<PirschEvent, "ip" | "user_agent">;
 
 /**
  * PirschBatchSession contains all required fields to send batched sessions to Pirsch. The IP and User-Agent are mandatory,
@@ -164,7 +163,6 @@ export interface PirschBatchSession extends PirschSession {
 export interface PirschBrowserHit {
     url: string;
     title?: string;
-    dnt?: string;
     accept_language?: string;
     referrer?: string;
     screen_width?: number;
@@ -220,6 +218,7 @@ export interface PirschFilter {
     event_meta?: Record<string, Scalar>;
     language?: string;
     country?: string;
+    region?: string;
     city?: string;
     referrer?: string;
     referrer_name?: string;
@@ -524,9 +523,19 @@ export interface PirschCountryStats extends PirschMetaStats {
 }
 
 /*
+ * PirschRegionStats is the result type for regional statistics.
+ */
+export interface PirschRegionStats extends PirschMetaStats {
+    country_code: string;
+    region: string;
+}
+
+/*
  * PirschCityStats is the result type for city statistics.
  */
 export interface PirschCityStats extends PirschMetaStats {
+    country_code: string;
+    region: string;
     city: string;
 }
 
