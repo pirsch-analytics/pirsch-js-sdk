@@ -3,6 +3,7 @@
 ## 2.8.0
 
 * added funnel endpoints
+* updated dependencies
 
 ## 2.7.0
 
