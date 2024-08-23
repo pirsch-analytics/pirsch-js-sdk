@@ -43,6 +43,8 @@ import {
     PirschBatchEvent,
     TagStats,
     PirschRegionStats,
+    FunnelData,
+    Funnel,
 } from "./types";
 
 import { PIRSCH_DEFAULT_BASE_URL, PIRSCH_DEFAULT_TIMEOUT, PirschEndpoint } from "./constants";
@@ -598,6 +600,28 @@ export abstract class PirschCoreClient extends PirschCommon {
 
         return await this.performFilteredGet<PirschKeyword[]>(PirschEndpoint.KEYWORDS, filter);
     }
+
+    /**
+     * listFunnel returns a list of all funnels including step definition for given domain ID.
+     *
+     * @param filter used to filter the result set.
+     */
+    async listFunnel(filter: PirschFilter): Promise<Funnel[] | PirschApiError> {
+        this.accessModeCheck("listFunnel");
+
+        return await this.performFilteredGet<Funnel[]>(PirschEndpoint.LIST_FUNNEL, filter);
+    }
+
+    /**
+     * funnel returns a list of all funnels including step definition for given domain ID.
+     *
+     * @param filter used to filter the result set. Then funnel_id must be set.
+     */
+        async funnel(filter: PirschFilter): Promise<FunnelData[] | PirschApiError> {
+            this.accessModeCheck("funnel");
+    
+            return await this.performFilteredGet<FunnelData[]>(PirschEndpoint.FUNNEL, filter);
+        }
 
     private async performPost<T extends object>(
         path: PirschEndpoint,

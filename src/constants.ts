@@ -57,5 +57,7 @@ export enum PirschEndpoint {
     SCREEN = "statistics/screen",
     KEYWORDS = "statistics/keywords",
     TAG_KEYS = "statistics/tags",
-	TAG_DETAILS = "statistics/tag/details"
+	TAG_DETAILS = "statistics/tag/details",
+    LIST_FUNNEL = "/api/v1/funnel",
+	FUNNEL = "/api/v1/statistics/funnel"
 }

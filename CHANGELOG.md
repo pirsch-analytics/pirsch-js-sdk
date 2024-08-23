@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.8.0
+
+* added funnel endpoints
+
 ## 2.7.0
 
 * added regional statistics

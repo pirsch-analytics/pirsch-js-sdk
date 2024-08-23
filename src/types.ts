@@ -241,6 +241,7 @@ export interface PirschFilter {
     sort?: string;
     direction?: PirschSortDirection;
     include_avg_time_on_page?: boolean;
+    funnel_id?: string;
 }
 
 /**
@@ -620,6 +621,48 @@ export interface PirschKeyword {
     ctr: number;
     position: number;
 }
+
+
+/**
+ * Funnel is the definition of a funnel.
+ */
+export interface Funnel extends PirschBaseEntity {
+	domain_id: string
+	name: string
+	steps: FunnelStep[]
+}
+
+/**
+ * FunnelStep is the definition of a funnel step.
+ */
+export interface FunnelStep extends PirschBaseEntity {
+	funnel_id: string
+	name: string
+	step: number
+	filter: PirschFilter
+}
+
+/**
+ * FunnelStepData is the result type for a funnel step.
+ */
+export interface FunnelStepData {
+	step: number
+	visitors: number
+	relative_visitors: number
+	previous_visitors: number
+	relative_previous_visitors: number
+	dropped: number
+	drop_off: number
+}
+
+/**
+ * FunnelData is the response type for the funnel definition and statistics.
+ */
+export interface FunnelData {
+	definition: Funnel
+	data: FunnelStepData[]
+}
+
 
 /**
  * PirschHttpOptions type

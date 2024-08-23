@@ -1,6 +1,6 @@
 {
   "name": "pirsch-sdk",
-  "version": "2.7.0",
+  "version": "2.8.0",
   "description": "TypeScript/JavaScript client SDK for Pirsch.",
   "main": "index.js",
   "types": "index.d.ts",
@@ -29,15 +29,15 @@
   },
   "homepage": "https://pirsch.io/",
   "dependencies": {
-    "@types/node": "^20.12.12",
-    "axios": "^1.7.2"
+    "@types/node": "^22.5.0",
+    "axios": "^1.7.4"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^7.10.0",
     "@typescript-eslint/parser": "^7.10.0",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-unicorn": "^53.0.0",
-    "typescript": "^5.4.5"
+    "eslint-plugin-unicorn": "^55.0.0",
+    "typescript": "^5.5.4"
   }
 }
