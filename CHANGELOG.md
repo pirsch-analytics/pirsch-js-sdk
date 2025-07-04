@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.9.0
+
+* switched to using sendBeacon to send events for the client-side SDK
+* updated dependencies
+
 ## 2.8.0
 
 * added funnel endpoints

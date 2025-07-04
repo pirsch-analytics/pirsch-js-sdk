@@ -88,7 +88,7 @@ export class PirschWebClient extends PirschCommon {
         hit?: Partial<PirschBrowserHit>
     ): Promise<void> {
         const data = { ...this.hitFromBrowser(), ...hit };
-        await this.post(
+        this.beacon(
             PirschEndpoint.EVENT,
             {
                 identification_code: this.identificationCode,
@@ -96,9 +96,9 @@ export class PirschWebClient extends PirschCommon {
                 event_duration: duration,
                 event_meta: this.prepareScalarObject(meta),
                 ...data,
-            },
-            { headers: { "Content-Type": "application/json" } }
+            }
         );
+        return Promise.resolve();
     }
 
     /**
@@ -125,7 +125,7 @@ export class PirschWebClient extends PirschCommon {
         hit: PirschBrowserHit,
         meta?: Record<string, Scalar>
     ): Promise<void> {
-        await this.post(
+        this.beacon(
             PirschEndpoint.EVENT,
             {
                 identification_code: this.identificationCode,
@@ -133,11 +133,9 @@ export class PirschWebClient extends PirschCommon {
                 event_duration: duration,
                 event_meta: this.prepareScalarObject(meta),
                 ...hit,
-            },
-            {
-                headers: { "Content-Type": "application/json" },
             }
         );
+        return Promise.resolve();
     }
 
     /**
@@ -214,6 +212,16 @@ export class PirschWebClient extends PirschCommon {
             return result.data;
         } catch (error: unknown) {
             const exception = await this.toApiError(error);
+            throw exception;
+        }
+    }
+
+    protected async beacon<Data extends object = object>(
+        url: string,
+        data: Data,
+    ) {
+        if (!navigator.sendBeacon(url, JSON.stringify(data))) {
+            const exception = await this.toApiError("sendBeacon failed");
             throw exception;
         }
     }
