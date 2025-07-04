@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.9.1
+
+* fixed missing base URL for sendBeacon
+
 ## 2.9.0
 
 * switched to using sendBeacon to send events for the client-side SDK

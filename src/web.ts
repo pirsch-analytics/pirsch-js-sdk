@@ -220,7 +220,7 @@ export class PirschWebClient extends PirschCommon {
         url: string,
         data: Data,
     ) {
-        if (!navigator.sendBeacon(url, JSON.stringify(data))) {
+        if (!navigator.sendBeacon([this.baseUrl, url].join("/"), JSON.stringify(data))) {
             const exception = await this.toApiError("sendBeacon failed");
             throw exception;
         }
