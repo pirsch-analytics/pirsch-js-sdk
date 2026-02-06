@@ -80,6 +80,71 @@ const main = async () => {
 void main();
 ```
 
+#### Tracking Outbound Links and Downloads
+
+The Pirsch snippet will, by default, connect event handlers to outbound and download links. To recreate this behavior:
+
+```js
+import { Pirsch } from "pirsch-sdk/web";
+
+const client = new Pirsch({ identificationCode: "<identification_code>" });
+
+const OUTBOUND_LINK_EVENT = "Outbound Link Click";
+const FILE_DOWNLOAD_EVENT = "File Download";
+const DOWNLOAD_EXTENSIONS = [
+  "7z", "avi", "csv", "docx", "exe", "gz", "key", "midi", "mov",
+  "mp3", "mp4", "mpeg", "pdf", "pkg", "pps", "ppt", "pptx", "rar",
+  "rtf", "txt", "wav", "wma", "wmv", "xlsx", "zip"
+];
+
+function trackLinks(container = document) {
+  for (const link of container.getElementsByTagName("a")) {
+    if (link.classList.contains("pirsch-ignore")) continue;
+
+    const ext = link.href.split(".").pop().toLowerCase();
+    const isDownload = DOWNLOAD_EXTENSIONS.includes(ext);
+
+    let track;
+    if (isDownload) {
+      const file = new URL(link.href).pathname;
+      track = () => client.event(FILE_DOWNLOAD_EVENT, 0, { file });
+    } else {
+      try {
+        const url = new URL(link.href);
+        if (url.hostname === location.hostname) continue;
+        track = () => client.event(OUTBOUND_LINK_EVENT, 0, { url: link.href });
+      } catch {
+        // Skip invalid URLs (javascript:, mailto:, tel:, etc.)
+        continue;
+      }
+    }
+
+    link.addEventListener("click", track);
+    link.addEventListener("auxclick", track);
+  }
+}
+
+// Call after your content has rendered
+trackLinks();
+
+// Or scope to a specific container
+trackLinks(document.getElementById("content"));
+```
+
+#### Tracking Page Views in SPAs
+
+The snippet automatically tracks page views via the History API. To replicate this:
+
+```js
+// Using client from above
+const originalPushState = history.pushState;
+history.pushState = function(state, title, url) {
+  originalPushState.apply(this, [state, title, url]);
+  client.hit();
+};
+window.addEventListener("popstate", () => client.hit());
+```
+
 ## FAQ
 
 > This module export three Clients (`pirsch-sdk`, `pirsch-sdk/web-api` and `pirsch-sdk/web`), what are the differences?
