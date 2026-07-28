@@ -1,8 +1,9 @@
 # Changelog
 
-## Unreleased
+## 2.10.0
 
 * fixed `event`/`customEvent` on the client-side SDK surfacing a failed `sendBeacon` (e.g. on Safari or during page unload) as an uncatchable unhandled promise rejection; a declined beacon is now dropped silently as best-effort analytics
+* updated dependencies (including TS v6)
 
 ## 2.9.1
 

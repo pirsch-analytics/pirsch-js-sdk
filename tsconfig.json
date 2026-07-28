@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "allowSyntheticDefaultImports": false,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "alwaysStrict": true,
@@ -15,20 +14,20 @@
     "noImplicitOverride": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "noImplicitUseStrict": false,
     "noPropertyAccessFromIndexSignature": true,
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "baseUrl": "src/",
+    "rootDir": "src/",
     "outDir": "dist/",
     "pretty": true,
-    "lib": ["esnext", "dom", "dom.iterable"],
+    "lib": ["esnext", "dom"],
     "skipLibCheck": true,
     "strict": true,
     "strictFunctionTypes": true,
     "strictNullChecks": true,
-    "target": "es2015"
+    "target": "es2015",
+    "types": ["node"]
   },
   "include": ["src/*.ts"],
   "exclude": ["tmp/"]
