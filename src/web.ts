@@ -88,7 +88,7 @@ export class PirschWebClient extends PirschCommon {
         hit?: Partial<PirschBrowserHit>
     ): Promise<void> {
         const data = { ...this.hitFromBrowser(), ...hit };
-        this.beacon(
+        await this.sendBeaconSafe(
             PirschEndpoint.EVENT,
             {
                 identification_code: this.identificationCode,
@@ -98,7 +98,6 @@ export class PirschWebClient extends PirschCommon {
                 ...data,
             }
         );
-        return Promise.resolve();
     }
 
     /**
@@ -125,7 +124,7 @@ export class PirschWebClient extends PirschCommon {
         hit: PirschBrowserHit,
         meta?: Record<string, Scalar>
     ): Promise<void> {
-        this.beacon(
+        await this.sendBeaconSafe(
             PirschEndpoint.EVENT,
             {
                 identification_code: this.identificationCode,
@@ -135,7 +134,6 @@ export class PirschWebClient extends PirschCommon {
                 ...hit,
             }
         );
-        return Promise.resolve();
     }
 
     /**
@@ -223,6 +221,26 @@ export class PirschWebClient extends PirschCommon {
         if (!navigator.sendBeacon([this.baseUrl, url].join("/"), JSON.stringify(data))) {
             const exception = await this.toApiError("sendBeacon failed");
             throw exception;
+        }
+    }
+
+    /**
+     * sendBeaconSafe sends a beacon without letting a failed dispatch escape.
+     *
+     * `navigator.sendBeacon` returns `false` when the browser declines to queue
+     * the request (payload over the user agent's limit, or, notably, on Safari
+     * and during page unload). A dropped hit is best-effort analytics: it must
+     * not reject into the host application or surface as an unhandled promise
+     * rejection, so the failure is swallowed here rather than thrown.
+     */
+    protected async sendBeaconSafe<Data extends object = object>(
+        url: string,
+        data: Data,
+    ) {
+        try {
+            await this.beacon(url, data);
+        } catch {
+            // Intentionally ignored — see method doc.
         }
     }
 
